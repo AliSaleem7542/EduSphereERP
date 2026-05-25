@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Teacher Attendance | EDU-SPHERE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="css/adminlte.css" />
+<!-- __THEME_APPLIED__ -->
+<script>
+(function(){
+  var s = JSON.parse(localStorage.getItem('sysSettings') || '{}');
+  var theme = s.sidebarTheme || 'dark';
+  document.addEventListener('DOMContentLoaded', function() {
+    var el = document.querySelector('.app-sidebar');
+    if (el) el.setAttribute('data-bs-theme', theme);
+  });
+})();
+</script>
+</head>
+<body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+<div class="app-wrapper">
+  <nav class="app-header navbar navbar-expand bg-body">
+    <div class="container-fluid">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" data-lte-toggle="sidebar" href="#" role="button"><i class="bi bi-list"></i></a></li>
+        <li class="nav-item d-none d-md-block"><a href="index2.html" class="nav-link">Dashboard</a></li>
+        <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Attendance</a></li>
+      </ul>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item dropdown user-menu">
+          <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+            <img src="assets/img/user2-160x160.jpg" class="user-image rounded-circle shadow" alt="User">
+            <span class="d-none d-md-inline">Ali Saleem</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+            <li class="user-header text-bg-primary"><img src="assets/img/user2-160x160.jpg" class="rounded-circle shadow" alt="User"><p>Ali Saleem - System Administrator<small>Member since Nov. 2023</small></p></li>
+            <li class="user-footer"><a href="#" class="btn btn-default btn-flat">Profile</a><a href="#" class="btn btn-default btn-flat float-end">Sign out</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+    <div class="sidebar-brand"><a href="index2.html" class="brand-link"><img src="assets/img/eduspherelogo (2).png" alt="Logo" class="brand-image opacity-75 shadow"><span class="brand-text fw-light">EDU-SPHERE</span></a></div>
+    <div class="sidebar-wrapper"><nav class="mt-2"><ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" data-accordion="false">
+      <li class="nav-item"><a href="index2.html" class="nav-link"><i class="nav-icon bi bi-speedometer2"></i><p>Admin Dashboard</p></a></li>
+      <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-people-fill"></i><p>Students Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+        <li class="nav-item"><a href="add-student.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Student</p></a></li>
+        <li class="nav-item"><a href="manage-students.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Students</p></a></li>
+        <li class="nav-item"><a href="student-records.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Records</p></a></li>
+        <li class="nav-item"><a href="student-promotions.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Promote Students</p></a></li>
+      </ul></li>
+      <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-person-badge-fill"></i><p>Teachers Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+        <li class="nav-item"><a href="add-teacher.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Teacher</p></a></li>
+        <li class="nav-item"><a href="manage-teachers.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Teachers</p></a></li>
+        <li class="nav-item"><a href="assign-subjects.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Assign Subjects</p></a></li>
+        <li class="nav-item"><a href="teacher-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Schedule</p></a></li>
+      </ul></li>
+      <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-diagram-3-fill"></i><p>Classes &amp; Sections<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+        <li class="nav-item"><a href="Classes &amp; Sections/add-class.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Class</p></a></li>
+        <li class="nav-item"><a href="Classes &amp; Sections/manage-classes.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Classes</p></a></li>
+        <li class="nav-item"><a href="Classes &amp; Sections/manage-sections.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Sections</p></a></li>
+        <li class="nav-item"><a href="Classes &amp; Sections/assign-class-teacher.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Assign Class Teacher</p></a></li>
+        <li class="nav-item"><a href="Classes &amp; Sections/student-allocation.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Allocation</p></a></li>
+        <li class="nav-item"><a href="Classes &amp; Sections/classroom-management.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Classroom Management</p></a></li>
+        <li class="nav-item"><a href="Classes &amp; Sections/subject-allocation.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Subject Allocation</p></a></li>
+        <li class="nav-item"><a href="Classes &amp; Sections/class-promotion.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Class Promotion</p></a></li>
+        <li class="nav-item"><a href="timetable.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Class Timetable</p></a></li>
+      </ul></li>
+      <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-clipboard-data-fill"></i><p>Exams &amp; Results<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+        <li class="nav-item"><a href="create-exam.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create Exam</p></a></li>
+        <li class="nav-item"><a href="exam-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Exam Schedule</p></a></li>
+        <li class="nav-item"><a href="result-management.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Result Management</p></a></li>
+      </ul></li>
+      <li class="nav-item menu-open"><a href="#" class="nav-link active"><i class="nav-icon bi bi-calendar-check-fill"></i><p>Attendance<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+        <li class="nav-item"><a href="student-attendance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Attendance</p></a></li>
+        <li class="nav-item"><a href="teacher-attendance.html" class="nav-link active"><i class="nav-icon bi bi-circle"></i><p>Teacher Attendance</p></a></li>
+        <li class="nav-item"><a href="attendance-reports.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Attendance Reports</p></a></li>
+      </ul></li>
+      <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-cash-stack"></i><p>Fee Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+        <li class="nav-item"><a href="collect-fee.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Collect Fee</p></a></li>
+        <li class="nav-item"><a href="fee-records.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Records</p></a></li>
+        <li class="nav-item"><a href="pending-fees.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Pending Fees</p></a></li>
+<li class="nav-item"><a href="fee-refunds.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Refunds</p></a></li>
+      </ul></li>
+        
+                <!-- Accounts -->
+        <li class="nav-item">
+          <a href="#" class="nav-link"><i class="nav-icon bi bi-journal-text"></i><p>Accounts<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item"><a href="accounts-entry.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Income / Expense Entry</p></a></li>
+            <li class="nav-item"><a href="accounts-ledger.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Ledger</p></a></li>
+            <li class="nav-item"><a href="accounts-balance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Balance Sheet</p></a></li>
+          </ul>
+        </li>
+<li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-book-fill"></i><p>Library<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+        <li class="nav-item"><a href="add-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Book</p></a></li>
+        <li class="nav-item"><a href="issue-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Issue Book</p></a></li>
+        <li class="nav-item"><a href="return-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Return Book</p></a></li>
+      </ul></li>
+      <li class="nav-item"><a href="announcements.html" class="nav-link"><i class="nav-icon bi bi-megaphone-fill"></i><p>Announcements</p></a></li>
+      <li class="nav-item"><a href="reports.html" class="nav-link"><i class="nav-icon bi bi-bar-chart-fill"></i><p>Reports</p></a></li>
+      <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-person-gear"></i><p>User Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+        <li class="nav-item"><a href="create-user.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create User</p></a></li>
+        <li class="nav-item"><a href="manage-users.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Users</p></a></li>
+        <li class="nav-item"><a href="roles-permissions.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Roles &amp; Permissions</p></a></li>
+      </ul></li>
+      <li class="nav-item"><a href="activity-logs.html" class="nav-link"><i class="nav-icon bi bi-clock-history"></i><p>Activity Logs</p></a></li>
+      <li class="nav-item"><a href="backup.html" class="nav-link"><i class="nav-icon bi bi-database-fill-down"></i><p>Backup &amp; Restore</p></a></li>
+      <li class="nav-item"><a href="settings.html" class="nav-link"><i class="nav-icon bi bi-gear-fill"></i><p>System Settings</p></a></li>
+    </ul></nav></div>
+  </aside>
+  <main class="app-main">
+    <div class="app-content-header"><div class="container-fluid"><div class="row">
+      <div class="col-sm-6"><h3 class="mb-0">Teacher Attendance</h3></div>
+      <div class="col-sm-6"><ol class="breadcrumb float-sm-end">
+        <li class="breadcrumb-item"><a href="index2.html">Home</a></li>
+        <li class="breadcrumb-item">Attendance</li>
+        <li class="breadcrumb-item active">Teacher Attendance</li>
+      </ol></div>
+    </div></div></div>
+    <div class="app-content"><div class="container-fluid">
+      <div class="row mb-4">
+        <div class="col-lg-3 col-6"><div class="small-box text-bg-info"><div class="inner"><h3 id="statPresent">0</h3><p>Present Today</p></div><div class="small-box-icon"><i class="bi bi-check-circle-fill"></i></div></div></div>
+        <div class="col-lg-3 col-6"><div class="small-box text-bg-danger"><div class="inner"><h3 id="statAbsent">0</h3><p>Absent Today</p></div><div class="small-box-icon"><i class="bi bi-x-circle-fill"></i></div></div></div>
+        <div class="col-lg-3 col-6"><div class="small-box text-bg-warning"><div class="inner"><h3 id="statLate">0</h3><p>Late Today</p></div><div class="small-box-icon"><i class="bi bi-clock-fill"></i></div></div></div>
+        <div class="col-lg-3 col-6"><div class="small-box text-bg-success"><div class="inner"><h3 id="statRate">0%</h3><p>Attendance Rate</p></div><div class="small-box-icon"><i class="bi bi-graph-up"></i></div></div></div>
+      </div>
+      <div class="card shadow mb-4">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <h3 class="card-title mb-0"><i class="bi bi-check-square"></i> Mark Teacher Attendance</h3>
+          <div class="d-flex gap-2">
+            <input type="date" class="form-control form-control-sm" id="attDate" style="width:160px">
+            <select class="form-select form-select-sm" id="filterDept" style="width:160px">
+              <option value="">All Departments</option>
+              <option>Science</option><option>Mathematics</option><option>English</option>
+              <option>Urdu</option><option>Social Studies</option><option>Computer Science</option>
+            </select>
+            <button class="btn btn-light btn-sm" onclick="loadTeachers()"><i class="bi bi-search"></i> Load</button>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover mb-0">
+              <thead class="table-dark">
+                <tr><th>#</th><th>Teacher Name</th><th>Department</th><th>Subject</th><th>Status</th><th>Time In</th><th>Remarks</th></tr>
+              </thead>
+              <tbody id="teacherBody"><tr><td colspan="7" class="text-center text-muted py-4">Click "Load" to load teachers.</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-footer d-flex gap-2">
+          <button class="btn btn-success btn-sm" onclick="markAll('Present')"><i class="bi bi-check-all"></i> All Present</button>
+          <button class="btn btn-danger btn-sm" onclick="markAll('Absent')"><i class="bi bi-x-circle"></i> All Absent</button>
+          <button class="btn btn-primary ms-auto" onclick="saveAttendance()"><i class="bi bi-save"></i> Save Attendance</button>
+        </div>
+      </div>
+      <div class="card shadow">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+          <h3 class="card-title mb-0"><i class="bi bi-table"></i> Attendance Records</h3>
+          <div class="d-flex gap-2">
+            <input type="date" class="form-control form-control-sm" id="viewDate" style="width:160px">
+            <button class="btn btn-light btn-sm" onclick="viewRecords()"><i class="bi bi-eye"></i> View</button>
+            <button class="btn btn-warning btn-sm" onclick="printRecords()"><i class="bi bi-printer-fill"></i> Print</button>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-sm table-striped mb-0">
+              <thead class="table-dark">
+                <tr><th>#</th><th>Date</th><th>Teacher</th><th>Department</th><th>Status</th><th>Time In</th><th>Remarks</th></tr>
+              </thead>
+              <tbody id="recordsBody"><tr><td colspan="7" class="text-center text-muted py-3">Select a date and click View.</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </main>
+  <footer class="app-footer"><strong>Copyright &copy; 2014-2025 <a href="#" class="text-decoration-none">EDU-SPHERE</a>.</strong> All rights reserved.</footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="js/adminlte.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/api.js"></script>
+    <script src="js/header.js"></script>
+<script>
+  AUTH.requireAuth('ADMIN');
+  var loadedTeachers = [];
+
+  function todayStr() { return new Date().toISOString().split('T')[0]; }
+
+  async function loadTeachers() {
+    var dept = document.getElementById('filterDept').value;
+    var params = { limit: 200, status: 'ACTIVE' };
+    if (dept) params.department = dept;
+    var res = await API.teachers.list(params);
+    if (!res || !res.success) return;
+    loadedTeachers = res.data.data || res.data || [];
+    var date = document.getElementById('attDate').value || todayStr();
+
+    // Load existing attendance for this date
+    var attRes = await API.attendance.listTeachers({ date: date });
+    var saved = (attRes && attRes.success) ? (attRes.data || []) : [];
+
+    var tbody = document.getElementById('teacherBody');
+    if (loadedTeachers.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-4">No teachers found.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = loadedTeachers.map(function(t, i) {
+      var existing = saved.find(function(r) { return r.teacherId === t.id; });
+      var status = existing ? existing.status : 'PRESENT';
+      var timeIn = existing ? (existing.timeIn || '') : '';
+      var remarks = existing ? (existing.remarks || '') : '';
+      return '<tr>' +
+        '<td>' + (i + 1) + '</td>' +
+        '<td><strong>' + t.name + '</strong></td>' +
+        '<td>' + (t.department || '-') + '</td>' +
+        '<td>-</td>' +
+        '<td><select class="form-select form-select-sm" id="status-' + t.id + '" style="width:120px">' +
+          '<option' + (status === 'PRESENT' ? ' selected' : '') + ' value="PRESENT">Present</option>' +
+          '<option' + (status === 'ABSENT' ? ' selected' : '') + ' value="ABSENT">Absent</option>' +
+          '<option' + (status === 'LATE' ? ' selected' : '') + ' value="LATE">Late</option>' +
+          '<option' + (status === 'LEAVE' ? ' selected' : '') + ' value="LEAVE">Leave</option>' +
+        '</select></td>' +
+        '<td><input type="time" class="form-control form-control-sm" id="time-' + t.id + '" value="' + timeIn + '" style="width:110px"></td>' +
+        '<td><input type="text" class="form-control form-control-sm" id="rem-' + t.id + '" value="' + remarks + '" placeholder="Optional"></td>' +
+        '</tr>';
+    }).join('');
+    updateStats(saved, date);
+  }
+
+  function markAll(status) {
+    var rows = document.querySelectorAll('[id^="status-"]');
+    rows.forEach(function(sel) { sel.value = status; });
+  }
+
+  async function saveAttendance() {
+    var date = document.getElementById('attDate').value || todayStr();
+    var rows = document.querySelectorAll('[id^="status-"]');
+    if (rows.length === 0) { API.toast('Load teachers first.', 'warning'); return; }
+
+    var records = loadedTeachers.map(function(t) {
+      return {
+        teacherId: t.id,
+        date: date,
+        status: document.getElementById('status-' + t.id).value,
+        remarks: document.getElementById('rem-' + t.id).value || null
+      };
+    });
+
+    var res = await API.attendance.markTeachers({ date: date, records: records });
+    if (res && res.success) {
+      API.toast('Attendance saved for ' + date, 'success');
+      updateStats(records, date);
+    } else {
+      API.toast((res && res.message) || 'Save failed', 'danger');
+    }
+  }
+
+  async function viewRecords() {
+    var date = document.getElementById('viewDate').value || todayStr();
+    var res = await API.attendance.listTeachers({ date: date });
+    if (!res || !res.success) return;
+    var recs = res.data || [];
+    var tbody = document.getElementById('recordsBody');
+    if (recs.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-3">No records for this date.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = recs.map(function(r, i) {
+      var badge = r.status === 'PRESENT' ? 'bg-success' : r.status === 'ABSENT' ? 'bg-danger' : r.status === 'LATE' ? 'bg-warning text-dark' : 'bg-secondary';
+      var name = r.teacher ? r.teacher.name : '—';
+      var dept = r.teacher ? r.teacher.department : '—';
+      var dateStr = r.date ? r.date.substring(0, 10) : '—';
+      return '<tr><td>' + (i + 1) + '</td><td>' + dateStr + '</td><td>' + name + '</td><td>' + dept + '</td>' +
+        '<td><span class="badge ' + badge + '">' + r.status + '</span></td>' +
+        '<td>-</td><td>' + (r.remarks || '-') + '</td></tr>';
+    }).join('');
+    updateStats(recs, date);
+  }
+
+  function updateStats(recs, date) {
+    var present = recs.filter(function(r) { return r.status === 'PRESENT'; }).length;
+    var absent = recs.filter(function(r) { return r.status === 'ABSENT'; }).length;
+    var late = recs.filter(function(r) { return r.status === 'LATE'; }).length;
+    var total = recs.length;
+    document.getElementById('statPresent').textContent = present;
+    document.getElementById('statAbsent').textContent = absent;
+    document.getElementById('statLate').textContent = late;
+    document.getElementById('statRate').textContent = total ? Math.round((present / total) * 100) + '%' : '0%';
+  }
+
+  function printRecords() { window.print(); }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('attDate').value = todayStr();
+    document.getElementById('viewDate').value = todayStr();
+  });
+</script>
+</body>
+</html>

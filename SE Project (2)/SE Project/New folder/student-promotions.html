@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Promote Students | EDU-SPHERE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <link rel="preload" href="css/adminlte.css" as="style" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" media="print" onload="this.media='all'" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="css/adminlte.css" />
+  <!-- __THEME_APPLIED__ -->
+<script>
+(function(){
+  var s = JSON.parse(localStorage.getItem('sysSettings') || '{}');
+  var theme = s.sidebarTheme || 'dark';
+  document.addEventListener('DOMContentLoaded', function() {
+    var el = document.querySelector('.app-sidebar');
+    if (el) el.setAttribute('data-bs-theme', theme);
+  });
+})();
+</script>
+</head>
+  <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+    <div class="app-wrapper">
+      <!-- NAVBAR -->
+      <nav class="app-header navbar navbar-expand bg-body">
+        <div class="container-fluid">
+          <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" data-lte-toggle="sidebar" href="#" role="button"><i class="bi bi-list"></i></a></li>
+            <li class="nav-item d-none d-md-block"><a href="index2.html" class="nav-link">Dashboard</a></li>
+            <li class="nav-item d-none d-md-block"><a href="manage-students.html" class="nav-link">Students</a></li>
+          </ul>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-search"></i></a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link" data-bs-toggle="dropdown" href="#"><i class="bi bi-bell-fill"></i><span class="navbar-badge badge text-bg-warning">15</span></a>
+              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <span class="dropdown-item dropdown-header">15 Notifications</span>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown user-menu">
+              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                <img src="assets/img/user2-160x160.jpg" class="user-image rounded-circle shadow" alt="User">
+                <span class="d-none d-md-inline">Ali Saleem</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <li class="user-header text-bg-primary">
+                  <img src="assets/img/user2-160x160.jpg" class="rounded-circle shadow" alt="User">
+                  <p>Ali Saleem - System Administrator <small>Member since Nov. 2023</small></p>
+                </li>
+                <li class="user-footer">
+                  <a href="#" class="btn btn-default btn-flat">Profile</a>
+                  <a href="#" class="btn btn-default btn-flat float-end">Sign out</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <!-- SIDEBAR -->
+      <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+        <div class="sidebar-brand">
+          <a href="index2.html" class="brand-link">
+            <img src="assets/img/eduspherelogo (2).png" alt="Logo" class="brand-image opacity-75 shadow">
+            <span class="brand-text fw-light">EDU-SPHERE</span>
+          </a>
+        </div>
+        <div class="sidebar-wrapper">
+          <nav class="mt-2">
+            <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" data-accordion="false">
+              <li class="nav-item"><a href="index2.html" class="nav-link"><i class="nav-icon bi bi-speedometer2"></i><p>Admin Dashboard</p></a></li>
+              <li class="nav-item menu-open">
+                <a href="#" class="nav-link active"><i class="nav-icon bi bi-people-fill"></i><p>Students Management<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="add-student.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Student</p></a></li>
+                  <li class="nav-item"><a href="manage-students.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Students</p></a></li>
+                  <li class="nav-item"><a href="student-records.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Records</p></a></li>
+                  <li class="nav-item"><a href="student-promotions.html" class="nav-link active"><i class="nav-icon bi bi-circle"></i><p>Promote Students</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-person-badge-fill"></i><p>Teachers Management<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="add-teacher.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Teacher</p></a></li>
+                  <li class="nav-item"><a href="manage-teachers.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Teachers</p></a></li>
+                  <li class="nav-item"><a href="assign-subjects.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Assign Subjects</p></a></li>
+                  <li class="nav-item"><a href="teacher-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Schedule</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-diagram-3-fill"></i><p>Classes & Sections<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="Classes & Sections/add-class.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Class</p></a></li>
+                  <li class="nav-item"><a href="Classes & Sections/manage-classes.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Classes</p></a></li>
+                  <li class="nav-item"><a href="Classes & Sections/manage-sections.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Sections</p></a></li>
+                  <li class="nav-item"><a href="Classes & Sections/assign-class-teacher.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Assign Class Teacher</p></a></li>
+                  <li class="nav-item"><a href="Classes & Sections/student-allocation.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Allocation</p></a></li>
+                  <li class="nav-item"><a href="Classes & Sections/classroom-management.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Classroom Management</p></a></li>
+                  <li class="nav-item"><a href="Classes & Sections/subject-allocation.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Subject Allocation</p></a></li>
+                  <li class="nav-item"><a href="Classes & Sections/class-promotion.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Class Promotion</p></a></li>
+                  <li class="nav-item"><a href="timetable.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Class Timetable</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-clipboard-data-fill"></i><p>Exams & Results<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="create-exam.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create Exam</p></a></li>
+                  <li class="nav-item"><a href="exam-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Exam Schedule</p></a></li>
+                  <li class="nav-item"><a href="result-management.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Result Management</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-calendar-check-fill"></i><p>Attendance<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="student-attendance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Attendance</p></a></li>
+                  <li class="nav-item"><a href="teacher-attendance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Attendance</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-cash-stack"></i><p>Fee Management<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="collect-fee.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Collect Fee</p></a></li>
+                  <li class="nav-item"><a href="fee-records.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Records</p></a></li>
+                  <li class="nav-item"><a href="pending-fees.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Pending Fees</p></a></li>
+<li class="nav-item"><a href="fee-refunds.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Refunds</p></a></li>
+                </ul>
+              </li>
+                <!-- Accounts -->
+        <li class="nav-item">
+          <a href="#" class="nav-link"><i class="nav-icon bi bi-journal-text"></i><p>Accounts<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item"><a href="accounts-entry.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Income / Expense Entry</p></a></li>
+            <li class="nav-item"><a href="accounts-ledger.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Ledger</p></a></li>
+            <li class="nav-item"><a href="accounts-balance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Balance Sheet</p></a></li>
+          </ul>
+        </li>
+<li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-book-fill"></i><p>Library<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="add-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Book</p></a></li>
+                  <li class="nav-item"><a href="issue-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Issue Book</p></a></li>
+                  <li class="nav-item"><a href="return-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Return Book</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item"><a href="announcements.html" class="nav-link"><i class="nav-icon bi bi-megaphone-fill"></i><p>Announcements</p></a></li>
+              <li class="nav-item"><a href="reports.html" class="nav-link"><i class="nav-icon bi bi-bar-chart-fill"></i><p>Reports</p></a></li>
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-person-gear"></i><p>User Management<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="create-user.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create User</p></a></li>
+                  <li class="nav-item"><a href="manage-users.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Users</p></a></li>
+                  <li class="nav-item"><a href="roles-permissions.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Roles & Permissions</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item"><a href="activity-logs.html" class="nav-link"><i class="nav-icon bi bi-clock-history"></i><p>Activity Logs</p></a></li>
+              <li class="nav-item"><a href="backup.html" class="nav-link"><i class="nav-icon bi bi-database-fill-down"></i><p>Backup & Restore</p></a></li>
+              <li class="nav-item"><a href="settings.html" class="nav-link"><i class="nav-icon bi bi-gear-fill"></i><p>System Settings</p></a></li>
+            </ul>
+          </nav>
+        </div>
+      </aside>
+      <!-- MAIN -->
+      <main class="app-main">
+        <div class="app-content-header">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-6"><h3 class="mb-0">Promote Students</h3></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="index2.html">Home</a></li>
+                  <li class="breadcrumb-item"><a href="#">Students Management</a></li>
+                  <li class="breadcrumb-item active">Promote Students</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="app-content">
+          <div class="container-fluid">
+            <!-- Stats -->
+            <div class="row mb-4">
+              <div class="col-md-3">
+                <div class="info-box">
+                  <span class="info-box-icon text-bg-primary shadow-sm"><i class="bi bi-people-fill"></i></span>
+                  <div class="info-box-content">
+                    <span class="info-box-text">Total Students</span>
+                    <span class="info-box-number" id="statTotal">0</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="info-box">
+                  <span class="info-box-icon text-bg-success shadow-sm"><i class="bi bi-arrow-up-circle-fill"></i></span>
+                  <div class="info-box-content">
+                    <span class="info-box-text">Promoted</span>
+                    <span class="info-box-number" id="statPromoted">0</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="info-box">
+                  <span class="info-box-icon text-bg-warning shadow-sm"><i class="bi bi-hourglass-split"></i></span>
+                  <div class="info-box-content">
+                    <span class="info-box-text">Pending</span>
+                    <span class="info-box-number" id="statPending">0</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="info-box">
+                  <span class="info-box-icon text-bg-info shadow-sm"><i class="bi bi-mortarboard-fill"></i></span>
+                  <div class="info-box-content">
+                    <span class="info-box-text">Graduated</span>
+                    <span class="info-box-number" id="statGraduated">0</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Promotion Form -->
+            <div class="card mb-4">
+              <div class="card-header bg-primary text-white">
+                <h3 class="card-title mb-0"><i class="bi bi-arrow-up-circle"></i> Promotion Settings</h3>
+              </div>
+              <div class="card-body">
+                <div class="row g-3 align-items-end">
+                  <div class="col-md-3">
+                    <label class="form-label">From Class</label>
+                    <select class="form-select" id="fromClass">
+                      <option value="">-- Select Class --</option>
+                    </select>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">From Section</label>
+                    <select class="form-select" id="fromSection">
+                      <option value="">All Sections</option>
+                    </select>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Promote To Class</label>
+                    <select class="form-select" id="toClass">
+                      <option value="">-- Select Target --</option>
+                    </select>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">To Section</label>
+                    <select class="form-select" id="toSection">
+                      <option value="">Same Section</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Students Table -->
+            <div class="card shadow mb-4">
+              <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                <h3 class="card-title mb-0"><i class="bi bi-table"></i> Students to Promote</h3>
+                <div class="d-flex gap-2 align-items-center">
+                  <span class="badge text-bg-light text-dark" id="selectedCount">0 selected</span>
+                  <button class="btn btn-sm btn-light" onclick="selectAll()"><i class="bi bi-check-all"></i> Select All</button>
+                  <button class="btn btn-sm btn-warning" onclick="deselectAll()"><i class="bi bi-x"></i> Deselect All</button>
+                  <button class="btn btn-sm btn-success" onclick="promoteSelected()"><i class="bi bi-arrow-up-circle-fill"></i> Promote Selected</button>
+                </div>
+              </div>
+              <div class="card-body p-0">
+                <div class="table-responsive">
+                  <table class="table table-striped table-hover mb-0">
+                    <thead class="table-dark">
+                      <tr>
+                        <th><input type="checkbox" id="checkAll" onchange="toggleAll(this)"></th>
+                        <th>#</th>
+                        <th>Roll No</th>
+                        <th>Name</th>
+                        <th>Current Class</th>
+                        <th>Section</th>
+                        <th>Gender</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id="promotionTableBody">
+                      <tr><td colspan="8" class="text-center text-muted py-4">Select a class above to load students.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Promotion History -->
+            <div class="card shadow">
+              <div class="card-header bg-success text-white">
+                <h3 class="card-title mb-0"><i class="bi bi-clock-history"></i> Promotion History</h3>
+              </div>
+              <div class="card-body">
+                <div class="alert alert-info mb-0">
+                  <i class="bi bi-info-circle me-2"></i>
+                  Promotion history is tracked in the database. After promoting students, use <strong>Manage Students</strong> to view their updated class assignments.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer class="app-footer">
+        <div class="float-end d-none d-sm-inline">Anything you want</div>
+        <strong>Copyright &copy; 2014-2025&nbsp;<a href="#" class="text-decoration-none">EDU-SPHERE</a>.</strong> All rights reserved.
+      </footer>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="js/adminlte.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/header.js"></script>
+    <script>
+      AUTH.requireAuth('ADMIN');
+
+      var allClasses   = [];
+      var loadedStudents = [];
+
+      async function loadStats() {
+        try {
+          var res = await API.students.list({ limit: 1000 });
+          if (res && res.success) {
+            var all = res.data.data || [];
+            document.getElementById('statTotal').textContent = all.length;
+            document.getElementById('statPending').textContent = all.length;
+          }
+          document.getElementById('statPromoted').textContent = '—';
+          document.getElementById('statGraduated').textContent = '—';
+        } catch(e) {}
+      }
+
+      async function loadClassDropdowns() {
+        try {
+          var res = await API.classes.list();
+          if (!res || !res.success) return;
+          allClasses = res.data || [];
+
+          var fromSel = document.getElementById('fromClass');
+          var toSel   = document.getElementById('toClass');
+          fromSel.innerHTML = '<option value="">-- Select Class --</option>';
+          toSel.innerHTML   = '<option value="">-- Select Target --</option>';
+          allClasses.forEach(function(c) {
+            fromSel.innerHTML += '<option value="' + c.id + '">' + c.name + '</option>';
+            toSel.innerHTML   += '<option value="' + c.id + '">' + c.name + '</option>';
+          });
+          toSel.innerHTML += '<option value="GRADUATED">Graduated (Pass Out)</option>';
+        } catch(e) {}
+      }
+
+      async function loadSectionDropdown(classId, selId) {
+        var sel = document.getElementById(selId);
+        sel.innerHTML = '<option value="">All Sections</option>';
+        if (!classId) return;
+        try {
+          var res = await API.classes.sections(classId);
+          if (res && res.success) {
+            res.data.forEach(function(s) {
+              sel.innerHTML += '<option value="' + s.id + '">' + s.name + '</option>';
+            });
+          }
+        } catch(e) {}
+      }
+
+      async function loadStudents() {
+        var classId   = document.getElementById('fromClass').value;
+        var sectionId = document.getElementById('fromSection').value;
+        var tbody = document.getElementById('promotionTableBody');
+
+        if (!classId) {
+          tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4">Select a class above to load students.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center py-3"><span class="spinner-border spinner-border-sm me-2"></span>Loading...</td></tr>';
+
+        try {
+          var params = { classId: classId, limit: 200 };
+          if (sectionId) params.sectionId = sectionId;
+          var res = await API.students.list(params);
+          if (!res || !res.success) {
+            tbody.innerHTML = '<tr><td colspan="8" class="text-center text-danger py-4">Failed to load students.</td></tr>';
+            return;
+          }
+          loadedStudents = res.data.data || [];
+          if (!loadedStudents.length) {
+            tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4">No students found in this class/section.</td></tr>';
+            return;
+          }
+          tbody.innerHTML = loadedStudents.map(function(s, i) {
+            var name = (s.firstName || '') + ' ' + (s.lastName || '');
+            var cls  = s.class   ? s.class.name   : '—';
+            var sec  = s.section ? s.section.name : '—';
+            return '<tr>' +
+              '<td><input type="checkbox" class="student-check" value="' + s.id + '" onchange="updateSelectedCount()"></td>' +
+              '<td>' + (i+1) + '</td>' +
+              '<td><code>' + (s.rollNo||'—') + '</code></td>' +
+              '<td><strong>' + name.trim() + '</strong></td>' +
+              '<td><span class="badge bg-secondary">' + cls + '</span></td>' +
+              '<td>' + sec + '</td>' +
+              '<td>' + (s.gender||'—') + '</td>' +
+              '<td><button class="btn btn-sm btn-success" onclick="promoteSingle(' + s.id + ')"><i class="bi bi-arrow-up-circle"></i> Promote</button></td>' +
+              '</tr>';
+          }).join('');
+          document.getElementById('checkAll').checked = false;
+          updateSelectedCount();
+        } catch(e) {
+          tbody.innerHTML = '<tr><td colspan="8" class="text-center text-danger py-4">Error: ' + e.message + '</td></tr>';
+        }
+      }
+
+      function updateSelectedCount() {
+        var checked = document.querySelectorAll('.student-check:checked').length;
+        document.getElementById('selectedCount').textContent = checked + ' selected';
+      }
+
+      function toggleAll(cb) {
+        document.querySelectorAll('.student-check').forEach(function(c) { c.checked = cb.checked; });
+        updateSelectedCount();
+      }
+
+      function selectAll() {
+        document.querySelectorAll('.student-check').forEach(function(c) { c.checked = true; });
+        document.getElementById('checkAll').checked = true;
+        updateSelectedCount();
+      }
+
+      function deselectAll() {
+        document.querySelectorAll('.student-check').forEach(function(c) { c.checked = false; });
+        document.getElementById('checkAll').checked = false;
+        updateSelectedCount();
+      }
+
+      async function doPromotion(ids) {
+        var toClassId = document.getElementById('toClass').value;
+        var toSecId   = document.getElementById('toSection').value;
+        if (!toClassId) { API.toast('Please select a target class first.', 'warning'); return; }
+
+        var successCount = 0;
+        var failCount    = 0;
+
+        for (var i = 0; i < ids.length; i++) {
+          try {
+            var body = { classId: toClassId === 'GRADUATED' ? null : toClassId };
+            if (toSecId && toClassId !== 'GRADUATED') body.sectionId = toSecId;
+            if (toClassId === 'GRADUATED') body.status = 'GRADUATED';
+            var res = await API.students.promote(ids[i], body);
+            if (res && res.success) successCount++;
+            else failCount++;
+          } catch(e) { failCount++; }
+        }
+
+        if (successCount > 0) {
+          API.toast(successCount + ' student(s) promoted successfully.', 'success');
+          loadStudents();
+          loadStats();
+        }
+        if (failCount > 0) {
+          API.toast(failCount + ' student(s) failed to promote.', 'danger');
+        }
+      }
+
+      function promoteSelected() {
+        var ids = Array.from(document.querySelectorAll('.student-check:checked')).map(function(c) { return parseInt(c.value); });
+        if (!ids.length) { API.toast('Please select at least one student.', 'warning'); return; }
+        if (!confirm('Promote ' + ids.length + ' selected student(s)?')) return;
+        doPromotion(ids);
+      }
+
+      function promoteSingle(id) {
+        if (!confirm('Promote this student?')) return;
+        doPromotion([id]);
+      }
+
+      document.getElementById('fromClass').addEventListener('change', function() {
+        loadSectionDropdown(this.value, 'fromSection');
+        loadStudents();
+      });
+      document.getElementById('fromSection').addEventListener('change', loadStudents);
+      document.getElementById('toClass').addEventListener('change', function() {
+        loadSectionDropdown(this.value === 'GRADUATED' ? '' : this.value, 'toSection');
+      });
+
+      document.addEventListener('DOMContentLoaded', function() {
+        loadClassDropdowns();
+        loadStats();
+        var sw = document.querySelector('.sidebar-wrapper');
+        if (sw && typeof OverlayScrollbarsGlobal !== 'undefined' && OverlayScrollbarsGlobal.OverlayScrollbars) {
+          OverlayScrollbarsGlobal.OverlayScrollbars(sw, { scrollbars: { theme: 'os-theme-light', autoHide: 'leave', clickScroll: true } });
+        }
+      });
+    </script>
+  </body>
+</html>

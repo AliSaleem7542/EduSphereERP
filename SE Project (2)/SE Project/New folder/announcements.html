@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Announcements | EDU-SPHERE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="css/adminlte.css" />
+</head>
+<body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+<div class="app-wrapper">
+  <nav class="app-header navbar navbar-expand bg-body">
+    <div class="container-fluid">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" data-lte-toggle="sidebar" href="#"><i class="bi bi-list"></i></a></li>
+        <li class="nav-item d-none d-md-block"><a href="index2.html" class="nav-link">Dashboard</a></li>
+      </ul>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item dropdown user-menu">
+          <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+            <img src="assets/img/user2-160x160.jpg" class="user-image rounded-circle shadow" alt="User">
+            <span class="d-none d-md-inline" id="navAdminName">Admin</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+            <li class="user-footer"><a href="index2.html" class="btn btn-default btn-flat">Dashboard</a><a href="#" class="btn btn-default btn-flat float-end" onclick="AUTH.logout('admin-login.html')">Sign out</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+    <div class="sidebar-brand"><a href="index2.html" class="brand-link"><img src="assets/img/eduspherelogo (2).png" alt="Logo" class="brand-image opacity-75 shadow"><span class="brand-text fw-light">EDU-SPHERE</span></a></div>
+    <div class="sidebar-wrapper"><nav class="mt-2"><ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation">
+      <li class="nav-item"><a href="index2.html" class="nav-link"><i class="nav-icon bi bi-speedometer2"></i><p>Dashboard</p></a></li>
+      <li class="nav-item"><a href="manage-students.html" class="nav-link"><i class="nav-icon bi bi-people-fill"></i><p>Students</p></a></li>
+      <li class="nav-item"><a href="manage-teachers.html" class="nav-link"><i class="nav-icon bi bi-person-badge-fill"></i><p>Teachers</p></a></li>
+      <li class="nav-item"><a href="student-attendance.html" class="nav-link"><i class="nav-icon bi bi-calendar-check-fill"></i><p>Attendance</p></a></li>
+      <li class="nav-item"><a href="collect-fee.html" class="nav-link"><i class="nav-icon bi bi-cash-stack"></i><p>Fees</p></a></li>
+      <li class="nav-item"><a href="result-management.html" class="nav-link"><i class="nav-icon bi bi-clipboard-data-fill"></i><p>Results</p></a></li>
+      <li class="nav-item active"><a href="announcements.html" class="nav-link active"><i class="nav-icon bi bi-megaphone-fill"></i><p>Announcements</p></a></li>
+      <li class="nav-item"><a href="reports.html" class="nav-link"><i class="nav-icon bi bi-bar-chart-fill"></i><p>Reports</p></a></li>
+      <li class="nav-item"><a href="settings.html" class="nav-link"><i class="nav-icon bi bi-gear-fill"></i><p>Settings</p></a></li>
+    </ul></nav></div>
+  </aside>
+  <main class="app-main">
+    <div class="app-content-header"><div class="container-fluid"><div class="row">
+      <div class="col-sm-6"><h3 class="mb-0">Announcements</h3></div>
+      <div class="col-sm-6"><ol class="breadcrumb float-sm-end"><li class="breadcrumb-item"><a href="index2.html">Home</a></li><li class="breadcrumb-item active">Announcements</li></ol></div>
+    </div></div></div>
+    <div class="app-content"><div class="container-fluid">
+      <div class="row mb-4">
+        <div class="col-md-3"><div class="info-box"><span class="info-box-icon text-bg-primary shadow-sm"><i class="bi bi-megaphone-fill"></i></span><div class="info-box-content"><span class="info-box-text">Total</span><span class="info-box-number" id="statTotal">0</span></div></div></div>
+        <div class="col-md-3"><div class="info-box"><span class="info-box-icon text-bg-success shadow-sm"><i class="bi bi-check-circle-fill"></i></span><div class="info-box-content"><span class="info-box-text">Active</span><span class="info-box-number" id="statActive">0</span></div></div></div>
+        <div class="col-md-3"><div class="info-box"><span class="info-box-icon text-bg-danger shadow-sm"><i class="bi bi-pin-angle-fill"></i></span><div class="info-box-content"><span class="info-box-text">Pinned</span><span class="info-box-number" id="statPinned">0</span></div></div></div>
+        <div class="col-md-3"><div class="info-box"><span class="info-box-icon text-bg-warning shadow-sm"><i class="bi bi-people-fill"></i></span><div class="info-box-content"><span class="info-box-text">Audiences</span><span class="info-box-number" id="statGroups">0</span></div></div></div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card shadow">
+            <div class="card-header bg-primary text-white"><h3 class="card-title mb-0"><i class="bi bi-plus-circle"></i> <span id="formTitle">New Announcement</span></h3></div>
+            <div class="card-body">
+              <input type="hidden" id="editId">
+              <div class="mb-3"><label class="form-label">Title <span class="text-danger">*</span></label><input type="text" class="form-control" id="annTitle" placeholder="Announcement title"></div>
+              <div class="mb-3"><label class="form-label">Message <span class="text-danger">*</span></label><textarea class="form-control" id="annMessage" rows="4" placeholder="Write your announcement..."></textarea></div>
+              <div class="mb-3"><label class="form-label">Category</label>
+                <select class="form-select" id="annCategory">
+                  <option value="GENERAL">General</option><option value="EXAM">Exam</option>
+                  <option value="FEE">Fee</option><option value="HOLIDAY">Holiday</option>
+                  <option value="EVENT">Event</option><option value="URGENT">Urgent</option>
+                </select>
+              </div>
+              <div class="mb-3"><label class="form-label">Audience</label>
+                <select class="form-select" id="annAudience">
+                  <option value="ALL">All</option><option value="STUDENTS">Students Only</option>
+                  <option value="TEACHERS">Teachers Only</option><option value="PARENTS">Parents Only</option><option value="STAFF">Staff Only</option>
+                </select>
+              </div>
+              <div class="row">
+                <div class="col-6 mb-3"><label class="form-label">Date</label><input type="date" class="form-control" id="annDate"></div>
+                <div class="col-6 mb-3"><label class="form-label">Expiry Date</label><input type="date" class="form-control" id="annExpiry"></div>
+              </div>
+              <div class="mb-3 form-check"><input type="checkbox" class="form-check-input" id="annPinned"><label class="form-check-label" for="annPinned">Pin this announcement</label></div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-success flex-fill" id="saveBtn" onclick="saveAnnouncement()"><i class="bi bi-check-circle"></i> Save</button>
+                <button class="btn btn-outline-secondary" onclick="resetForm()"><i class="bi bi-x"></i> Clear</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="card shadow">
+            <div class="card-header bg-secondary text-white">
+              <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <h3 class="card-title mb-0"><i class="bi bi-list-ul"></i> All Announcements</h3>
+                <div class="d-flex gap-2 flex-wrap">
+                  <input type="text" class="form-control form-control-sm" id="searchInput" placeholder="Search..." oninput="renderList()" style="width:140px">
+                  <select class="form-select form-select-sm" id="filterCat" onchange="renderList()" style="width:120px">
+                    <option value="">All Categories</option>
+                    <option value="GENERAL">General</option><option value="EXAM">Exam</option><option value="FEE">Fee</option>
+                    <option value="HOLIDAY">Holiday</option><option value="EVENT">Event</option><option value="URGENT">Urgent</option>
+                  </select>
+                  <select class="form-select form-select-sm" id="filterAudience" onchange="renderList()" style="width:120px">
+                    <option value="">All Audiences</option>
+                    <option value="ALL">All</option><option value="STUDENTS">Students</option><option value="TEACHERS">Teachers</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="card-body" id="annList"><p class="text-center text-muted py-4"><span class="spinner-border spinner-border-sm me-2"></span>Loading...</p></div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </main>
+  <footer class="app-footer"><strong>Copyright &copy; 2025 EDU-SPHERE.</strong> All rights reserved.</footer>
+</div>
+
+<div class="modal fade" id="viewModal" tabindex="-1">
+  <div class="modal-dialog modal-lg"><div class="modal-content">
+    <div class="modal-header"><h5 class="modal-title" id="modalTitle">Announcement</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+    <div class="modal-body">
+      <div class="d-flex gap-2 mb-3" id="modalBadges"></div>
+      <p id="modalMessage" class="mb-2" style="white-space:pre-wrap"></p>
+      <small class="text-muted">Date: <span id="modalDate"></span> | Expires: <span id="modalExpiry"></span> | Audience: <span id="modalAudience"></span></small>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-success" onclick="printAnn(currentViewId)"><i class="bi bi-printer-fill"></i> Print</button>
+      <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    </div>
+  </div></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="js/adminlte.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/api.js"></script>
+<script>
+AUTH.requireAuth('ADMIN');
+var CAT_COLORS = { GENERAL:'bg-secondary', EXAM:'bg-primary', FEE:'bg-warning text-dark', HOLIDAY:'bg-success', EVENT:'bg-info text-dark', URGENT:'bg-danger' };
+var annCache = [];
+var currentViewId = null;
+
+async function loadAnnouncements() {
+  var params = {};
+  var cat = document.getElementById('filterCat').value;
+  var aud = document.getElementById('filterAudience').value;
+  if (cat) params.category = cat;
+  if (aud) params.audience = aud;
+  var res = await API.announcements.list(params);
+  if (!res || !res.success) return;
+  annCache = res.data || [];
+  updateStats();
+  renderList();
+}
+
+function updateStats() {
+  var today = new Date().toISOString().split('T')[0];
+  var active = annCache.filter(function(a){ return !a.expiryDate || a.expiryDate >= today; });
+  var pinned = annCache.filter(function(a){ return a.isPinned; });
+  var groups = new Set(annCache.map(function(a){ return a.audience; }));
+  document.getElementById('statTotal').textContent  = annCache.length;
+  document.getElementById('statActive').textContent = active.length;
+  document.getElementById('statPinned').textContent = pinned.length;
+  document.getElementById('statGroups').textContent = groups.size;
+}
+
+function renderList() {
+  var q   = (document.getElementById('searchInput').value || '').toLowerCase();
+  var cat = document.getElementById('filterCat').value;
+  var aud = document.getElementById('filterAudience').value;
+  var today = new Date().toISOString().split('T')[0];
+  var list = annCache.filter(function(a){
+    return (!q || a.title.toLowerCase().includes(q) || a.message.toLowerCase().includes(q))
+        && (!cat || a.category === cat)
+        && (!aud || a.audience === aud);
+  });
+  list.sort(function(a,b){ return (b.isPinned?1:0)-(a.isPinned?1:0) || new Date(b.createdAt)-new Date(a.createdAt); });
+  var container = document.getElementById('annList');
+  if (!list.length) { container.innerHTML='<p class="text-center text-muted py-4">No announcements found.</p>'; return; }
+  container.innerHTML = list.map(function(a){
+    var expired = a.expiryDate && a.expiryDate < today;
+    var catColor = CAT_COLORS[a.category] || 'bg-secondary';
+    var dateStr = a.date ? a.date.split('T')[0] : '';
+    var expiryStr = a.expiryDate ? a.expiryDate.split('T')[0] : '';
+    return '<div class="card mb-3 '+(expired?'border-secondary opacity-75':'border-0 shadow-sm')+'">' +
+      '<div class="card-body py-3">' +
+        '<div class="d-flex justify-content-between align-items-start">' +
+          '<div>'+(a.isPinned?'<i class="bi bi-pin-angle-fill text-danger me-1"></i>':'')+'<strong>'+a.title+'</strong>'+(expired?' <span class="badge bg-secondary ms-1">Expired</span>':'')+'</div>' +
+          '<div class="d-flex gap-1"><span class="badge '+catColor+'">'+a.category+'</span><span class="badge bg-light text-dark border">'+a.audience+'</span></div>' +
+        '</div>' +
+        '<p class="text-muted mb-2 mt-1" style="font-size:.9rem;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">'+a.message+'</p>' +
+        '<div class="d-flex justify-content-between align-items-center">' +
+          '<small class="text-muted"><i class="bi bi-calendar3"></i> '+dateStr+(expiryStr?' | Expires: '+expiryStr:'')+'</small>' +
+          '<div class="d-flex gap-1">' +
+            '<button class="btn btn-sm btn-outline-info" onclick="viewAnn('+a.id+')" title="View"><i class="bi bi-eye-fill"></i></button>' +
+            '<button class="btn btn-sm btn-outline-primary" onclick="editAnn('+a.id+')" title="Edit"><i class="bi bi-pencil-fill"></i></button>' +
+            '<button class="btn btn-sm btn-outline-'+(a.isPinned?'warning':'secondary')+'" onclick="togglePin('+a.id+')" title="'+(a.isPinned?'Unpin':'Pin')+'"><i class="bi bi-pin-angle'+(a.isPinned?'-fill':'')+'"></i></button>' +
+            '<button class="btn btn-sm btn-outline-danger" onclick="deleteAnn('+a.id+')" title="Delete"><i class="bi bi-trash-fill"></i></button>' +
+          '</div>' +
+        '</div>' +
+      '</div></div>';
+  }).join('');
+}
+
+async function saveAnnouncement() {
+  var title   = document.getElementById('annTitle').value.trim();
+  var message = document.getElementById('annMessage').value.trim();
+  if (!title || !message) { API.toast('Title and Message are required.', 'danger'); return; }
+  var body = {
+    title, message,
+    category:   document.getElementById('annCategory').value,
+    audience:   document.getElementById('annAudience').value,
+    date:       document.getElementById('annDate').value || new Date().toISOString().split('T')[0],
+    expiryDate: document.getElementById('annExpiry').value || null,
+    isPinned:   document.getElementById('annPinned').checked,
+  };
+  API.spinner(true, 'saveBtn');
+  var editId = document.getElementById('editId').value;
+  var res = editId ? await API.announcements.update(editId, body) : await API.announcements.create(body);
+  API.spinner(false, 'saveBtn');
+  if (res && res.success) {
+    API.toast(editId ? 'Announcement updated' : 'Announcement created');
+    resetForm();
+    loadAnnouncements();
+  } else {
+    API.toast((res && res.message) || 'Save failed', 'danger');
+  }
+}
+
+function editAnn(id) {
+  var a = annCache.find(function(x){ return x.id === id; });
+  if (!a) return;
+  document.getElementById('editId').value       = a.id;
+  document.getElementById('annTitle').value     = a.title;
+  document.getElementById('annMessage').value   = a.message;
+  document.getElementById('annCategory').value  = a.category;
+  document.getElementById('annAudience').value  = a.audience;
+  document.getElementById('annDate').value      = a.date ? a.date.split('T')[0] : '';
+  document.getElementById('annExpiry').value    = a.expiryDate ? a.expiryDate.split('T')[0] : '';
+  document.getElementById('annPinned').checked  = a.isPinned;
+  document.getElementById('formTitle').textContent = 'Edit Announcement';
+  window.scrollTo(0,0);
+}
+
+async function deleteAnn(id) {
+  if (!confirm('Delete this announcement?')) return;
+  var res = await API.announcements.remove(id);
+  if (res && res.success) { API.toast('Deleted'); loadAnnouncements(); }
+  else API.toast('Delete failed', 'danger');
+}
+
+async function togglePin(id) {
+  var res = await API.announcements.togglePin(id);
+  if (res && res.success) loadAnnouncements();
+}
+
+function viewAnn(id) {
+  var a = annCache.find(function(x){ return x.id === id; });
+  if (!a) return;
+  currentViewId = id;
+  var catColor = CAT_COLORS[a.category] || 'bg-secondary';
+  document.getElementById('modalTitle').textContent = a.title;
+  document.getElementById('modalBadges').innerHTML =
+    '<span class="badge '+catColor+'">'+a.category+'</span>' +
+    '<span class="badge bg-light text-dark border">'+a.audience+'</span>' +
+    (a.isPinned?'<span class="badge bg-danger"><i class="bi bi-pin-angle-fill"></i> Pinned</span>':'');
+  document.getElementById('modalMessage').textContent = a.message;
+  document.getElementById('modalDate').textContent    = a.date ? a.date.split('T')[0] : '—';
+  document.getElementById('modalExpiry').textContent  = a.expiryDate ? a.expiryDate.split('T')[0] : 'No expiry';
+  document.getElementById('modalAudience').textContent = a.audience;
+  new bootstrap.Modal(document.getElementById('viewModal')).show();
+}
+
+function printAnn(id) {
+  var a = annCache.find(function(x){ return x.id === id; });
+  if (!a) return;
+  var w = window.open('','_blank');
+  w.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>'+a.title+'</title><style>body{font-family:Arial,sans-serif;margin:40px}.title{font-size:20px;font-weight:bold;margin-bottom:8px}.message{font-size:15px;line-height:1.8;white-space:pre-wrap;border-left:4px solid #1a3a5c;padding-left:16px;margin:20px 0}.footer{text-align:center;margin-top:40px;font-size:12px;color:#888}</style></head><body>');
+  w.document.write('<h2>EDU-SPHERE</h2><div class="title">'+a.title+'</div><p>Category: '+a.category+' | Audience: '+a.audience+'</p><div class="message">'+a.message+'</div><div class="footer">EDU-SPHERE Administration</div></body></html>');
+  w.document.close(); w.focus(); w.print();
+}
+
+function resetForm() {
+  document.getElementById('editId').value = '';
+  document.getElementById('annTitle').value = '';
+  document.getElementById('annMessage').value = '';
+  document.getElementById('annCategory').value = 'GENERAL';
+  document.getElementById('annAudience').value = 'ALL';
+  document.getElementById('annDate').value = new Date().toISOString().split('T')[0];
+  document.getElementById('annExpiry').value = '';
+  document.getElementById('annPinned').checked = false;
+  document.getElementById('formTitle').textContent = 'New Announcement';
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  document.getElementById('annDate').value = new Date().toISOString().split('T')[0];
+  loadAnnouncements();
+});
+</script>
+</body>
+</html>

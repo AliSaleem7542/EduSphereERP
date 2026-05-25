@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Teacher Dashboard | EDU-SPHERE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="css/adminlte.css" />
+  <style>
+    .welcome-card { background: linear-gradient(135deg, #1b5e20, #388e3c); color: white; border-radius: 12px; }
+    .stat-card { border-radius: 10px; border: none; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+  </style>
+</head>
+<body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+<div class="app-wrapper">
+<nav class="app-header navbar navbar-expand bg-body">
+  <div class="container-fluid">
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" data-lte-toggle="sidebar" href="#"><i class="bi bi-list"></i></a></li>
+      <li class="nav-item d-none d-md-block"><span class="nav-link fw-semibold text-success"><i class="bi bi-person-badge-fill me-1"></i>Teacher Portal</span></li>
+    </ul>
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item dropdown user-menu">
+        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+          <img src="assets/img/avatar.png" class="user-image rounded-circle shadow" id="navPhoto" alt="Teacher">
+          <span class="d-none d-md-inline" id="navName">Teacher</span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+          <li class="user-header text-bg-success"><img src="assets/img/avatar.png" class="rounded-circle shadow" id="navPhoto2" alt="Teacher"><p id="navNameFull">Teacher<small id="navDept"></small></p></li>
+          <li class="user-footer"><a href="teacher-profile.html" class="btn btn-default btn-flat">My Profile</a><a href="#" class="btn btn-default btn-flat float-end" onclick="AUTH.logout('teacher-login.html')">Sign out</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
+<aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+  <div class="sidebar-brand"><a href="teacher-dashboard.html" class="brand-link"><img src="assets/img/eduspherelogo (2).png" alt="Logo" class="brand-image opacity-75 shadow"><span class="brand-text fw-light">EDU-SPHERE</span></a></div>
+  <div class="sidebar-wrapper"><nav class="mt-2"><ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation">
+    <li class="nav-item"><a href="teacher-dashboard.html" class="nav-link active"><i class="nav-icon bi bi-speedometer2"></i><p>Dashboard</p></a></li>
+    <li class="nav-item"><a href="teacher-profile.html" class="nav-link"><i class="nav-icon bi bi-person-circle"></i><p>My Profile</p></a></li>
+    <li class="nav-item"><a href="teacher-my-students.html" class="nav-link"><i class="nav-icon bi bi-people-fill"></i><p>My Students</p></a></li>
+    <li class="nav-item"><a href="teacher-mark-attendance.html" class="nav-link"><i class="nav-icon bi bi-calendar-check-fill"></i><p>Mark Attendance</p></a></li>
+    <li class="nav-item"><a href="teacher-enter-results.html" class="nav-link"><i class="nav-icon bi bi-clipboard-data-fill"></i><p>Enter Results</p></a></li>
+    <li class="nav-item"><a href="teacher-my-schedule.html" class="nav-link"><i class="nav-icon bi bi-calendar3"></i><p>My Schedule</p></a></li>
+    <li class="nav-item"><a href="teacher-exams-view.html" class="nav-link"><i class="nav-icon bi bi-pencil-square"></i><p>Exam Schedule</p></a></li>
+    <li class="nav-item"><a href="teacher-announcements-view.html" class="nav-link"><i class="nav-icon bi bi-megaphone-fill"></i><p>Announcements</p></a></li>
+  </ul></nav></div>
+</aside>
+<main class="app-main">
+  <div class="app-content-header"><div class="container-fluid"><div class="row">
+    <div class="col-sm-6"><h3 class="mb-0">Dashboard</h3></div>
+    <div class="col-sm-6"><ol class="breadcrumb float-sm-end"><li class="breadcrumb-item active">Home</li></ol></div>
+  </div></div></div>
+  <div class="app-content"><div class="container-fluid">
+    <div class="welcome-card p-4 mb-4 d-flex align-items-center gap-4">
+      <img src="assets/img/avatar.png" id="welcomePhoto" class="rounded-circle" width="80" height="80" style="object-fit:cover;border:3px solid rgba(255,255,255,0.4)" onerror="this.src='assets/img/avatar.png'">
+      <div>
+        <h4 class="mb-1" id="welcomeName">Welcome!</h4>
+        <p class="mb-0 opacity-75"><span id="welcomeDept"></span> &bull; <span id="welcomeExp"></span> years experience</p>
+        <small class="opacity-60"><span id="welcomeSubjects"></span></small>
+      </div>
+    </div>
+    <div class="row mb-4">
+      <div class="col-md-3 col-6 mb-3"><div class="stat-card card text-center p-3"><div class="text-primary fs-1"><i class="bi bi-people-fill"></i></div><h4 class="mb-0" id="statStudents">0</h4><small class="text-muted">My Students</small></div></div>
+      <div class="col-md-3 col-6 mb-3"><div class="stat-card card text-center p-3"><div class="text-success fs-1"><i class="bi bi-calendar-check-fill"></i></div><h4 class="mb-0" id="statAttToday">—</h4><small class="text-muted">Attendance Today</small></div></div>
+      <div class="col-md-3 col-6 mb-3"><div class="stat-card card text-center p-3"><div class="text-danger fs-1"><i class="bi bi-pencil-square"></i></div><h4 class="mb-0" id="statExams">0</h4><small class="text-muted">Upcoming Exams</small></div></div>
+      <div class="col-md-3 col-6 mb-3"><div class="stat-card card text-center p-3"><div class="text-warning fs-1"><i class="bi bi-megaphone-fill"></i></div><h4 class="mb-0" id="statAnn">0</h4><small class="text-muted">Announcements</small></div></div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-4">
+        <div class="card shadow h-100">
+          <div class="card-header bg-primary text-white"><h5 class="card-title mb-0"><i class="bi bi-megaphone-fill me-2"></i>Recent Announcements</h5></div>
+          <div class="card-body p-0"><ul class="list-group list-group-flush" id="annList"><li class="list-group-item text-muted text-center py-3">Loading...</li></ul></div>
+          <div class="card-footer text-end"><a href="teacher-announcements-view.html" class="btn btn-sm btn-outline-primary">View All</a></div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-4">
+        <div class="card shadow h-100">
+          <div class="card-header bg-danger text-white"><h5 class="card-title mb-0"><i class="bi bi-pencil-square me-2"></i>Upcoming Exams</h5></div>
+          <div class="card-body p-0"><ul class="list-group list-group-flush" id="examList"><li class="list-group-item text-muted text-center py-3">Loading...</li></ul></div>
+          <div class="card-footer text-end"><a href="teacher-exams-view.html" class="btn btn-sm btn-outline-danger">View All</a></div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</main>
+<footer class="app-footer"><strong>Copyright &copy; 2025 EDU-SPHERE.</strong> Teacher Portal</footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="js/adminlte.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/api.js"></script>
+<script>
+  AUTH.requireAuth('TEACHER');
+  var user = AUTH.getUser() || JSON.parse(sessionStorage.getItem('teacherSession') || '{}');
+  var teacherId = user.teacherId || user.id;
+
+  async function initDashboard() {
+    var tRes = await API.teachers.get(teacherId);
+    if (tRes && tRes.success) {
+      var t = tRes.data;
+      var photo = t.photo ? 'http://localhost:5000' + t.photo : 'assets/img/avatar.png';
+      document.getElementById('navPhoto').src     = photo;
+      document.getElementById('navPhoto2').src    = photo;
+      document.getElementById('welcomePhoto').src = photo;
+      document.getElementById('navName').textContent       = t.name||'Teacher';
+      document.getElementById('navNameFull').childNodes[0].textContent = t.name||'Teacher';
+      document.getElementById('navDept').textContent       = ' — ' + (t.department||'');
+      document.getElementById('welcomeName').textContent   = 'Welcome, ' + (t.name||'Teacher') + '!';
+      document.getElementById('welcomeDept').textContent   = t.department||'—';
+      document.getElementById('welcomeExp').textContent    = t.experience||'0';
+    }
+
+    // My subjects
+    var subRes = await API.teachers.subjects(teacherId);
+    if (subRes && subRes.success) {
+      var subs = subRes.data || [];
+      document.getElementById('welcomeSubjects').textContent = subs.length ? 'Subjects: ' + subs.map(function(s){ return s.subject ? s.subject.name : ''; }).join(', ') : 'No subjects assigned';
+    }
+
+    // My students
+    var stuRes = await API.teachers.myStudents(teacherId);
+    if (stuRes && stuRes.success) document.getElementById('statStudents').textContent = stuRes.data.length;
+
+    // Today's attendance
+    var attRes = await API.attendance.today();
+    if (attRes && attRes.success) {
+      var a = attRes.data;
+      document.getElementById('statAttToday').textContent = a.total > 0 ? a.present + ' present' : 'Not marked';
+    }
+
+    // Upcoming exams
+    var examRes = await API.exams.upcoming();
+    if (examRes && examRes.success) {
+      var exams = examRes.data || [];
+      document.getElementById('statExams').textContent = exams.length;
+      var examList = document.getElementById('examList');
+      if (exams.length) {
+        examList.innerHTML = exams.slice(0,4).map(function(e) {
+          return '<li class="list-group-item py-2 d-flex justify-content-between"><span><strong>'+e.title+'</strong><br><small class="text-muted">'+(e.subject?e.subject.name:'')+'</small></span><span class="badge bg-danger align-self-center">'+e.startDate.split('T')[0]+'</span></li>';
+        }).join('');
+      } else {
+        examList.innerHTML = '<li class="list-group-item text-muted text-center py-3">No upcoming exams.</li>';
+      }
+    }
+
+    // Announcements
+    var annRes = await API.announcements.list({ audience: 'TEACHERS' });
+    var annList = document.getElementById('annList');
+    if (annRes && annRes.success) {
+      document.getElementById('statAnn').textContent = annRes.data.length;
+      if (annRes.data.length) {
+        annList.innerHTML = annRes.data.slice(0,4).map(function(a) {
+          return '<li class="list-group-item py-2"><strong>'+a.title+'</strong><br><small class="text-muted">'+(a.date?a.date.split('T')[0]:'')+'</small></li>';
+        }).join('');
+      } else {
+        annList.innerHTML = '<li class="list-group-item text-muted text-center py-3">No announcements.</li>';
+      }
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', initDashboard);
+</script>
+</body>
+</html>

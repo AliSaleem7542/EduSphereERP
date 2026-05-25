@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EduSphere - Add Teacher</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="./css/adminlte.css">
+<style>
+  .avatar-preview {
+    width: 110px; height: 110px; border-radius: 50%;
+    object-fit: cover; border: 3px solid #dee2e6;
+  }
+  .step-indicator .step {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px;
+    background: #dee2e6; color: #6c757d;
+  }
+  .step-indicator .step.active { background: #0d6efd; color: white; }
+  .step-indicator .step.done { background: #198754; color: white; }
+  .step-line { flex: 1; height: 3px; background: #dee2e6; margin: 0 6px; }
+  .step-line.done { background: #198754; }
+  .form-section { display: none; }
+  .form-section.active { display: block; }
+</style>
+<!-- __THEME_APPLIED__ -->
+<script>
+(function(){
+  var s = JSON.parse(localStorage.getItem('sysSettings') || '{}');
+  var theme = s.sidebarTheme || 'dark';
+  document.addEventListener('DOMContentLoaded', function() {
+    var el = document.querySelector('.app-sidebar');
+    if (el) el.setAttribute('data-bs-theme', theme);
+  });
+})();
+</script>
+<script src="js/auth.js"></script>
+<script src="js/api.js"></script>
+    <script src="js/header.js"></script>
+<script>AUTH.requireAuth('ADMIN');</script>
+</head>
+<body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+<div class="app-wrapper">
+
+<!-- HEADER -->
+<nav class="app-header navbar navbar-expand bg-body">
+  <div class="container-fluid">
+    <ul class="navbar-nav">
+      <li class="nav-item"></li>
+        <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button"><i class="bi bi-list"></i></a>
+      </li>
+      <li class="nav-item d-none d-md-block"><a href="index2.html" class="nav-link">Dashboard</a></li>
+      <li class="nav-item d-none d-md-block"><a href="manage-students.html" class="nav-link">Students</a></li>
+      <li class="nav-item d-none d-md-block"><a href="manage-teachers.html" class="nav-link">Teachers</a></li>
+      <li class="nav-item d-none d-md-block"><a href="reports.html" class="nav-link">Reports</a></li>
+    </ul>
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-search"></i></a></li>
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-bs-toggle="dropdown" href="#"><i class="bi bi-chat-text"></i><span class="navbar-badge badge text-bg-danger">3</span></a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+          <a href="#" class="dropdown-item">
+            <div class="d-flex">
+              <div class="flex-shrink-0"><img src="./assets/img/user1-128x128.jpg" alt="User" class="img-size-50 rounded-circle me-3"></div>
+              <div class="flex-grow-1">
+                <h3 class="dropdown-item-title">Brad Diesel <span class="float-end fs-7 text-danger"><i class="bi bi-star-fill"></i></span></h3>
+                <p class="fs-7">New student admission request</p>
+                <p class="fs-7 text-secondary"><i class="bi bi-clock-fill me-1"></i> 4 Hours Ago</p>
+              </div>
+            </div>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-bs-toggle="dropdown" href="#"><i class="bi bi-bell-fill"></i><span class="navbar-badge badge text-bg-warning">15</span></a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+          <span class="dropdown-item dropdown-header">15 Notifications</span>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item"><i class="bi bi-mortarboard-fill me-2"></i> 12 new student admissions <span class="float-end text-secondary fs-7">10 mins</span></a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" data-lte-toggle="fullscreen">
+          <i data-lte-icon="maximize" class="bi bi-arrows-fullscreen"></i>
+          <i data-lte-icon="minimize" class="bi bi-fullscreen-exit" style="display:none"></i>
+        </a>
+      </li>
+      <li class="nav-item dropdown user-menu">
+        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+          <img src="./assets/img/user2-160x160.jpg" class="user-image rounded-circle shadow" alt="User">
+          <span class="d-none d-md-inline">Ali Saleem</span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+          <li class="user-header text-bg-primary">
+            <img src="./assets/img/user2-160x160.jpg" class="rounded-circle shadow" alt="User">
+            <p>Ali Saleem - System Administrator <small>Member since Nov. 2023</small></p>
+          </li>
+          <li class="user-body">
+            <div class="row">
+              <div class="col-4 text-center"><a href="#">Students</a></div>
+              <div class="col-4 text-center"><a href="#">Classes</a></div>
+              <div class="col-4 text-center"><a href="#">Subjects</a></div>
+            </div>
+          </li>
+          <li class="user-footer">
+            <a href="#" class="btn btn-default btn-flat">Profile</a>
+            <a href="#" class="btn btn-default btn-flat float-end">Sign out</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- SIDEBAR -->
+<aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+  <div class="sidebar-brand">
+    <a href="index2.html" class="brand-link">
+      <img src="./assets/img/eduspherelogo (2).png" alt="Logo" class="brand-image opacity-75 shadow">
+      <span class="brand-text fw-light">EDU-SPHERE</span>
+    </a>
+  </div>
+  <div class="sidebar-wrapper">
+    <nav class="mt-2">
+      <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" data-accordion="false">
+        <li class="nav-item"><a href="index2.html" class="nav-link"><i class="nav-icon bi bi-speedometer2"></i><p>Admin Dashboard</p></a></li>
+        <li class="nav-item">
+          <a href="#" class="nav-link"><i class="nav-icon bi bi-people-fill"></i><p>Students Management<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item"><a href="add-student.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Student</p></a></li>
+            <li class="nav-item"><a href="manage-students.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Students</p></a></li>
+            <li class="nav-item"><a href="student-records.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Records</p></a></li>
+            <li class="nav-item"><a href="student-promotions.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Promote Students</p></a></li>
+          </ul>
+        </li>
+        <li class="nav-item menu-open">
+          <a href="#" class="nav-link active"><i class="nav-icon bi bi-person-badge-fill"></i><p>Teachers Management<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item"><a href="add-teacher.html" class="nav-link active"><i class="nav-icon bi bi-circle"></i><p>Add Teacher</p></a></li>
+            <li class="nav-item"><a href="manage-teachers.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Teachers</p></a></li>
+            <li class="nav-item"><a href="assign-subjects.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Assign Subjects</p></a></li>
+            <li class="nav-item"><a href="teacher-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Schedule</p></a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link"><i class="nav-icon bi bi-diagram-3-fill"></i><p>Classes & Sections<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item"><a href="Classes & Sections/add-class.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Class</p></a></li>
+            <li class="nav-item"><a href="Classes & Sections/manage-classes.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Classes</p></a></li>
+            <li class="nav-item"><a href="Classes & Sections/manage-sections.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Sections</p></a></li>
+            <li class="nav-item"><a href="Classes & Sections/assign-class-teacher.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Assign Class Teacher</p></a></li>
+            <li class="nav-item"><a href="Classes & Sections/student-allocation.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Allocation</p></a></li>
+            <li class="nav-item"><a href="Classes & Sections/classroom-management.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Classroom Management</p></a></li>
+            <li class="nav-item"><a href="Classes & Sections/subject-allocation.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Subject Allocation</p></a></li>
+            <li class="nav-item"><a href="Classes & Sections/class-promotion.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Class Promotion</p></a></li>
+            <li class="nav-item"><a href="timetable.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Class Timetable</p></a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link"><i class="nav-icon bi bi-clipboard-data-fill"></i><p>Exams & Results<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item"><a href="create-exam.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create Exam</p></a></li>
+            <li class="nav-item"><a href="exam-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Exam Schedule</p></a></li>
+            <li class="nav-item"><a href="result-management.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Result Management</p></a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link"><i class="nav-icon bi bi-calendar-check-fill"></i><p>Attendance<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item"><a href="student-attendance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Attendance</p></a></li>
+            <li class="nav-item"><a href="teacher-attendance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Attendance</p></a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link"><i class="nav-icon bi bi-cash-stack"></i><p>Fee Management<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item"><a href="collect-fee.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Collect Fee</p></a></li>
+            <li class="nav-item"><a href="fee-records.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Records</p></a></li>
+            <li class="nav-item"><a href="pending-fees.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Pending Fees</p></a></li>
+<li class="nav-item"><a href="fee-refunds.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Refunds</p></a></li>
+          </ul>
+        </li>
+                <!-- Accounts -->
+        <li class="nav-item">
+          <a href="#" class="nav-link"><i class="nav-icon bi bi-journal-text"></i><p>Accounts<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item"><a href="accounts-entry.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Income / Expense Entry</p></a></li>
+            <li class="nav-item"><a href="accounts-ledger.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Ledger</p></a></li>
+            <li class="nav-item"><a href="accounts-balance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Balance Sheet</p></a></li>
+          </ul>
+        </li>
+<li class="nav-item">
+          <a href="#" class="nav-link"><i class="nav-icon bi bi-book-fill"></i><p>Library<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item"><a href="add-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Book</p></a></li>
+            <li class="nav-item"><a href="issue-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Issue Book</p></a></li>
+            <li class="nav-item"><a href="return-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Return Book</p></a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a href="announcements.html" class="nav-link"><i class="nav-icon bi bi-megaphone-fill"></i><p>Announcements</p></a></li>
+        <li class="nav-item"><a href="reports.html" class="nav-link"><i class="nav-icon bi bi-bar-chart-fill"></i><p>Reports</p></a></li>
+        <li class="nav-item">
+          <a href="#" class="nav-link"><i class="nav-icon bi bi-person-gear"></i><p>User Management<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item"><a href="create-user.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create User</p></a></li>
+            <li class="nav-item"><a href="manage-users.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Users</p></a></li>
+            <li class="nav-item"><a href="roles-permissions.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Roles & Permissions</p></a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a href="activity-logs.html" class="nav-link"><i class="nav-icon bi bi-clock-history"></i><p>Activity Logs</p></a></li>
+        <li class="nav-item"><a href="backup.html" class="nav-link"><i class="nav-icon bi bi-database-fill-down"></i><p>Backup & Restore</p></a></li>
+        <li class="nav-item"><a href="settings.html" class="nav-link"><i class="nav-icon bi bi-gear-fill"></i><p>System Settings</p></a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+p>a></a>
+
+<!-- MAIN CONTENT -->
+<main class="app-main">
+  <div class="app-content-header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-6"><h3 class="mb-0">Add New Teacher</h3></div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-end">
+            <li class="breadcrumb-item"><a href="index2.html">Home</a></li>
+            <li class="breadcrumb-item">Teachers Management</li>
+            <li class="breadcrumb-item active">Add Teacher</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-content">
+    <div class="container-fluid">
+
+      <!-- STATS -->
+      <div class="row mb-3">
+        <div class="col-12 col-sm-6 col-md-3">
+          <div class="info-box">
+            <span class="info-box-icon text-bg-primary shadow-sm"><i class="bi bi-person-badge-fill"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Total Teachers</span>
+              <span class="info-box-number" id="statTotal">0</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3">
+          <div class="info-box">
+            <span class="info-box-icon text-bg-success shadow-sm"><i class="bi bi-diagram-3"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Departments</span>
+              <span class="info-box-number" id="statDepts">0</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3">
+          <div class="info-box">
+            <span class="info-box-icon text-bg-warning shadow-sm"><i class="bi bi-award-fill"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Experienced (5+ yrs)</span>
+              <span class="info-box-number" id="statExp">0</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3">
+          <div class="info-box">
+            <span class="info-box-icon text-bg-danger shadow-sm"><i class="bi bi-person-check-fill"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Added This Session</span>
+              <span class="info-box-number" id="statSession">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- MULTI-STEP FORM -->
+        <div class="col-md-8">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title"><i class="bi bi-person-plus-fill me-2"></i>Teacher Registration Form</h3>
+            </div>
+            <div class="card-body">
+
+              <!-- STEP INDICATOR -->
+              <div class="d-flex align-items-center mb-4 step-indicator">
+                <div class="step active" id="step1-dot">1</div>
+                <div class="step-line" id="line1"></div>
+                <div class="step" id="step2-dot">2</div>
+                <div class="step-line" id="line2"></div>
+                <div class="step" id="step3-dot">3</div>
+              </div>
+              <div class="d-flex justify-content-between mb-4" style="font-size:13px; color:#6c757d; margin-top:-10px">
+                <span>Personal Info</span>
+                <span>Professional Info</span>
+                <span>Account & Review</span>
+              </div>
+
+              <form id="teacherForm" novalidate>
+
+                <!-- STEP 1: Personal Info -->
+                <div class="form-section active" id="section1">
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label">Full Name <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="tName" placeholder="e.g. Ahmed Khan" required>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Father's Name</label>
+                      <input type="text" class="form-control" id="tFather" placeholder="e.g. Muhammad Khan">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Date of Birth</label>
+                      <input type="date" class="form-control" id="tDob">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Gender</label>
+                      <select class="form-select" id="tGender">
+                        <option value="">-- Select --</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Other</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">CNIC</label>
+                      <input type="text" class="form-control" id="tCnic" placeholder="XXXXX-XXXXXXX-X">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Phone <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="tPhone" placeholder="03XX-XXXXXXX" required>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Email <span class="text-danger">*</span></label>
+                      <input type="email" class="form-control" id="tEmail" placeholder="teacher@school.com" required>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Address</label>
+                      <input type="text" class="form-control" id="tAddress" placeholder="Street, City">
+                    </div>
+                  </div>
+                  <div class="mt-4 d-flex justify-content-end">
+                    <button type="button" class="btn btn-primary" onclick="goStep(2)">Next <i class="bi bi-arrow-right ms-1"></i></button>
+                  </div>
+                </div>
+
+                <!-- STEP 2: Professional Info -->
+                <div class="form-section" id="section2">
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label">Department <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="tDept" placeholder="e.g. Mathematics" required>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Qualification <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="tQual" placeholder="e.g. M.Sc, B.Ed" required>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Specialization</label>
+                      <input type="text" class="form-control" id="tSpec" placeholder="e.g. Algebra, Physics">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Experience (years) <span class="text-danger">*</span></label>
+                      <input type="number" class="form-control" id="tExp" placeholder="e.g. 5" min="0" required>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Joining Date</label>
+                      <input type="date" class="form-control" id="tJoining">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Employment Type</label>
+                      <select class="form-select" id="tEmpType">
+                        <option value="">-- Select --</option>
+                        <option>Permanent</option>
+                        <option>Contract</option>
+                        <option>Part-Time</option>
+                        <option>Visiting</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Salary (PKR)</label>
+                      <input type="number" class="form-control" id="tSalary" placeholder="e.g. 50000">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Status</label>
+                      <select class="form-select" id="tStatus">
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                        <option value="On Leave">On Leave</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="mt-4 d-flex justify-content-between">
+                    <button type="button" class="btn btn-secondary" onclick="goStep(1)"><i class="bi bi-arrow-left me-1"></i> Back</button>
+                    <button type="button" class="btn btn-primary" onclick="goStep(3)">Next <i class="bi bi-arrow-right ms-1"></i></button>
+                  </div>
+                </div>
+
+                <!-- STEP 3: Review & Submit -->
+                <div class="form-section" id="section3">
+                  <h6 class="text-muted mb-3"><i class="bi bi-eye me-1"></i>Review Before Saving</h6>
+                  <div class="table-responsive">
+                    <table class="table table-bordered table-sm" id="reviewTable">
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                  <div class="mt-3 d-flex justify-content-between">
+                    <button type="button" class="btn btn-secondary" onclick="goStep(2)"><i class="bi bi-arrow-left me-1"></i> Back</button>
+                    <button type="submit" class="btn btn-success"><i class="bi bi-check-circle me-1"></i> Save Teacher</button>
+                  </div>
+                </div>
+
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- PHOTO + RECENT PANEL -->
+        <div class="col-md-4">
+          <!-- Photo Upload -->
+          <div class="card mb-3">
+            <div class="card-header"><h3 class="card-title"><i class="bi bi-camera me-2"></i>Profile Photo</h3></div>
+            <div class="card-body text-center">
+              <img src="./assets/img/avatar.png" alt="Preview" class="avatar-preview mb-3" id="photoPreview">
+              <div>
+                <label class="btn btn-outline-primary btn-sm">
+                  <i class="bi bi-upload me-1"></i> Upload Photo
+                  <input type="file" accept="image/*" style="display:none" id="photoInput" onchange="previewPhoto(this)">
+                </label>
+              </div>
+              <small class="text-muted d-block mt-2">JPG, PNG — max 2MB</small>
+            </div>
+          </div>
+          <!-- Recently Added -->
+          <div class="card">
+            <div class="card-header"><h3 class="card-title"><i class="bi bi-clock-history me-2"></i>Recently Added</h3></div>
+            <div class="card-body p-0">
+              <ul class="list-group list-group-flush" id="recentList">
+                <li class="list-group-item text-muted text-center py-3">No teachers yet.</li>
+              </ul>
+            </div>
+            <div class="card-footer text-center">
+              <a href="manage-teachers.html" class="btn btn-sm btn-outline-primary"><i class="bi bi-people me-1"></i>View All Teachers</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUCCESS ALERT -->
+      <div class="alert alert-success alert-dismissible fade" id="successAlert" role="alert" style="display:none">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        <strong>Teacher added successfully!</strong> <a href="manage-teachers.html" class="alert-link">View all teachers</a>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer class="app-footer">
+  <div class="float-end d-none d-sm-inline">EDU-SPHERE Admin</div>
+  <strong>Copyright &copy; 2025 <a href="#" class="text-decoration-none">EDU-SPHERE</a>.</strong> All rights reserved.
+</footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="./js/adminlte.min.js"></script>
+<script>
+  let sessionCount = 0;
+  let currentStep = 1;
+
+  function updateStats() {
+    // Stats loaded from API via loadRecentTeachers()
+  }
+
+  function renderRecent() {
+    // Loaded from API via loadRecentTeachers()
+  }
+
+  function goStep(step) {
+    // Validate before moving forward
+    if (step > currentStep) {
+      if (currentStep === 1) {
+        const name = document.getElementById("tName").value.trim();
+        const phone = document.getElementById("tPhone").value.trim();
+        const email = document.getElementById("tEmail").value.trim();
+        if (!name || !phone || !email) { alert("Please fill in Name, Phone and Email."); return; }
+      }
+      if (currentStep === 2) {
+        const dept = document.getElementById("tDept").value.trim();
+        const qual = document.getElementById("tQual").value.trim();
+        const exp = document.getElementById("tExp").value.trim();
+        if (!dept || !qual || !exp) { alert("Please fill in Department, Qualification and Experience."); return; }
+      }
+    }
+
+    // Update step dots
+    for (let i = 1; i <= 3; i++) {
+      const dot = document.getElementById("step" + i + "-dot");
+      dot.className = "step" + (i < step ? " done" : i === step ? " active" : "");
+    }
+    for (let i = 1; i <= 2; i++) {
+      const line = document.getElementById("line" + i);
+      line.className = "step-line" + (i < step ? " done" : "");
+    }
+
+    // Show/hide sections
+    document.querySelectorAll(".form-section").forEach(s => s.classList.remove("active"));
+    document.getElementById("section" + step).classList.add("active");
+    currentStep = step;
+
+    // Build review table on step 3
+    if (step === 3) buildReview();
+  }
+
+  function buildReview() {
+    const fields = [
+      ["Full Name", document.getElementById("tName").value],
+      ["Father's Name", document.getElementById("tFather").value],
+      ["Date of Birth", document.getElementById("tDob").value],
+      ["Gender", document.getElementById("tGender").value],
+      ["CNIC", document.getElementById("tCnic").value],
+      ["Phone", document.getElementById("tPhone").value],
+      ["Email", document.getElementById("tEmail").value],
+      ["Address", document.getElementById("tAddress").value],
+      ["Department", document.getElementById("tDept").value],
+      ["Qualification", document.getElementById("tQual").value],
+      ["Specialization", document.getElementById("tSpec").value],
+      ["Experience", document.getElementById("tExp").value + " years"],
+      ["Joining Date", document.getElementById("tJoining").value],
+      ["Employment Type", document.getElementById("tEmpType").value],
+      ["Salary", document.getElementById("tSalary").value ? "PKR " + document.getElementById("tSalary").value : ""],
+      ["Status", document.getElementById("tStatus").value],
+    ];
+    const tbody = document.querySelector("#reviewTable tbody");
+    tbody.innerHTML = fields.filter(f => f[1]).map(f =>
+      `<tr><th class="text-muted" style="width:40%">${f[0]}</th><td>${f[1]}</td></tr>`
+    ).join("");
+  }
+
+  function previewPhoto(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = e => document.getElementById("photoPreview").src = e.target.result;
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  document.getElementById("teacherForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    // ── Frontend validation ──────────────────────────────────────────────────
+    var name  = document.getElementById("tName").value.trim();
+    var phone = document.getElementById("tPhone").value.trim();
+    var email = document.getElementById("tEmail").value.trim();
+    var dept  = document.getElementById("tDept").value.trim();
+    var qual  = document.getElementById("tQual").value.trim();
+    var expRaw = document.getElementById("tExp").value.trim();
+
+    if (!name)  { API.toast('Full Name is required', 'danger'); goStep(1); return; }
+    if (!phone) { API.toast('Phone number is required', 'danger'); goStep(1); return; }
+    if (!email) { API.toast('Email is required', 'danger'); goStep(1); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { API.toast('Please enter a valid email address', 'danger'); goStep(1); return; }
+    if (!dept)  { API.toast('Department is required', 'danger'); goStep(2); return; }
+    if (!qual)  { API.toast('Qualification is required', 'danger'); goStep(2); return; }
+    if (expRaw === '' || isNaN(parseInt(expRaw, 10)) || parseInt(expRaw, 10) < 0) {
+      API.toast('Experience must be a non-negative number', 'danger'); goStep(2); return;
+    }
+
+    // ── Enum mappings ────────────────────────────────────────────────────────
+    var genderVal = document.getElementById("tGender").value;
+    var genderMap = { 'Male': 'MALE', 'Female': 'FEMALE', 'Other': 'OTHER' };
+    var gender = genderMap[genderVal] || 'MALE';   // default MALE if not selected
+
+    var empType = document.getElementById("tEmpType").value;
+    var empMap  = { 'Permanent': 'PERMANENT', 'Contract': 'CONTRACT', 'Part-Time': 'PART_TIME', 'Visiting': 'VISITING' };
+    var employmentType = empMap[empType] || 'PERMANENT';
+
+    var statusVal = document.getElementById("tStatus").value;
+    var statusMap = { 'Active': 'ACTIVE', 'Inactive': 'INACTIVE', 'On Leave': 'ON_LEAVE' };
+    var status = statusMap[statusVal] || 'ACTIVE';
+
+    // ── Numeric fields ───────────────────────────────────────────────────────
+    var experience = parseInt(expRaw, 10) || 0;
+    var salaryRaw  = document.getElementById("tSalary").value.trim();
+    var salary     = salaryRaw !== '' && !isNaN(parseFloat(salaryRaw)) ? String(parseFloat(salaryRaw)) : '';
+
+    // ── Date fields — only include if non-empty ──────────────────────────────
+    var dobVal     = document.getElementById("tDob").value;       // "YYYY-MM-DD" or ""
+    var joiningVal = document.getElementById("tJoining").value;   // "YYYY-MM-DD" or ""
+
+    // ── Build FormData ───────────────────────────────────────────────────────
+    var fd = new FormData();
+    fd.append('name',           name);
+    fd.append('phone',          phone);
+    fd.append('email',          email);
+    fd.append('department',     dept);
+    fd.append('qualification',  qual);
+    fd.append('experience',     String(experience));
+    fd.append('gender',         gender);
+    fd.append('employmentType', employmentType);
+    fd.append('status',         status);
+
+    // Optional string fields — send empty string; controller converts to null
+    fd.append('fatherName',     document.getElementById("tFather").value.trim());
+    fd.append('cnic',           document.getElementById("tCnic").value.trim());
+    fd.append('address',        document.getElementById("tAddress").value.trim());
+    fd.append('specialization', document.getElementById("tSpec").value.trim());
+
+    // Optional date fields — only append if user filled them in
+    if (dobVal)     fd.append('dob',         dobVal);
+    if (joiningVal) fd.append('joiningDate',  joiningVal);
+
+    // Optional salary
+    if (salary !== '') fd.append('salary', salary);
+
+    // Photo
+    var photoFile = document.getElementById("photoInput").files[0];
+    if (photoFile) fd.append('photo', photoFile);
+
+    // ── Submit ───────────────────────────────────────────────────────────────
+    var submitBtn = document.querySelector('#teacherForm button[type="submit"]');
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Saving...'; }
+
+    var res = await API.teachers.create(fd);
+
+    if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Save Teacher'; }
+
+    if (res && res.success) {
+      sessionCount++;
+      document.getElementById("teacherForm").reset();
+      document.getElementById("photoPreview").src = "./assets/img/avatar.png";
+      goStep(1);
+      var alertEl = document.getElementById("successAlert");
+      alertEl.style.display = "block";
+      alertEl.classList.add("show");
+      setTimeout(function() { alertEl.classList.remove("show"); setTimeout(function() { alertEl.style.display = "none"; }, 300); }, 4000);
+      await loadRecentTeachers();
+    } else {
+      // Show backend detail if available (non-production), otherwise show message
+      var errMsg = (res && res.detail) ? res.detail : ((res && res.message) || 'Failed to add teacher');
+      API.toast(errMsg, 'danger');
+    }
+  });
+
+  async function loadRecentTeachers() {
+    var res = await API.teachers.list({ limit: 5 });
+    if (res && res.success) {
+      var list = res.data.data || res.data || [];
+      document.getElementById("statTotal").textContent = res.data.total || list.length;
+      var depts = {};
+      list.forEach(function(t) { if (t.department) depts[t.department] = 1; });
+      document.getElementById("statDepts").textContent = Object.keys(depts).length;
+      document.getElementById("statExp").textContent = list.filter(function(t) { return parseInt(t.experience) >= 5; }).length;
+      document.getElementById("statSession").textContent = sessionCount;
+      var recentList = document.getElementById("recentList");
+      if (!list.length) {
+        recentList.innerHTML = '<li class="list-group-item text-muted text-center py-3">No teachers yet.</li>';
+        return;
+      }
+      recentList.innerHTML = list.map(function(t) {
+        return '<li class="list-group-item d-flex align-items-center gap-2 py-2">' +
+          '<span class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width:32px;height:32px;font-size:13px;font-weight:700;flex-shrink:0">' +
+          t.name.charAt(0).toUpperCase() + '</span>' +
+          '<div><div class="fw-semibold" style="font-size:13px">' + t.name + '</div>' +
+          '<div class="text-muted" style="font-size:11px">' + (t.department || '') + '</div></div></li>';
+      }).join("");
+    }
+  }
+
+  loadRecentTeachers();
+</script>
+</body>
+</html>

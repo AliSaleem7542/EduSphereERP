@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Import - EDU-SPHERE</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <style>
+    body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+    .card { box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+  </style>
+</head>
+<body>
+  <div class="container" style="max-width: 800px;">
+    <div class="text-center mb-4">
+      <img src="assets/img/eduspherelogo (2).png" alt="Logo" style="width:80px;height:80px;border-radius:50%;border:3px solid white;">
+      <h2 class="text-white mt-3">Simple Data Import</h2>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="bi bi-download me-2"></i>Import Pre-loaded Data</h5>
+      </div>
+      <div class="card-body">
+        <div class="alert alert-info">
+          <i class="bi bi-info-circle-fill me-2"></i>
+          This will import school data from the embedded JSON file.
+        </div>
+        
+        <div class="d-grid gap-2">
+          <button class="btn btn-success btn-lg" onclick="importData()">
+            <i class="bi bi-cloud-download-fill me-2"></i>Import Data Now
+          </button>
+          <button class="btn btn-outline-danger" onclick="clearData()">
+            <i class="bi bi-trash-fill me-2"></i>Clear All Data
+          </button>
+        </div>
+        
+        <div id="result" class="mt-3"></div>
+        <div id="preview" class="mt-3"></div>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="bi bi-eye-fill me-2"></i>Current Data Status</h5>
+      </div>
+      <div class="card-body">
+        <div id="status"></div>
+        <button class="btn btn-sm btn-primary mt-2" onclick="checkStatus()">
+          <i class="bi bi-arrow-clockwise me-1"></i>Refresh Status
+        </button>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <a href="index2.html" class="btn btn-outline-light btn-lg">
+        <i class="bi bi-house-fill me-2"></i>Back to Dashboard
+      </a>
+      <a href="manage-students.html" class="btn btn-light btn-lg ms-2">
+        <i class="bi bi-people-fill me-2"></i>View Students
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Check authentication
+    if (!sessionStorage.getItem('adminSession')) {
+      window.location.href = 'admin-login.html';
+    }
+
+    function importData() {
+      var resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = '<div class="alert alert-info"><div class="spinner-border spinner-border-sm me-2"></div>Loading data...</div>';
+      
+      // Try to load from school_data.json
+      fetch('school_data.json')
+        .then(response => {
+          if (!response.ok) throw new Error('File not found');
+          return response.json();
+        })
+        .then(data => {
+          processAndImport(data);
+        })
+        .catch(error => {
+          resultDiv.innerHTML = '<div class="alert alert-danger">' +
+            '<i class="bi bi-exclamation-triangle-fill me-2"></i>' +
+            '<strong>Error:</strong> Could not load school_data.json<br>' +
+            '<small>Error: ' + error.message + '</small><br><br>' +
+            '<button class="btn btn-sm btn-warning" onclick="useEmbeddedData()">Use Embedded Sample Data Instead</button>' +
+            '</div>';
+        });
+    }
+
+    function processAndImport(data) {
+      var resultDiv = document.getElementById('result');
+      
+      try {
+        // Validate data
+        if (!data.students || !Array.isArray(data.students)) {
+          throw new Error('Invalid data format - students array missing');
+        }
+
+        // Import to localStorage
+        localStorage.setItem('students', JSON.stringify(data.students));
+        
+        if (data.schoolSections) {
+          localStorage.setItem('schoolSections', JSON.stringify(data.schoolSections));
+        }
+        
+        if (data.schoolClasses) {
+          localStorage.setItem('schoolClasses', JSON.stringify(data.schoolClasses));
+        }
+        
+        if (data.feeRecords) {
+          localStorage.setItem('feeRecords', JSON.stringify(data.feeRecords));
+        }
+
+        // Show success
+        var studentCount = data.students.length;
+        var sectionCount = data.schoolSections ? data.schoolSections.length : 0;
+        var feeCount = data.feeRecords ? data.feeRecords.length : 0;
+
+        resultDiv.innerHTML = '<div class="alert alert-success">' +
+          '<i class="bi bi-check-circle-fill me-2"></i>' +
+          '<strong>Import Successful!</strong><br>' +
+          '<ul class="mb-0 mt-2">' +
+          '<li>Students: ' + studentCount + '</li>' +
+          '<li>Sections: ' + sectionCount + '</li>' +
+          '<li>Fee Records: ' + feeCount + '</li>' +
+          '</ul>' +
+          '<div class="mt-3">' +
+          '<a href="manage-students.html" class="btn btn-sm btn-success me-2"><i class="bi bi-people-fill me-1"></i>View Students</a>' +
+          '<a href="fee-records.html" class="btn btn-sm btn-warning"><i class="bi bi-cash-stack me-1"></i>View Fees</a>' +
+          '</div>' +
+          '</div>';
+
+        // Show preview
+        showPreview(data.students);
+        checkStatus();
+      } catch (error) {
+        resultDiv.innerHTML = '<div class="alert alert-danger">' +
+          '<i class="bi bi-exclamation-triangle-fill me-2"></i>' +
+          '<strong>Import Failed:</strong> ' + error.message +
+          '</div>';
+      }
+    }
+
+    function showPreview(students) {
+      if (!students || students.length === 0) return;
+      
+      var html = '<h6 class="mt-3">First 5 Students:</h6>' +
+        '<div class="table-responsive">' +
+        '<table class="table table-sm table-bordered table-hover">' +
+        '<thead class="table-dark">' +
+        '<tr><th>#</th><th>Roll No</th><th>Name</th><th>Father Name</th><th>Section</th><th>Fee</th></tr>' +
+        '</thead><tbody>';
+      
+      students.slice(0, 5).forEach(function(s, i) {
+        html += '<tr>' +
+          '<td>' + (i+1) + '</td>' +
+          '<td>' + (s.rollNo || 'N/A') + '</td>' +
+          '<td>' + (s.name || 'N/A') + '</td>' +
+          '<td>' + (s.fatherName || 'N/A') + '</td>' +
+          '<td>' + (s.section || 'N/A') + '</td>' +
+          '<td>Rs. ' + (s.packageTotal || 0).toLocaleString() + '</td>' +
+          '</tr>';
+      });
+      
+      html += '</tbody></table></div>';
+      document.getElementById('preview').innerHTML = html;
+    }
+
+    function useEmbeddedData() {
+      // Sample embedded data for testing
+      var sampleData = {
+        schoolClasses: [{
+          id: "1st Year",
+          name: "1st Year",
+          description: "First Year - Session 2025-2027",
+          addedAt: "2025-01-01"
+        }],
+        schoolSections: [
+          {id: 1, name: "C-1", class: "1st Year", description: "C-1 Section", capacity: 50, addedAt: "2025-01-01"},
+          {id: 2, name: "M-1", class: "1st Year", description: "M-1 Section", capacity: 50, addedAt: "2025-01-01"}
+        ],
+        students: [
+          {id: 1000, rollNo: "201", name: "AMAMA KHAN", fatherName: "RANA TASLEEM", fatherPhone: "0333-6699724", address: "SAMUNDRI", class: "1st Year", section: "C-1", annualCharges: 8000, tuitionFee: 0, transportFee: 0, packageTotal: 8000, feeCategory: "Regular", admissionDate: "2025-04-01", admissionType: "New Admission", gender: "", dob: "", cnic: "", addedAt: "2025-04-01", photo: "assets/img/avatar.png"},
+          {id: 1001, rollNo: "202", name: "NIMRA BASHIR", fatherName: "BASHIR AHMAD ZAHID", fatherPhone: "0340-8653449", address: "449 GB", class: "1st Year", section: "C-1", annualCharges: 8000, tuitionFee: 18000, transportFee: 0, packageTotal: 26000, feeCategory: "Regular", admissionDate: "2025-04-01", admissionType: "New Admission", gender: "", dob: "", cnic: "", addedAt: "2025-04-01", photo: "assets/img/avatar.png"},
+          {id: 1002, rollNo: "203", name: "MUNTAHA NOOR", fatherName: "MUHAMMAD RIZWAN", fatherPhone: "0318-7018942", address: "SAMUNDRI", class: "1st Year", section: "C-1", annualCharges: 8000, tuitionFee: 18000, transportFee: 0, packageTotal: 26000, feeCategory: "Regular", admissionDate: "2025-04-01", admissionType: "New Admission", gender: "", dob: "", cnic: "", addedAt: "2025-04-01", photo: "assets/img/avatar.png"},
+          {id: 1003, rollNo: "101", name: "FEHA MURTAZA", fatherName: "GHULAM MURTAZA", fatherPhone: "0304-9144847", address: "203 GB", class: "1st Year", section: "M-1", annualCharges: 8000, tuitionFee: 100, transportFee: 40000, packageTotal: 48100, feeCategory: "Regular", admissionDate: "2025-04-01", admissionType: "New Admission", gender: "", dob: "", cnic: "", addedAt: "2025-04-01", photo: "assets/img/avatar.png"},
+          {id: 1004, rollNo: "102", name: "AYESHA MURSALEEN", fatherName: "M MURSALEEN", fatherPhone: "0300-0797136", address: "136 GB", class: "1st Year", section: "M-1", annualCharges: 8000, tuitionFee: 100, transportFee: 0, packageTotal: 8100, feeCategory: "Regular", admissionDate: "2025-04-01", admissionType: "New Admission", gender: "", dob: "", cnic: "", addedAt: "2025-04-01", photo: "assets/img/avatar.png"}
+        ],
+        feeRecords: []
+      };
+
+      // Generate fee records
+      sampleData.students.forEach(function(s) {
+        sampleData.feeRecords.push({
+          id: Date.now() + Math.random(),
+          studentId: s.id,
+          studentName: s.name,
+          rollNo: s.rollNo,
+          class: s.class,
+          section: s.section,
+          amount: s.packageTotal,
+          feeType: 'Annual Package',
+          status: 'Pending',
+          date: new Date().toISOString().split('T')[0],
+          remarks: 'Sample data'
+        });
+      });
+
+      processAndImport(sampleData);
+    }
+
+    function clearData() {
+      if (!confirm('Clear ALL data from system? This cannot be undone!')) return;
+      
+      ['students', 'schoolSections', 'schoolClasses', 'feeRecords', 'teachers', 'bookIssues', 'libraryBooks', 'announcements', 'activityLogs', 'studentAttendance', 'teacherAttendance', 'exams', 'results'].forEach(function(key) {
+        localStorage.removeItem(key);
+      });
+      
+      document.getElementById('result').innerHTML = '<div class="alert alert-warning"><i class="bi bi-trash-fill me-2"></i>All data cleared!</div>';
+      document.getElementById('preview').innerHTML = '';
+      checkStatus();
+    }
+
+    function checkStatus() {
+      var students = JSON.parse(localStorage.getItem('students') || '[]');
+      var sections = JSON.parse(localStorage.getItem('schoolSections') || '[]');
+      var classes = JSON.parse(localStorage.getItem('schoolClasses') || '[]');
+      var feeRecords = JSON.parse(localStorage.getItem('feeRecords') || '[]');
+      
+      var html = '<div class="row g-2">' +
+        '<div class="col-6 col-md-3"><div class="card bg-primary text-white text-center p-2"><h4>' + students.length + '</h4><small>Students</small></div></div>' +
+        '<div class="col-6 col-md-3"><div class="card bg-success text-white text-center p-2"><h4>' + sections.length + '</h4><small>Sections</small></div></div>' +
+        '<div class="col-6 col-md-3"><div class="card bg-info text-white text-center p-2"><h4>' + classes.length + '</h4><small>Classes</small></div></div>' +
+        '<div class="col-6 col-md-3"><div class="card bg-warning text-dark text-center p-2"><h4>' + feeRecords.length + '</h4><small>Fee Records</small></div></div>' +
+        '</div>';
+      
+      document.getElementById('status').innerHTML = html;
+    }
+
+    // Check status on load
+    checkStatus();
+  </script>
+</body>
+</html>

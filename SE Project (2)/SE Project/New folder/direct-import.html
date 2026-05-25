@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Direct Import - EDU-SPHERE</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <style>
+    body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+    .card { box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+  </style>
+</head>
+<body>
+  <div class="container" style="max-width: 800px;">
+    <div class="text-center mb-4">
+      <img src="assets/img/eduspherelogo (2).png" alt="Logo" style="width:80px;height:80px;border-radius:50%;border:3px solid white;">
+      <h2 class="text-white mt-3">Direct Data Import</h2>
+      <p class="text-white-50">No file loading - Direct import!</p>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header bg-success text-white">
+        <h5 class="mb-0"><i class="bi bi-lightning-charge-fill me-2"></i>Quick Import</h5>
+      </div>
+      <div class="card-body">
+        <div class="alert alert-info">
+          <i class="bi bi-info-circle-fill me-2"></i>
+          Click button below to import sample students directly (no file needed!)
+        </div>
+        
+        <div class="d-grid gap-2">
+          <button class="btn btn-success btn-lg" onclick="importNow()">
+            <i class="bi bi-download me-2"></i>Import 10 Sample Students
+          </button>
+          <button class="btn btn-outline-danger" onclick="clearAll()">
+            <i class="bi bi-trash-fill me-2"></i>Clear All Data
+          </button>
+        </div>
+        
+        <div id="result" class="mt-3"></div>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="bi bi-database-fill me-2"></i>Current Data</h5>
+      </div>
+      <div class="card-body">
+        <div id="status"></div>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <a href="index2.html" class="btn btn-outline-light btn-lg me-2">
+        <i class="bi bi-house-fill me-2"></i>Dashboard
+      </a>
+      <a href="manage-students.html" class="btn btn-light btn-lg">
+        <i class="bi bi-people-fill me-2"></i>View Students
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Check auth
+    if (!sessionStorage.getItem('adminSession')) {
+      window.location.href = 'admin-login.html';
+    }
+
+    function importNow() {
+      var resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = '<div class="alert alert-info"><div class="spinner-border spinner-border-sm me-2"></div>Importing...</div>';
+      
+      // Direct embedded data - NO FILE LOADING!
+      var data = {
+        schoolClasses: [
+          {id: "1st Year", name: "1st Year", description: "First Year - Session 2025-2027", addedAt: "2025-01-01"}
+        ],
+        schoolSections: [
+          {id: 1, name: "C-1", class: "1st Year", description: "C-1 Section", capacity: 50, addedAt: "2025-01-01"},
+          {id: 2, name: "M-1", class: "1st Year", description: "M-1 Section", capacity: 50, addedAt: "2025-01-01"},
+          {id: 3, name: "E-1", class: "1st Year", description: "E-1 Section", capacity: 50, addedAt: "2025-01-01"}
+        ],
+        students: [
+          {id: 1000, rollNo: "201", name: "AMAMA KHAN", fatherName: "RANA TASLEEM", fatherPhone: "0333-6699724", address: "SAMUNDRI", class: "1st Year", section: "C-1", annualCharges: 8000, tuitionFee: 0, transportFee: 0, packageTotal: 8000, feeCategory: "Regular", admissionDate: "2025-04-01", admissionType: "New Admission", gender: "Female", dob: "", cnic: "", addedAt: "2025-04-01", photo: "assets/img/avatar.png"},
+          
+          {id: 1001, rollNo: "202", name: "NIMRA BASHIR", fatherName: "BASHIR AHMAD", fatherPhone: "0340-8653449", address: "449 GB", class: "1st Year", section: "C-1", annualCharges: 8000, tuitionFee: 18000, transportFee: 0, packageTotal: 26000, feeCategory: "Regular", admissionDate: "2025-04-01", admissionType: "New Admission", gender: "Female", dob: "", cnic: "", addedAt: "2025-04-01", photo: "assets/img/avatar.png"},
+          
+          {id: 1002, rollNo: "203", name: "MUNTAHA NOOR", fatherName: "MUHAMMAD RIZWAN", fatherPhone: "0318-7018942", address: "SAMUNDRI", class: "1st Year", section: "C-1", annualCharges: 8000, tuitionFee: 18000, transportFee: 0, packageTotal: 26000, feeCategory: "Regular", admissionDate: "2025-04-01", admissionType: "New Admission", gender: "Female", dob: "", cnic: "", addedAt: "2025-04-01", photo: "assets/img/avatar.png"},
+          
+          {id: 1003, rollNo: "204", name: "ROMAAN AFZAAL", fatherName: "MUHAMMAD AFZAAL", fatherPhone: "0303-6227655", address: "SAMUNDRI", class: "1st Year", section: "C-1", annualCharges: 8000, tuitionFee: 25000, transportFee: 0, packageTotal: 33000, feeCategory: "Regular", admissionDate: "2025-04-01", admissionType: "New Admission", gender: "Male", dob: "", cnic: "", addedAt: "2025-04-01", photo: "assets/img/avatar.png"},
+          
+          {id: 1004, rollNo: "205", name: "MARYAM NAZIR", fatherName: "NAZIR AHMAD", fatherPhone: "0300-7667564", address: "466 GB", class: "1st Year", section: "C-1", annualCharges: 8000, tuitionFee: 40200, transportFee: 0, packageTotal: 48200, feeCategory: "Regular", admissionDate: "2025-04-01", admissionType: "New Admission", gender: "Female", dob: "", cnic: "", addedAt: "2025-04-01", photo: "assets/img/avatar.png"},
+          
+          {id: 1005, rollNo: "101", name: "FEHA MURTAZA", fatherName: "GHULAM MURTAZA", fatherPhone: "0304-9144847", address: "203 GB", class: "1st Year", section: "M-1", annualCharges: 8000, tuitionFee: 100, transportFee: 40000, packageTotal: 48100, feeCategory: "Regular", admissionDate: "2025-04-01", admissionType: "New Admission", gender: "Female", dob: "", cnic: "", addedAt: "2025-04-01", photo: "assets/img/avatar.png"},
+          
+          {id: 1006, rollNo: "102", name: "AYESHA MURSALEEN", fatherName: "M MURSALEEN", fatherPhone: "0300-0797136", address: "136 GB", class: "1st Year", section: "M-1", annualCharges: 8000, tuitionFee: 100, transportFee: 0, packageTotal: 8100, feeCategory: "Regular", admissionDate: "2025-04-01", admissionType: "New Admission", gender: "Female", dob: "", cnic: "", addedAt: "2025-04-01", photo: "assets/img/avatar.png"},
+          
+          {id: 1007, rollNo: "103", name: "KASHMAIL IRFAN", fatherName: "MUHAMMAD IRFAN", fatherPhone: "0305-6058124", address: "NAWAB TOWN", class: "1st Year", section: "M-1", annualCharges: 8000, tuitionFee: 100, transportFee: 0, packageTotal: 8100, feeCategory: "Regular", admissionDate: "2025-04-01", admissionType: "New Admission", gender: "Female", dob: "", cnic: "", addedAt: "2025-04-01", photo: "assets/img/avatar.png"},
+          
+          {id: 1008, rollNo: "104", name: "WAJIHA FATIMA", fatherName: "TOUQEER AHMAD", fatherPhone: "0307-0334500", address: "QASIM ROAD", class: "1st Year", section: "M-1", annualCharges: 8000, tuitionFee: 18000, transportFee: 0, packageTotal: 26000, feeCategory: "Regular", admissionDate: "2025-04-01", admissionType: "New Admission", gender: "Female", dob: "", cnic: "", addedAt: "2025-04-01", photo: "assets/img/avatar.png"},
+          
+          {id: 1009, rollNo: "301", name: "AHMED ALI", fatherName: "ALI HASSAN", fatherPhone: "0321-1234567", address: "SAMUNDRI", class: "1st Year", section: "E-1", annualCharges: 8000, tuitionFee: 20000, transportFee: 0, packageTotal: 28000, feeCategory: "Regular", admissionDate: "2025-04-01", admissionType: "New Admission", gender: "Male", dob: "", cnic: "", addedAt: "2025-04-01", photo: "assets/img/avatar.png"}
+        ],
+        feeRecords: []
+      };
+
+      // Generate fee records
+      data.students.forEach(function(s) {
+        data.feeRecords.push({
+          id: Date.now() + Math.random(),
+          studentId: s.id,
+          studentName: s.name,
+          rollNo: s.rollNo,
+          class: s.class,
+          section: s.section,
+          amount: s.packageTotal,
+          feeType: 'Annual Package',
+          status: 'Pending',
+          date: new Date().toISOString().split('T')[0],
+          remarks: 'Imported data'
+        });
+      });
+
+      // Save to localStorage
+      try {
+        localStorage.setItem('students', JSON.stringify(data.students));
+        localStorage.setItem('schoolSections', JSON.stringify(data.schoolSections));
+        localStorage.setItem('schoolClasses', JSON.stringify(data.schoolClasses));
+        localStorage.setItem('feeRecords', JSON.stringify(data.feeRecords));
+
+        resultDiv.innerHTML = '<div class="alert alert-success">' +
+          '<i class="bi bi-check-circle-fill me-2"></i>' +
+          '<strong>✅ Import Successful!</strong><br><br>' +
+          '<ul class="mb-0">' +
+          '<li><strong>' + data.students.length + '</strong> Students imported</li>' +
+          '<li><strong>' + data.schoolSections.length + '</strong> Sections created</li>' +
+          '<li><strong>' + data.feeRecords.length + '</strong> Fee records generated</li>' +
+          '</ul>' +
+          '<div class="mt-3">' +
+          '<a href="manage-students.html" class="btn btn-success me-2"><i class="bi bi-people-fill me-1"></i>View Students</a>' +
+          '<a href="fee-records.html" class="btn btn-warning"><i class="bi bi-cash-stack me-1"></i>View Fees</a>' +
+          '</div>' +
+          '</div>';
+
+        // Show preview
+        var preview = '<div class="mt-3"><h6>Imported Students:</h6>' +
+          '<div class="table-responsive"><table class="table table-sm table-bordered table-hover">' +
+          '<thead class="table-dark"><tr><th>Roll No</th><th>Name</th><th>Father</th><th>Section</th><th>Fee</th></tr></thead><tbody>';
+        
+        data.students.forEach(function(s) {
+          preview += '<tr>' +
+            '<td>' + s.rollNo + '</td>' +
+            '<td>' + s.name + '</td>' +
+            '<td>' + s.fatherName + '</td>' +
+            '<td>' + s.section + '</td>' +
+            '<td>Rs. ' + s.packageTotal.toLocaleString() + '</td>' +
+            '</tr>';
+        });
+        
+        preview += '</tbody></table></div></div>';
+        resultDiv.innerHTML += preview;
+
+        updateStatus();
+      } catch (error) {
+        resultDiv.innerHTML = '<div class="alert alert-danger">' +
+          '<i class="bi bi-exclamation-triangle-fill me-2"></i>' +
+          '<strong>Error:</strong> ' + error.message +
+          '</div>';
+      }
+    }
+
+    function clearAll() {
+      if (!confirm('Clear ALL data? This cannot be undone!')) return;
+      
+      ['students', 'schoolSections', 'schoolClasses', 'feeRecords'].forEach(function(key) {
+        localStorage.removeItem(key);
+      });
+      
+      document.getElementById('result').innerHTML = '<div class="alert alert-warning"><i class="bi bi-trash-fill me-2"></i>All data cleared!</div>';
+      updateStatus();
+    }
+
+    function updateStatus() {
+      var students = JSON.parse(localStorage.getItem('students') || '[]');
+      var sections = JSON.parse(localStorage.getItem('schoolSections') || '[]');
+      var classes = JSON.parse(localStorage.getItem('schoolClasses') || '[]');
+      var fees = JSON.parse(localStorage.getItem('feeRecords') || '[]');
+      
+      var html = '<div class="row g-2">' +
+        '<div class="col-6 col-md-3"><div class="card bg-primary text-white text-center p-3"><h3>' + students.length + '</h3><small>Students</small></div></div>' +
+        '<div class="col-6 col-md-3"><div class="card bg-success text-white text-center p-3"><h3>' + sections.length + '</h3><small>Sections</small></div></div>' +
+        '<div class="col-6 col-md-3"><div class="card bg-info text-white text-center p-3"><h3>' + classes.length + '</h3><small>Classes</small></div></div>' +
+        '<div class="col-6 col-md-3"><div class="card bg-warning text-dark text-center p-3"><h3>' + fees.length + '</h3><small>Fee Records</small></div></div>' +
+        '</div>';
+      
+      document.getElementById('status').innerHTML = html;
+    }
+
+    // Update status on load
+    updateStatus();
+  </script>
+</body>
+</html>

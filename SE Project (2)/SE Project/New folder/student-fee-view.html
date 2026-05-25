@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>My Fee | EDU-SPHERE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="css/adminlte.css" />
+</head>
+<body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+<div class="app-wrapper">
+<nav class="app-header navbar navbar-expand bg-body">
+  <div class="container-fluid">
+    <ul class="navbar-nav"><li class="nav-item"><a class="nav-link" data-lte-toggle="sidebar" href="#" role="button"><i class="bi bi-list"></i></a></li><li class="nav-item d-none d-md-block"><span class="nav-link fw-semibold text-primary"><i class="bi bi-mortarboard-fill me-1"></i>Student Portal</span></li></ul>
+    <ul class="navbar-nav ms-auto"><li class="nav-item dropdown user-menu"><a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><img src="assets/img/avatar.png" class="user-image rounded-circle shadow" id="navPhoto" alt="Student"><span class="d-none d-md-inline" id="navName">Student</span></a><ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end"><li class="user-header text-bg-primary"><img src="assets/img/avatar.png" class="rounded-circle shadow" id="navPhoto2" alt="Student"><p id="navNameFull">Student</p></li><li class="user-footer"><a href="student-profile.html" class="btn btn-default btn-flat">My Profile</a><a href="#" class="btn btn-default btn-flat float-end" onclick="logout()">Sign out</a></li></ul></li></ul>
+  </div>
+</nav>
+<aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+  <div class="sidebar-brand"><a href="student-dashboard.html" class="brand-link"><img src="assets/img/eduspherelogo (2).png" alt="Logo" class="brand-image opacity-75 shadow"><span class="brand-text fw-light">EDU-SPHERE</span></a></div>
+  <div class="sidebar-wrapper"><nav class="mt-2"><ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" data-accordion="false">
+    <li class="nav-item"><a href="student-dashboard.html" class="nav-link"><i class="nav-icon bi bi-speedometer2"></i><p>Dashboard</p></a></li>
+    <li class="nav-item"><a href="student-profile.html" class="nav-link"><i class="nav-icon bi bi-person-circle"></i><p>My Profile</p></a></li>
+    <li class="nav-item"><a href="student-attendance-view.html" class="nav-link"><i class="nav-icon bi bi-calendar-check-fill"></i><p>My Attendance</p></a></li>
+    <li class="nav-item"><a href="student-results-view.html" class="nav-link"><i class="nav-icon bi bi-clipboard-data-fill"></i><p>My Results</p></a></li>
+    <li class="nav-item"><a href="student-fee-view.html" class="nav-link active"><i class="nav-icon bi bi-cash-stack"></i><p>My Fee</p></a></li>
+    <li class="nav-item"><a href="student-timetable-view.html" class="nav-link"><i class="nav-icon bi bi-calendar3"></i><p>My Timetable</p></a></li>
+    <li class="nav-item"><a href="student-library-view.html" class="nav-link"><i class="nav-icon bi bi-book-fill"></i><p>Library</p></a></li>
+    <li class="nav-item"><a href="student-exams-view.html" class="nav-link"><i class="nav-icon bi bi-pencil-square"></i><p>Exam Schedule</p></a></li>
+    <li class="nav-item"><a href="student-announcements-view.html" class="nav-link"><i class="nav-icon bi bi-megaphone-fill"></i><p>Announcements</p></a></li>
+  </ul></nav></div>
+</aside>
+<main class="app-main">
+  <div class="app-content-header"><div class="container-fluid"><div class="row"><div class="col-sm-6"><h3 class="mb-0">My Fee</h3></div><div class="col-sm-6"><ol class="breadcrumb float-sm-end"><li class="breadcrumb-item"><a href="student-dashboard.html">Home</a></li><li class="breadcrumb-item active">My Fee</li></ol></div></div></div></div>
+  <div class="app-content"><div class="container-fluid">
+    <div class="row mb-4">
+      <div class="col-md-4 mb-3"><div class="info-box"><span class="info-box-icon text-bg-primary shadow-sm"><i class="bi bi-receipt"></i></span><div class="info-box-content"><span class="info-box-text">Package Total</span><span class="info-box-number" id="statTotal">Rs. 0</span></div></div></div>
+      <div class="col-md-4 mb-3"><div class="info-box"><span class="info-box-icon text-bg-success shadow-sm"><i class="bi bi-check-circle-fill"></i></span><div class="info-box-content"><span class="info-box-text">Total Paid</span><span class="info-box-number" id="statPaid">Rs. 0</span></div></div></div>
+      <div class="col-md-4 mb-3"><div class="info-box"><span class="info-box-icon text-bg-danger shadow-sm"><i class="bi bi-exclamation-triangle-fill"></i></span><div class="info-box-content"><span class="info-box-text">Remaining</span><span class="info-box-number" id="statRemaining">Rs. 0</span></div></div></div>
+    </div>
+    <div class="card shadow">
+      <div class="card-header bg-warning text-dark"><h5 class="card-title mb-0"><i class="bi bi-receipt me-2"></i>Fee Payment History</h5></div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-striped table-hover mb-0">
+            <thead class="table-dark"><tr><th>#</th><th>Date</th><th>Receipt No</th><th>Fee Type</th><th>Installment</th><th>Amount</th><th>Method</th><th>Challan</th></tr></thead>
+            <tbody id="feeBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</main>
+<footer class="app-footer"><strong>Copyright &copy; 2025 EDU-SPHERE.</strong> Student Portal</footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="js/adminlte.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/api.js"></script>
+<script>
+  AUTH.requireAuth('STUDENT');
+  var user = AUTH.getUser();
+
+  async function init() {
+    var studentId = user && user.studentId;
+    if (!studentId) { AUTH.logout('student-login.html'); return; }
+    document.getElementById('navName').textContent = user.name || 'Student';
+    document.getElementById('navNameFull').textContent = user.name || 'Student';
+
+    // Load student profile for package total
+    var profileRes = await API.students.get(studentId);
+    var student = (profileRes && profileRes.success) ? profileRes.data : {};
+
+    // Load fee records
+    var res = await API.students.fees(studentId);
+    if (!res || !res.success) return;
+    var records = res.data.records || [];
+    var totalPaid = Number(res.data.totalPaid || 0);
+    var packageTotal = Number(student.packageTotal || 0);
+    var remaining = Math.max(0, packageTotal - totalPaid);
+
+    document.getElementById('statTotal').textContent = 'Rs. ' + packageTotal.toLocaleString();
+    document.getElementById('statPaid').textContent = 'Rs. ' + totalPaid.toLocaleString();
+    document.getElementById('statRemaining').textContent = 'Rs. ' + remaining.toLocaleString();
+
+    var tbody = document.getElementById('feeBody');
+    if (!records.length) {
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4">No fee records found.</td></tr>';
+    } else {
+      tbody.innerHTML = records.map(function(r, i) {
+        var dateStr = r.date ? r.date.substring(0, 10) : '—';
+        return '<tr><td>' + (i + 1) + '</td><td>' + dateStr + '</td><td><code>' + (r.receiptNo || '—') + '</code></td>' +
+          '<td>' + (r.feeType || '—') + '</td><td>' + (r.installment || '—') + '</td>' +
+          '<td><strong>Rs. ' + Number(r.amount).toLocaleString() + '</strong></td>' +
+          '<td>' + (r.paymentMethod || '—') + '</td>' +
+          '<td><button class="btn btn-sm btn-outline-primary" onclick="printChallan(' + i + ')" title="Print Challan"><i class="bi bi-printer-fill"></i></button></td></tr>';
+      }).join('');
+    }
+    window._feeRecords = records;
+    window._studentProfile = student;
+  }
+
+  function printChallan(idx) {
+    var r = (window._feeRecords || [])[idx];
+    var s = window._studentProfile || {};
+    if (!r) return;
+    var win = window.open('', '_blank', 'width=600,height=500');
+    win.document.write('<!DOCTYPE html><html><head><title>Fee Challan</title>' +
+      '<style>body{font-family:Arial,sans-serif;margin:30px;color:#333}.header{text-align:center;border-bottom:2px solid #1a237e;padding-bottom:12px;margin-bottom:20px}.header h2{margin:0;color:#1a237e;font-size:1.4rem}.challan-title{text-align:center;background:#1a237e;color:white;padding:8px;border-radius:4px;margin-bottom:20px;font-size:1rem;font-weight:bold}table{width:100%;border-collapse:collapse}td,th{padding:9px 12px;border:1px solid #dee2e6;font-size:13px}th{background:#f8f9fa;width:40%;font-weight:600}.amount-row td{font-size:1.1rem;font-weight:bold;color:#1a237e}.footer{text-align:center;margin-top:30px;font-size:0.8rem;color:#999;border-top:1px solid #dee2e6;padding-top:10px}.stamp{text-align:right;margin-top:40px;font-size:0.85rem;color:#666}</style></head><body>' +
+      '<div class="header"><h2>EDU-SPHERE</h2><p>Fee Receipt / Challan</p></div>' +
+      '<div class="challan-title">FEE PAYMENT RECEIPT</div>' +
+      '<table><tr><th>Student Name</th><td>' + (s.firstName ? s.firstName + ' ' + s.lastName : user.name || '—') + '</td></tr>' +
+      '<tr><th>Roll Number</th><td>' + (s.rollNo || user.rollNo || '—') + '</td></tr>' +
+      '<tr><th>Receipt No</th><td><strong>' + (r.receiptNo || '—') + '</strong></td></tr>' +
+      '<tr><th>Fee Type</th><td>' + (r.feeType || '—') + '</td></tr>' +
+      '<tr><th>Installment</th><td>' + (r.installment || '—') + '</td></tr>' +
+      '<tr><th>Payment Date</th><td>' + (r.date ? r.date.substring(0, 10) : '—') + '</td></tr>' +
+      '<tr><th>Payment Method</th><td>' + (r.paymentMethod || '—') + '</td></tr>' +
+      '<tr class="amount-row"><th>Amount Paid</th><td>Rs. ' + Number(r.amount).toLocaleString() + '</td></tr></table>' +
+      '<div class="stamp"><p>Authorized Signature: ___________________</p></div>' +
+      '<div class="footer">This is a computer-generated receipt. EDU-SPHERE &copy; 2025</div>' +
+      '</body></html>');
+    win.document.close(); win.focus(); setTimeout(function() { win.print(); }, 400);
+  }
+
+  function logout() { AUTH.logout('student-login.html'); }
+  init();
+</script>
+</body>
+</html>

@@ -1,0 +1,632 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum Role {
+  ADMIN
+  TEACHER
+  STUDENT
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum StudentStatus {
+  ACTIVE
+  INACTIVE
+  GRADUATED
+  TRANSFERRED
+}
+
+enum TeacherStatus {
+  ACTIVE
+  INACTIVE
+  ON_LEAVE
+}
+
+enum EmploymentType {
+  PERMANENT
+  CONTRACT
+  PART_TIME
+  VISITING
+}
+
+enum AdmissionType {
+  NEW
+  TRANSFER
+  READMISSION
+}
+
+enum FeeCategory {
+  REGULAR
+  SCHOLARSHIP
+  HALF_FEE
+  FREE
+}
+
+enum TransportType {
+  NONE
+  SCHOOL_BUS
+  PRIVATE
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LEAVE
+  LATE
+}
+
+enum ExamType {
+  MID_TERM
+  FINAL_TERM
+  UNIT_TEST
+  MONTHLY_TEST
+  MOCK
+}
+
+enum FeeType {
+  MONTHLY
+  ADMISSION
+  EXAM
+  LIBRARY
+  TRANSPORT
+  OTHER
+}
+
+enum PaymentMethod {
+  CASH
+  BANK_TRANSFER
+  CHEQUE
+  ONLINE
+}
+
+enum FeeStatus {
+  PAID
+  REFUNDED
+  PARTIAL
+}
+
+enum BookIssueStatus {
+  ISSUED
+  RETURNED
+  OVERDUE
+}
+
+enum AnnouncementCategory {
+  GENERAL
+  EXAM
+  FEE
+  HOLIDAY
+  EVENT
+  URGENT
+}
+
+enum AnnouncementAudience {
+  ALL
+  STUDENTS
+  TEACHERS
+  PARENTS
+  STAFF
+}
+
+enum AccountEntryType {
+  INCOME
+  EXPENSE
+}
+
+enum Day {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+}
+
+// ─── Core Models ──────────────────────────────────────────────────────────────
+
+model User {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique
+  passwordHash String
+  role         Role
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  teacher              Teacher?
+  student              Student?
+  feeRecordsCollected  FeeRecord[]       @relation("CollectedBy")
+  feeRefundsProcessed  FeeRefund[]       @relation("ProcessedBy")
+  accountEntries       AccountEntry[]
+  bookIssues           BookIssue[]       @relation("IssuedBy")
+  announcements        Announcement[]
+  activityLogs         ActivityLog[]
+  systemSettings       SystemSettings[]
+  teacherAttendance    TeacherAttendance[] @relation("MarkedByUser")
+  studentPromotions    StudentPromotion[]
+  refreshTokens        RefreshToken[]
+  createdUsers         User[]            @relation("CreatedBy")
+  createdBy            User?             @relation("CreatedBy", fields: [createdById], references: [id])
+  createdById          Int?
+  examsCreated         Exam[]            @relation("ExamCreatedBy")
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
+
+model AcademicYear {
+  id        Int      @id @default(autoincrement())
+  label     String   @unique
+  startDate DateTime
+  endDate   DateTime
+  isCurrent Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  classes           Class[]
+  students          Student[]
+  teacherSubjects   TeacherSubject[]
+  timetables        Timetable[]
+  exams             Exam[]
+  studentPromotions StudentPromotion[]
+
+  @@map("academic_years")
+}
+
+model Class {
+  id             Int    @id @default(autoincrement())
+  name           String
+  academicYearId Int
+
+  academicYear    AcademicYear     @relation(fields: [academicYearId], references: [id])
+  sections        Section[]
+  subjects        Subject[]
+  students        Student[]
+  teacherSubjects TeacherSubject[]
+  timetables      Timetable[]
+  exams           Exam[]
+  studentAttendance StudentAttendance[]
+  promotionsFrom  StudentPromotion[] @relation("FromClass")
+  promotionsTo    StudentPromotion[] @relation("ToClass")
+
+  @@unique([name, academicYearId])
+  @@map("classes")
+}
+
+model Section {
+  id             Int    @id @default(autoincrement())
+  name           String
+  classId        Int
+  classTeacherId Int?
+
+  class          Class     @relation(fields: [classId], references: [id], onDelete: Cascade)
+  classTeacher   Teacher?  @relation("ClassTeacher", fields: [classTeacherId], references: [id])
+  students       Student[]
+  timetables     Timetable[]
+  promotionsFrom StudentPromotion[] @relation("FromSection")
+  promotionsTo   StudentPromotion[] @relation("ToSection")
+
+  @@unique([name, classId])
+  @@map("sections")
+}
+
+model Subject {
+  id      Int     @id @default(autoincrement())
+  name    String
+  code    String?
+  classId Int
+
+  class           Class            @relation(fields: [classId], references: [id], onDelete: Cascade)
+  teacherSubjects TeacherSubject[]
+  timetables      Timetable[]
+  exams           Exam[]
+
+  @@unique([name, classId])
+  @@map("subjects")
+}
+
+// ─── People Models ────────────────────────────────────────────────────────────
+
+model Student {
+  id               Int           @id @default(autoincrement())
+  userId           Int?          @unique
+  rollNo           String        @unique
+  firstName        String
+  middleName       String?
+  lastName         String
+  dob              DateTime?
+  gender           Gender
+  bloodGroup       String?
+  cnic             String?
+  religion         String?
+  address          String?
+  photo            String?
+  admissionDate    DateTime
+  admissionType    AdmissionType @default(NEW)
+  classId          Int
+  sectionId        Int?
+  academicYearId   Int
+  prevSchool       String?
+  prevGrade        String?
+  feeCategory      FeeCategory   @default(REGULAR)
+  transport        TransportType @default(NONE)
+  transportFee     Decimal?      @db.Decimal(10, 2)
+  annualCharges    Decimal?      @db.Decimal(10, 2)
+  tuitionFee       Decimal?      @db.Decimal(10, 2)
+  packageTotal     Decimal?      @db.Decimal(10, 2)
+  fatherName       String?
+  fatherCnic       String?
+  fatherPhone      String?
+  fatherOccupation String?
+  motherName       String?
+  motherPhone      String?
+  guardianName     String?
+  guardianPhone    String?
+  emergencyContact String?
+  status           StudentStatus @default(ACTIVE)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  user         User?         @relation(fields: [userId], references: [id])
+  class        Class         @relation(fields: [classId], references: [id])
+  section      Section?      @relation(fields: [sectionId], references: [id])
+  academicYear AcademicYear  @relation(fields: [academicYearId], references: [id])
+
+  attendance   StudentAttendance[]
+  results      ExamResult[]
+  feeRecords   FeeRecord[]
+  feeRefunds   FeeRefund[]
+  bookIssues   BookIssue[]
+  promotions   StudentPromotion[]
+
+  @@map("students")
+}
+
+model Teacher {
+  id             Int            @id @default(autoincrement())
+  userId         Int            @unique
+  name           String
+  fatherName     String?
+  dob            DateTime?
+  gender         Gender
+  cnic           String?
+  phone          String         @unique
+  email          String         @unique
+  address        String?
+  photo          String?
+  department     String
+  qualification  String
+  specialization String?
+  experience     Int            @default(0)
+  joiningDate    DateTime?
+  employmentType EmploymentType @default(PERMANENT)
+  salary         Decimal?       @db.Decimal(10, 2)
+  status         TeacherStatus  @default(ACTIVE)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  user              User             @relation(fields: [userId], references: [id])
+  subjects          TeacherSubject[]
+  timetables        Timetable[]
+  markedAttendance  StudentAttendance[] @relation("MarkedByTeacher")
+  enteredResults    ExamResult[]     @relation("EnteredByTeacher")
+  teacherAttendance TeacherAttendance[]
+  classTeacherOf    Section[]        @relation("ClassTeacher")
+
+  @@map("teachers")
+}
+
+model TeacherSubject {
+  id             Int  @id @default(autoincrement())
+  teacherId      Int
+  subjectId      Int
+  classId        Int
+  sectionId      Int?
+  academicYearId Int
+
+  teacher      Teacher      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  subject      Subject      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  class        Class        @relation(fields: [classId], references: [id], onDelete: Cascade)
+  academicYear AcademicYear @relation(fields: [academicYearId], references: [id])
+
+  @@unique([teacherId, subjectId, classId, academicYearId])
+  @@map("teacher_subjects")
+}
+
+// ─── Academic Models ──────────────────────────────────────────────────────────
+
+model Timetable {
+  id             Int    @id @default(autoincrement())
+  classId        Int
+  sectionId      Int?
+  subjectId      Int
+  teacherId      Int
+  day            Day
+  periodNo       Int
+  startTime      String
+  endTime        String
+  room           String?
+  academicYearId Int
+
+  class        Class        @relation(fields: [classId], references: [id], onDelete: Cascade)
+  section      Section?     @relation(fields: [sectionId], references: [id])
+  subject      Subject      @relation(fields: [subjectId], references: [id])
+  teacher      Teacher      @relation(fields: [teacherId], references: [id])
+  academicYear AcademicYear @relation(fields: [academicYearId], references: [id])
+
+  @@unique([classId, sectionId, day, periodNo, academicYearId])
+  @@map("timetables")
+}
+
+model Exam {
+  id             Int      @id @default(autoincrement())
+  title          String
+  type           ExamType
+  classId        Int?
+  subjectId      Int?
+  startDate      DateTime
+  endDate        DateTime
+  totalMarks     Int      @default(100)
+  passingMarks   Int      @default(40)
+  venue          String?
+  notes          String?
+  academicYearId Int
+  createdById    Int
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  class        Class?       @relation(fields: [classId], references: [id])
+  subject      Subject?     @relation(fields: [subjectId], references: [id])
+  academicYear AcademicYear @relation(fields: [academicYearId], references: [id])
+  createdBy    User         @relation("ExamCreatedBy", fields: [createdById], references: [id])
+  results      ExamResult[]
+
+  @@map("exams")
+}
+
+model ExamResult {
+  id            Int      @id @default(autoincrement())
+  examId        Int
+  studentId     Int
+  obtainedMarks Decimal  @db.Decimal(6, 2)
+  percentage    Decimal  @db.Decimal(5, 2)
+  grade         String
+  isPassed      Boolean
+  enteredById   Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  exam      Exam    @relation(fields: [examId], references: [id], onDelete: Cascade)
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  enteredBy Teacher @relation("EnteredByTeacher", fields: [enteredById], references: [id])
+
+  @@unique([examId, studentId])
+  @@map("exam_results")
+}
+
+model StudentAttendance {
+  id          Int              @id @default(autoincrement())
+  studentId   Int
+  classId     Int
+  date        DateTime         @db.Date
+  status      AttendanceStatus @default(PRESENT)
+  remarks     String?
+  markedById  Int
+  createdAt   DateTime         @default(now())
+
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  class     Class   @relation(fields: [classId], references: [id])
+  markedBy  Teacher @relation("MarkedByTeacher", fields: [markedById], references: [id])
+
+  @@unique([studentId, date])
+  @@map("student_attendance")
+}
+
+model TeacherAttendance {
+  id          Int              @id @default(autoincrement())
+  teacherId   Int
+  date        DateTime         @db.Date
+  status      AttendanceStatus @default(PRESENT)
+  remarks     String?
+  markedById  Int
+  createdAt   DateTime         @default(now())
+
+  teacher  Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  markedBy User    @relation("MarkedByUser", fields: [markedById], references: [id])
+
+  @@unique([teacherId, date])
+  @@map("teacher_attendance")
+}
+
+// ─── Fee Models ───────────────────────────────────────────────────────────────
+
+model FeeRecord {
+  id              Int           @id @default(autoincrement())
+  receiptNo       String        @unique
+  studentId       Int
+  feeType         FeeType
+  period          String?
+  installment     String?
+  amount          Decimal       @db.Decimal(10, 2)
+  transportAmount Decimal?      @db.Decimal(10, 2)
+  paymentMethod   PaymentMethod @default(CASH)
+  remarks         String?
+  date            DateTime      @db.Date
+  status          FeeStatus     @default(PAID)
+  collectedById   Int
+  createdAt       DateTime      @default(now())
+
+  student     Student    @relation(fields: [studentId], references: [id])
+  collectedBy User       @relation("CollectedBy", fields: [collectedById], references: [id])
+  refund      FeeRefund?
+
+  @@map("fee_records")
+}
+
+model FeeRefund {
+  id            Int      @id @default(autoincrement())
+  feeRecordId   Int      @unique
+  studentId     Int
+  amount        Decimal  @db.Decimal(10, 2)
+  reason        String
+  date          DateTime @db.Date
+  processedById Int
+  createdAt     DateTime @default(now())
+
+  feeRecord   FeeRecord @relation(fields: [feeRecordId], references: [id])
+  student     Student   @relation(fields: [studentId], references: [id])
+  processedBy User      @relation("ProcessedBy", fields: [processedById], references: [id])
+
+  @@map("fee_refunds")
+}
+
+// ─── Accounts Model ───────────────────────────────────────────────────────────
+
+model AccountEntry {
+  id          Int              @id @default(autoincrement())
+  type        AccountEntryType
+  category    String
+  description String
+  amount      Decimal          @db.Decimal(10, 2)
+  date        DateTime         @db.Date
+  reference   String?
+  createdById Int
+  createdAt   DateTime         @default(now())
+
+  createdBy User @relation(fields: [createdById], references: [id])
+
+  @@map("account_entries")
+}
+
+// ─── Library Models ───────────────────────────────────────────────────────────
+
+model Book {
+  id              Int      @id @default(autoincrement())
+  title           String
+  author          String
+  isbn            String?  @unique
+  category        String?
+  publisher       String?
+  edition         String?
+  totalCopies     Int      @default(1)
+  availableCopies Int      @default(1)
+  shelfNo         String?
+  addedAt         DateTime @default(now())
+
+  issues BookIssue[]
+
+  @@map("books")
+}
+
+model BookIssue {
+  id          Int             @id @default(autoincrement())
+  bookId      Int
+  studentId   Int
+  issueDate   DateTime        @db.Date
+  dueDate     DateTime        @db.Date
+  returnDate  DateTime?       @db.Date
+  fine        Decimal?        @db.Decimal(8, 2)
+  status      BookIssueStatus @default(ISSUED)
+  issuedById  Int
+  createdAt   DateTime        @default(now())
+
+  book     Book    @relation(fields: [bookId], references: [id])
+  student  Student @relation(fields: [studentId], references: [id])
+  issuedBy User    @relation("IssuedBy", fields: [issuedById], references: [id])
+
+  @@map("book_issues")
+}
+
+// ─── Communication Models ─────────────────────────────────────────────────────
+
+model Announcement {
+  id          Int                  @id @default(autoincrement())
+  title       String
+  message     String
+  category    AnnouncementCategory @default(GENERAL)
+  audience    AnnouncementAudience @default(ALL)
+  date        DateTime             @db.Date
+  expiryDate  DateTime?            @db.Date
+  isPinned    Boolean              @default(false)
+  createdById Int
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+
+  createdBy User @relation(fields: [createdById], references: [id])
+
+  @@map("announcements")
+}
+
+// ─── System Models ────────────────────────────────────────────────────────────
+
+model ActivityLog {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  action    String
+  entity    String
+  entityId  Int?
+  details   Json?
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("activity_logs")
+}
+
+model SystemSettings {
+  id          Int      @id @default(autoincrement())
+  key         String   @unique
+  value       String
+  updatedById Int
+  updatedAt   DateTime @updatedAt
+
+  updatedBy User @relation(fields: [updatedById], references: [id])
+
+  @@map("system_settings")
+}
+
+model StudentPromotion {
+  id             Int      @id @default(autoincrement())
+  studentId      Int
+  fromClassId    Int
+  toClassId      Int
+  fromSectionId  Int?
+  toSectionId    Int?
+  academicYearId Int
+  promotedById   Int
+  promotedAt     DateTime @default(now())
+
+  student      Student      @relation(fields: [studentId], references: [id])
+  fromClass    Class        @relation("FromClass", fields: [fromClassId], references: [id])
+  toClass      Class        @relation("ToClass", fields: [toClassId], references: [id])
+  fromSection  Section?     @relation("FromSection", fields: [fromSectionId], references: [id])
+  toSection    Section?     @relation("ToSection", fields: [toSectionId], references: [id])
+  academicYear AcademicYear @relation(fields: [academicYearId], references: [id])
+  promotedBy   User         @relation(fields: [promotedById], references: [id])
+
+  @@map("student_promotions")
+}

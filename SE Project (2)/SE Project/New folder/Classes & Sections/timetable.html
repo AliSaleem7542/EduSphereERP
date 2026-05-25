@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Class Timetable | EDU-SPHERE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <link rel="preload" href="../css/adminlte.css" as="style" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" media="print" onload="this.media='all'" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="../css/adminlte.css" />
+    <style>
+      .timetable-grid th { background:#343a40; color:#fff; text-align:center; vertical-align:middle; }
+      .timetable-grid td { text-align:center; vertical-align:middle; min-width:110px; }
+      .period-cell { border-radius:6px; padding:6px 4px; font-size:0.82rem; cursor:pointer; }
+      .period-cell:hover { opacity:0.85; }
+      .empty-cell { color:#aaa; font-size:0.8rem; }
+    </style>
+  <!-- __THEME_APPLIED__ -->
+<script>
+(function(){
+  var s = JSON.parse(localStorage.getItem('sysSettings') || '{}');
+  var theme = s.sidebarTheme || 'dark';
+  document.addEventListener('DOMContentLoaded', function() {
+    var el = document.querySelector('.app-sidebar');
+    if (el) el.setAttribute('data-bs-theme', theme);
+  });
+})();
+</script>
+</head>
+  <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+    <div class="app-wrapper">
+      <nav class="app-header navbar navbar-expand bg-body">
+        <div class="container-fluid">
+          <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" data-lte-toggle="sidebar" href="#" role="button"><i class="bi bi-list"></i></a></li>
+            <li class="nav-item d-none d-md-block"><a href="../index2.html" class="nav-link">Dashboard</a></li>
+            <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Classes &amp; Sections</a></li>
+          </ul>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link" data-bs-toggle="dropdown" href="#"><i class="bi bi-bell-fill"></i><span class="navbar-badge badge text-bg-warning">15</span></a>
+              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <span class="dropdown-item dropdown-header">15 Notifications</span>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown user-menu">
+              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                <img src="../assets/img/user2-160x160.jpg" class="user-image rounded-circle shadow" alt="User">
+                <span class="d-none d-md-inline">Ali Saleem</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <li class="user-header text-bg-primary"><img src="../assets/img/user2-160x160.jpg" class="rounded-circle shadow" alt="User"><p>Ali Saleem - System Administrator <small>Member since Nov. 2023</small></p></li>
+                <li class="user-footer"><a href="#" class="btn btn-default btn-flat">Profile</a><a href="#" class="btn btn-default btn-flat float-end">Sign out</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+        <div class="sidebar-brand"><a href="../index2.html" class="brand-link"><img src="../assets/img/eduspherelogo (2).png" alt="Logo" class="brand-image opacity-75 shadow"><span class="brand-text fw-light">EDU-SPHERE</span></a></div>
+        <div class="sidebar-wrapper"><nav class="mt-2"><ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" data-accordion="false">
+          <li class="nav-item"><a href="../index2.html" class="nav-link"><i class="nav-icon bi bi-speedometer2"></i><p>Admin Dashboard</p></a></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-people-fill"></i><p>Students Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="../add-student.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Student</p></a></li>
+            <li class="nav-item"><a href="../manage-students.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Students</p></a></li>
+            <li class="nav-item"><a href="../student-records.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Records</p></a></li>
+            <li class="nav-item"><a href="../student-promotions.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Promote Students</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-person-badge-fill"></i><p>Teachers Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="../add-teacher.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Teacher</p></a></li>
+            <li class="nav-item"><a href="../manage-teachers.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Teachers</p></a></li>
+            <li class="nav-item"><a href="../assign-subjects.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Assign Subjects</p></a></li>
+            <li class="nav-item"><a href="../teacher-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Schedule</p></a></li>
+          </ul></li>
+          <li class="nav-item menu-open"><a href="#" class="nav-link active"><i class="nav-icon bi bi-diagram-3-fill"></i><p>Classes &amp; Sections<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="add-class.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Class</p></a></li>
+            <li class="nav-item"><a href="manage-classes.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Classes</p></a></li>
+            <li class="nav-item"><a href="manage-sections.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Sections</p></a></li>
+            <li class="nav-item"><a href="assign-class-teacher.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Assign Class Teacher</p></a></li>
+            <li class="nav-item"><a href="student-allocation.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Allocation</p></a></li>
+            <li class="nav-item"><a href="classroom-management.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Classroom Management</p></a></li>
+            <li class="nav-item"><a href="subject-allocation.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Subject Allocation</p></a></li>
+            <li class="nav-item"><a href="class-promotion.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Class Promotion</p></a></li>
+            <li class="nav-item"><a href="timetable.html" class="nav-link active"><i class="nav-icon bi bi-circle"></i><p>Class Timetable</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-clipboard-data-fill"></i><p>Exams &amp; Results<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="../create-exam.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create Exam</p></a></li>
+            <li class="nav-item"><a href="../exam-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Exam Schedule</p></a></li>
+            <li class="nav-item"><a href="../result-management.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Result Management</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-calendar-check-fill"></i><p>Attendance<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="../student-attendance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Attendance</p></a></li>
+            <li class="nav-item"><a href="../teacher-attenadance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Attendance</p></a></li>
+            <li class="nav-item"><a href="../attendance-reports.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Attendance Reports</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-cash-stack"></i><p>Fee Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="../collect-fee.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Collect Fee</p></a></li>
+            <li class="nav-item"><a href="../fee-records.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Records</p></a></li>
+            <li class="nav-item"><a href="../pending-fees.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Pending Fees</p></a></li>
+<li class="nav-item"><a href="../fee-refunds.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Refunds</p></a></li>
+          </ul></li>
+        
+                <!-- Accounts -->
+        <li class="nav-item">
+          <a href="#" class="nav-link"><i class="nav-icon bi bi-journal-text"></i><p>Accounts<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item"><a href="../accounts-entry.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Income / Expense Entry</p></a></li>
+            <li class="nav-item"><a href="../accounts-ledger.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Ledger</p></a></li>
+            <li class="nav-item"><a href="../accounts-balance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Balance Sheet</p></a></li>
+          </ul>
+        </li>
+<li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-book-fill"></i><p>Library<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="../add-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Book</p></a></li>
+            <li class="nav-item"><a href="../issue-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Issue Book</p></a></li>
+            <li class="nav-item"><a href="../return-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Return Book</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="../announcements.html" class="nav-link"><i class="nav-icon bi bi-megaphone-fill"></i><p>Announcements</p></a></li>
+          <li class="nav-item"><a href="../reports.html" class="nav-link"><i class="nav-icon bi bi-bar-chart-fill"></i><p>Reports</p></a></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-person-gear"></i><p>User Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="../create-user.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create User</p></a></li>
+            <li class="nav-item"><a href="../manage-users.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Users</p></a></li>
+            <li class="nav-item"><a href="../roles-permissions.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Roles &amp; Permissions</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="../activity-logs.html" class="nav-link"><i class="nav-icon bi bi-clock-history"></i><p>Activity Logs</p></a></li>
+          <li class="nav-item"><a href="../backup.html" class="nav-link"><i class="nav-icon bi bi-database-fill-down"></i><p>Backup &amp; Restore</p></a></li>
+          <li class="nav-item"><a href="../settings.html" class="nav-link"><i class="nav-icon bi bi-gear-fill"></i><p>System Settings</p></a></li>
+        </ul></nav></div>
+      </aside>
+""
+      <main class="app-main">
+        <div class="app-content-header"><div class="container-fluid"><div class="row">
+          <div class="col-sm-6"><h3 class="mb-0">Class Timetable</h3></div>
+          <div class="col-sm-6"><ol class="breadcrumb float-sm-end">
+            <li class="breadcrumb-item"><a href="../index2.html">Home</a></li>
+            <li class="breadcrumb-item">Classes &amp; Sections</li>
+            <li class="breadcrumb-item active">Class Timetable</li>
+          </ol></div>
+        </div></div></div>
+        <div class="app-content"><div class="container-fluid">
+          <div class="row mb-4">
+            <div class="col-md-3"><div class="info-box"><span class="info-box-icon text-bg-primary shadow-sm"><i class="bi bi-calendar3"></i></span><div class="info-box-content"><span class="info-box-text">Periods / Day</span><span class="info-box-number">8</span></div></div></div>
+            <div class="col-md-3"><div class="info-box"><span class="info-box-icon text-bg-success shadow-sm"><i class="bi bi-diagram-3-fill"></i></span><div class="info-box-content"><span class="info-box-text">Classes</span><span class="info-box-number">4</span></div></div></div>
+            <div class="col-md-3"><div class="info-box"><span class="info-box-icon text-bg-warning shadow-sm"><i class="bi bi-book-fill"></i></span><div class="info-box-content"><span class="info-box-text">Subjects</span><span class="info-box-number">9</span></div></div></div>
+            <div class="col-md-3"><div class="info-box"><span class="info-box-icon text-bg-info shadow-sm"><i class="bi bi-person-badge-fill"></i></span><div class="info-box-content"><span class="info-box-text">Teachers</span><span class="info-box-number">5</span></div></div></div>
+          </div>
+          <!-- Filters -->
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="row align-items-end g-3">
+                <div class="col-md-3">
+                  <label class="form-label">Select Class</label>
+                  <select class="form-select" id="filterClass" onchange="renderTimetable()">
+                    <option value="Grade 9">Grade 9</option>
+                    <option value="Grade 10">Grade 10</option>
+                    <option value="Grade 11">Grade 11</option>
+                    <option value="Grade 12">Grade 12</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Select Section</label>
+                  <select class="form-select" id="filterSection" onchange="renderTimetable()">
+                    <option value="A">Section A</option>
+                    <option value="B">Section B</option>
+                    <option value="C">Section C</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Academic Year</label>
+                  <select class="form-select" id="filterYear">
+                    <option value="2025-26">2025-26</option>
+                    <option value="2024-25">2024-25</option>
+                  </select>
+                </div>
+                <div class="col-md-3 d-flex gap-2">
+                  <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#addPeriodModal"><i class="bi bi-plus-circle"></i> Add Period</button>
+                  <button class="btn btn-outline-danger" onclick="clearTimetable()" title="Clear All"><i class="bi bi-trash"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Grid -->
+          <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+              <h3 class="card-title mb-0"><i class="bi bi-table"></i> Weekly Timetable &mdash; <span id="ttLabel">Grade 9 / Section A</span></h3>
+              <button class="btn btn-sm btn-light" onclick="window.print()"><i class="bi bi-printer"></i> Print</button>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-bordered mb-0 timetable-grid">
+                  <thead><tr>
+                    <th style="width:90px;">Period</th>
+                    <th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th><th>Saturday</th>
+                  </tr></thead>
+                  <tbody id="timetableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- Legend -->
+          <div class="card mb-4"><div class="card-body">
+            <strong><i class="bi bi-palette"></i> Subject Colors:</strong>
+            <span class="badge text-bg-primary ms-2">Mathematics</span>
+            <span class="badge text-bg-success ms-1">English</span>
+            <span class="badge text-bg-warning ms-1">Urdu</span>
+            <span class="badge text-bg-danger ms-1">Physics</span>
+            <span class="badge text-bg-info ms-1">Chemistry</span>
+            <span class="badge text-bg-secondary ms-1">Biology</span>
+            <span class="badge ms-1" style="background:#6f42c1;color:#fff">History</span>
+            <span class="badge ms-1" style="background:#fd7e14;color:#fff">Geography</span>
+            <span class="badge ms-1" style="background:#20c997;color:#fff">Break</span>
+          </div></div>
+        </div></div>
+      </main>
+      <!-- Modal -->
+      <div class="modal fade" id="addPeriodModal" tabindex="-1">
+        <div class="modal-dialog"><div class="modal-content">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title"><i class="bi bi-plus-circle"></i> <span id="modalTitle">Add Period</span></h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="editKey">
+            <div class="mb-3"><label class="form-label">Day</label>
+              <select class="form-select" id="mDay">
+                <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
+                <option>Thursday</option><option>Friday</option><option>Saturday</option>
+              </select>
+            </div>
+            <div class="mb-3"><label class="form-label">Period</label>
+              <select class="form-select" id="mPeriod">
+                <option value="1">Period 1 (08:00-08:45)</option>
+                <option value="2">Period 2 (08:45-09:30)</option>
+                <option value="3">Period 3 (09:30-10:15)</option>
+                <option value="4">Break   (10:15-10:30)</option>
+                <option value="5">Period 4 (10:30-11:15)</option>
+                <option value="6">Period 5 (11:15-12:00)</option>
+                <option value="7">Period 6 (12:00-12:45)</option>
+                <option value="8">Period 7 (12:45-13:30)</option>
+              </select>
+            </div>
+            <div class="mb-3"><label class="form-label">Subject</label>
+              <select class="form-select" id="mSubject">
+                <option>Mathematics</option><option>English</option><option>Urdu</option>
+                <option>Physics</option><option>Chemistry</option><option>Biology</option>
+                <option>History</option><option>Geography</option><option>Break</option>
+              </select>
+            </div>
+            <div class="mb-3"><label class="form-label">Teacher</label>
+              <select class="form-select" id="mTeacher">
+                <option>Mr. Ahmed Khan</option><option>Mrs. Fatima Ali</option>
+                <option>Mr. Hassan Raza</option><option>Dr. Saira Malik</option>
+                <option>Ms. Ayesha Siddiqui</option><option>&#8212; (Break)</option>
+              </select>
+            </div>
+            <div class="mb-3"><label class="form-label">Room</label>
+              <input type="text" class="form-control" id="mRoom" placeholder="e.g. Room 101">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button class="btn btn-primary" onclick="savePeriod()"><i class="bi bi-check-circle"></i> Save</button>
+          </div>
+        </div></div>
+      </div>
+      <footer class="app-footer"><strong>Copyright &copy; 2014-2025 <a href="#" class="text-decoration-none">EDU-SPHERE</a>.</strong> All rights reserved.</footer>
+    </div>
+""
+    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+        <script src="../js/adminlte.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/header.js"></script>
+    <script>
+      AUTH.requireAuth('ADMIN');
+
+      var _classes = [], _sections = [], _subjects = [], _teachers = [], _ttData = {};
+
+      async function loadClasses() {
+        try {
+          var res = await API.classes.list();
+          _classes = (res && res.success) ? (res.data || []) : [];
+          var sel = document.getElementById('filterClass');
+          if (sel) {
+            sel.innerHTML = '';
+            _classes.forEach(function(c){ sel.innerHTML += '<option value="' + c.id + '">' + c.name + '</option>'; });
+            if (_classes.length) loadSections();
+          }
+        } catch(e) {}
+      }
+
+      async function loadSections() {
+        var classId = document.getElementById('filterClass') ? document.getElementById('filterClass').value : '';
+        if (!classId) return;
+        try {
+          var res = await API.classes.sections(classId);
+          _sections = (res && res.success) ? (res.data || []) : [];
+          var sel = document.getElementById('filterSection');
+          if (sel) {
+            sel.innerHTML = '';
+            _sections.forEach(function(s){ sel.innerHTML += '<option value="' + s.id + '">' + s.name + '</option>'; });
+            renderTimetable();
+          }
+        } catch(e) {}
+      }
+
+      async function loadSubjectsAndTeachers() {
+        try {
+          var [sRes, tRes] = await Promise.all([API.subjects.list(), API.teachers.list({ limit: 200 })]);
+          _subjects = (sRes && sRes.success) ? (sRes.data || []) : [];
+          _teachers = (tRes && tRes.success) ? (tRes.data.data || tRes.data || []) : [];
+          var mSub = document.getElementById('mSubject');
+          if (mSub) {
+            mSub.innerHTML = '';
+            _subjects.forEach(function(s){ mSub.innerHTML += '<option value="' + s.id + '">' + s.name + '</option>'; });
+          }
+          var mTch = document.getElementById('mTeacher');
+          if (mTch) {
+            mTch.innerHTML = '<option value="">— (Break / None)</option>';
+            _teachers.forEach(function(t){ var name = t.name || ((t.firstName||'') + ' ' + (t.lastName||'')).trim(); mTch.innerHTML += '<option value="' + t.id + '">' + name + '</option>'; });
+          }
+        } catch(e) {}
+      }
+
+      var DAYS = ['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
+      var DAY_LABELS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+      var PERIODS = [
+        {num:1,label:'Period 1',time:'08:00-08:45',startTime:'08:00',endTime:'08:45'},
+        {num:2,label:'Period 2',time:'08:45-09:30',startTime:'08:45',endTime:'09:30'},
+        {num:3,label:'Period 3',time:'09:30-10:15',startTime:'09:30',endTime:'10:15'},
+        {num:4,label:'Break',   time:'10:15-10:30',startTime:'10:15',endTime:'10:30'},
+        {num:5,label:'Period 4',time:'10:30-11:15',startTime:'10:30',endTime:'11:15'},
+        {num:6,label:'Period 5',time:'11:15-12:00',startTime:'11:15',endTime:'12:00'},
+        {num:7,label:'Period 6',time:'12:00-12:45',startTime:'12:00',endTime:'12:45'},
+        {num:8,label:'Period 7',time:'12:45-13:30',startTime:'12:45',endTime:'13:30'}
+      ];
+      var COLORS = { Mathematics:'primary', English:'success', Urdu:'warning', Physics:'danger', Chemistry:'info', Biology:'secondary', History:'#6f42c1', Geography:'#fd7e14', Break:'#20c997' };
+
+      async function renderTimetable() {
+        var classId   = document.getElementById('filterClass') ? document.getElementById('filterClass').value : '';
+        var sectionId = document.getElementById('filterSection') ? document.getElementById('filterSection').value : '';
+        var clsText   = document.getElementById('filterClass') ? (document.getElementById('filterClass').options[document.getElementById('filterClass').selectedIndex] || {}).text || '' : '';
+        var secText   = document.getElementById('filterSection') ? (document.getElementById('filterSection').options[document.getElementById('filterSection').selectedIndex] || {}).text || '' : '';
+        var ttLabel = document.getElementById('ttLabel');
+        if (ttLabel) ttLabel.textContent = clsText + ' / ' + secText;
+        if (!classId || !sectionId) return;
+        _ttData = {};
+        try {
+          var res = await API.timetable.forClass(classId, sectionId);
+          var data = (res && res.success) ? (res.data || []) : [];
+          data.forEach(function(slot){ _ttData[(slot.day||'').toUpperCase() + '|' + slot.periodNo] = slot; });
+        } catch(e) {}
+        var tbody = document.getElementById('timetableBody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+        for (var pi = 0; pi < PERIODS.length; pi++) {
+          var p = PERIODS[pi];
+          var tr = document.createElement('tr');
+          tr.innerHTML = '<th class="text-center"><div class="fw-bold">' + p.label + '</div><small class="text-muted">' + p.time + '</small></th>';
+          for (var di = 0; di < DAYS.length; di++) {
+            var day = DAYS[di];
+            var key = day + '|' + p.num;
+            var entry = _ttData[key];
+            var td;
+            if (entry) {
+              var subName = (entry.subject && entry.subject.name) || 'Unknown';
+              var tchName = (entry.teacher && ((entry.teacher.firstName||'') + ' ' + (entry.teacher.lastName||entry.teacher.name||'')).trim()) || '';
+              var c = COLORS[subName] || 'secondary';
+              var isHex = c.charAt(0) === '#';
+              var sty = isHex ? 'background:' + c + ';color:#fff;' : '';
+              var cls2 = isHex ? '' : 'text-bg-' + c;
+              td = '<td><div class="period-cell ' + cls2 + '" style="' + sty + '" onclick="editPeriod(\'' + day + '\',' + p.num + ')">' +
+                '<div class="fw-bold">' + subName + '</div><small>' + tchName + '</small><br><small>' + (entry.room||'') + '</small></div></td>';
+            } else {
+              td = '<td><span class="empty-cell" style="cursor:pointer" onclick="openAdd(\'' + day + '\',' + p.num + ')"><i class="bi bi-plus-circle"></i> Add</span></td>';
+            }
+            tr.innerHTML += td;
+          }
+          tbody.appendChild(tr);
+        }
+      }
+
+      function openAdd(day, period) {
+        var mDay = document.getElementById('mDay'); if (mDay) mDay.value = day;
+        var mPeriod = document.getElementById('mPeriod'); if (mPeriod) mPeriod.value = period;
+        document.getElementById('editKey').value = '';
+        var modal = document.getElementById('addPeriodModal');
+        if (modal) new bootstrap.Modal(modal).show();
+      }
+
+      function editPeriod(day, period) {
+        var entry = _ttData[day + '|' + period];
+        if (!entry) return;
+        document.getElementById('editKey').value = entry.id || '';
+        var mDay = document.getElementById('mDay'); if (mDay) mDay.value = day;
+        var mPeriod = document.getElementById('mPeriod'); if (mPeriod) mPeriod.value = period;
+        var mSub = document.getElementById('mSubject'); if (mSub) mSub.value = (entry.subjectId || (entry.subject && entry.subject.id) || '');
+        var mTch = document.getElementById('mTeacher'); if (mTch) mTch.value = (entry.teacherId || (entry.teacher && entry.teacher.id) || '');
+        var mRoom = document.getElementById('mRoom'); if (mRoom) mRoom.value = entry.room || '';
+        var modal = document.getElementById('addPeriodModal');
+        if (modal) new bootstrap.Modal(modal).show();
+      }
+
+      async function savePeriod() {
+        var classId   = document.getElementById('filterClass').value;
+        var sectionId = document.getElementById('filterSection').value;
+        var day       = document.getElementById('mDay').value.toUpperCase();
+        var periodNo  = parseInt(document.getElementById('mPeriod').value);
+        var subjectId = document.getElementById('mSubject').value;
+        var teacherId = document.getElementById('mTeacher').value;
+        var room      = document.getElementById('mRoom').value.trim();
+        var editKey   = document.getElementById('editKey').value;
+        var pInfo     = PERIODS.find(function(p){ return p.num === periodNo; }) || {};
+        var body = { classId: classId, sectionId: sectionId, subjectId: subjectId, teacherId: teacherId||null, day: day, periodNo: periodNo, startTime: pInfo.startTime||'', endTime: pInfo.endTime||'', room: room };
+        try {
+          var res = editKey ? await API.timetable.update(editKey, body) : await API.timetable.create(body);
+          if (res && res.success) {
+            API.toast('Period saved.', 'success');
+            var modal = bootstrap.Modal.getInstance(document.getElementById('addPeriodModal'));
+            if (modal) modal.hide();
+            renderTimetable();
+          } else { API.toast((res && res.message) || 'Save failed.', 'danger'); }
+        } catch(e) { API.toast('Error: ' + e.message, 'danger'); }
+      }
+
+      async function clearTimetable() {
+        if (!confirm('Clear entire timetable for this class/section?')) return;
+        var slots = Object.values(_ttData);
+        if (!slots.length) { API.toast('Timetable is already empty.', 'info'); return; }
+        try {
+          await Promise.all(slots.map(function(slot){ return API.timetable.remove(slot.id); }));
+          API.toast('Timetable cleared.', 'success');
+          renderTimetable();
+        } catch(e) { API.toast('Error: ' + e.message, 'danger'); }
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        loadClasses();
+        loadSubjectsAndTeachers();
+        var sw = document.querySelector('.sidebar-wrapper');
+        if (sw && typeof OverlayScrollbarsGlobal !== 'undefined' && OverlayScrollbarsGlobal.OverlayScrollbars) {
+          OverlayScrollbarsGlobal.OverlayScrollbars(sw, { scrollbars: { theme: 'os-theme-light', autoHide: 'leave', clickScroll: true } });
+        }
+      });
+    </script>
+  </body>
+</html>

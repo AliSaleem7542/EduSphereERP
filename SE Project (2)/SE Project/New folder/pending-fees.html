@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Pending Fees | EDU-SPHERE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <link rel="preload" href="css/adminlte.css" as="style" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" media="print" onload="this.media='all'" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="css/adminlte.css" />
+  <!-- __THEME_APPLIED__ -->
+<script>
+(function(){
+  var s = JSON.parse(localStorage.getItem('sysSettings') || '{}');
+  var theme = s.sidebarTheme || 'dark';
+  document.addEventListener('DOMContentLoaded', function() {
+    var el = document.querySelector('.app-sidebar');
+    if (el) el.setAttribute('data-bs-theme', theme);
+  });
+})();
+</script>
+</head>
+  <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+    <div class="app-wrapper">
+      <nav class="app-header navbar navbar-expand bg-body">
+        <div class="container-fluid">
+          <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" data-lte-toggle="sidebar" href="#" role="button"><i class="bi bi-list"></i></a></li>
+            <li class="nav-item d-none d-md-block"><a href="index2.html" class="nav-link">Dashboard</a></li>
+            <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Fee Management</a></li>
+          </ul>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-search"></i></a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link" data-bs-toggle="dropdown" href="#"><i class="bi bi-bell-fill"></i><span class="navbar-badge badge text-bg-warning">15</span></a>
+              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <span class="dropdown-item dropdown-header">15 Notifications</span>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown user-menu">
+              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                <img src="assets/img/user2-160x160.jpg" class="user-image rounded-circle shadow" alt="User">
+                <span class="d-none d-md-inline">Ali Saleem</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <li class="user-header text-bg-primary">
+                  <img src="assets/img/user2-160x160.jpg" class="rounded-circle shadow" alt="User">
+                  <p>Ali Saleem - System Administrator <small>Member since Nov. 2023</small></p>
+                </li>
+                <li class="user-footer">
+                  <a href="#" class="btn btn-default btn-flat">Profile</a>
+                  <a href="#" class="btn btn-default btn-flat float-end">Sign out</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+        <div class="sidebar-brand">
+          <a href="index2.html" class="brand-link">
+            <img src="assets/img/eduspherelogo (2).png" alt="Logo" class="brand-image opacity-75 shadow">
+            <span class="brand-text fw-light">EDU-SPHERE</span>
+          </a>
+        </div>
+        <div class="sidebar-wrapper">
+          <nav class="mt-2">
+            <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" data-accordion="false">
+              <li class="nav-item"><a href="index2.html" class="nav-link"><i class="nav-icon bi bi-speedometer2"></i><p>Admin Dashboard</p></a></li>
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-people-fill"></i><p>Students Management<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="add-student.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Student</p></a></li>
+                  <li class="nav-item"><a href="manage-students.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Students</p></a></li>
+                  <li class="nav-item"><a href="student-records.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Records</p></a></li>
+                  <li class="nav-item"><a href="student-promotions.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Promote Students</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-person-badge-fill"></i><p>Teachers Management<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="add-teacher.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Teacher</p></a></li>
+                  <li class="nav-item"><a href="manage-teachers.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Teachers</p></a></li>
+                  <li class="nav-item"><a href="assign-subjects.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Assign Subjects</p></a></li>
+                  <li class="nav-item"><a href="teacher-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Schedule</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-diagram-3-fill"></i><p>Classes &amp; Sections<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="Classes &amp; Sections/add-class.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Class</p></a></li>
+                  <li class="nav-item"><a href="Classes &amp; Sections/manage-classes.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Classes</p></a></li>
+                  <li class="nav-item"><a href="Classes &amp; Sections/manage-sections.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Sections</p></a></li>
+                  <li class="nav-item"><a href="Classes &amp; Sections/assign-class-teacher.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Assign Class Teacher</p></a></li>
+                  <li class="nav-item"><a href="Classes &amp; Sections/student-allocation.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Allocation</p></a></li>
+                  <li class="nav-item"><a href="Classes &amp; Sections/classroom-management.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Classroom Management</p></a></li>
+                  <li class="nav-item"><a href="Classes &amp; Sections/subject-allocation.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Subject Allocation</p></a></li>
+                  <li class="nav-item"><a href="Classes &amp; Sections/class-promotion.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Class Promotion</p></a></li>
+                  <li class="nav-item"><a href="timetable.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Class Timetable</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-clipboard-data-fill"></i><p>Exams &amp; Results<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="create-exam.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create Exam</p></a></li>
+                  <li class="nav-item"><a href="exam-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Exam Schedule</p></a></li>
+                  <li class="nav-item"><a href="result-management.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Result Management</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-calendar-check-fill"></i><p>Attendance<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="student-attendance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Attendance</p></a></li>
+                  <li class="nav-item"><a href="teacher-attendance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Attendance</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item menu-open">
+                <a href="#" class="nav-link active"><i class="nav-icon bi bi-cash-stack"></i><p>Fee Management<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="collect-fee.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Collect Fee</p></a></li>
+                  <li class="nav-item"><a href="fee-records.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Records</p></a></li>
+                  <li class="nav-item"><a href="pending-fees.html" class="nav-link active"><i class="nav-icon bi bi-circle"></i><p>Pending Fees</p></a></li>
+<li class="nav-item"><a href="fee-refunds.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Refunds</p></a></li>
+                </ul>
+              </li>
+                <!-- Accounts -->
+        <li class="nav-item">
+          <a href="#" class="nav-link"><i class="nav-icon bi bi-journal-text"></i><p>Accounts<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item"><a href="accounts-entry.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Income / Expense Entry</p></a></li>
+            <li class="nav-item"><a href="accounts-ledger.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Ledger</p></a></li>
+            <li class="nav-item"><a href="accounts-balance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Balance Sheet</p></a></li>
+          </ul>
+        </li>
+<li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-book-fill"></i><p>Library<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="add-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Book</p></a></li>
+                  <li class="nav-item"><a href="issue-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Issue Book</p></a></li>
+                  <li class="nav-item"><a href="return-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Return Book</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item"><a href="announcements.html" class="nav-link"><i class="nav-icon bi bi-megaphone-fill"></i><p>Announcements</p></a></li>
+              <li class="nav-item"><a href="reports.html" class="nav-link"><i class="nav-icon bi bi-bar-chart-fill"></i><p>Reports</p></a></li>
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-person-gear"></i><p>User Management<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="create-user.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create User</p></a></li>
+                  <li class="nav-item"><a href="manage-users.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Users</p></a></li>
+                  <li class="nav-item"><a href="roles-permissions.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Roles &amp; Permissions</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item"><a href="activity-logs.html" class="nav-link"><i class="nav-icon bi bi-clock-history"></i><p>Activity Logs</p></a></li>
+              <li class="nav-item"><a href="backup.html" class="nav-link"><i class="nav-icon bi bi-database-fill-down"></i><p>Backup &amp; Restore</p></a></li>
+              <li class="nav-item"><a href="settings.html" class="nav-link"><i class="nav-icon bi bi-gear-fill"></i><p>System Settings</p></a></li>
+            </ul>
+          </nav>
+        </div>
+      </aside>
+      <main class="app-main">
+        <div class="app-content-header">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-6"><h3 class="mb-0">Pending Fees</h3></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="index2.html">Home</a></li>
+                  <li class="breadcrumb-item">Fee Management</li>
+                  <li class="breadcrumb-item active">Pending Fees</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="app-content">
+          <div class="container-fluid">
+            <div id="notifBanner"></div>
+            <div class="row mb-4">
+              <div class="col-md-3">
+                <div class="info-box">
+                  <span class="info-box-icon text-bg-danger shadow-sm"><i class="bi bi-exclamation-triangle-fill"></i></span>
+                  <div class="info-box-content">
+                    <span class="info-box-text">Defaulters</span>
+                    <span class="info-box-number" id="statDefaulters">0</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="info-box">
+                  <span class="info-box-icon text-bg-warning shadow-sm"><i class="bi bi-cash-coin"></i></span>
+                  <div class="info-box-content">
+                    <span class="info-box-text">Total Pending</span>
+                    <span class="info-box-number" id="statPendingAmt">Rs. 0</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="info-box">
+                  <span class="info-box-icon text-bg-success shadow-sm"><i class="bi bi-people-fill"></i></span>
+                  <div class="info-box-content">
+                    <span class="info-box-text">Total Students</span>
+                    <span class="info-box-number" id="statStudents">0</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="info-box">
+                  <span class="info-box-icon text-bg-info shadow-sm"><i class="bi bi-check-circle-fill"></i></span>
+                  <div class="info-box-content">
+                    <span class="info-box-text">Cleared This Month</span>
+                    <span class="info-box-number" id="statCleared">0</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Filter + Month Selector -->
+            <div class="card mb-4">
+              <div class="card-body">
+                <div class="row g-3 align-items-end">
+                  <div class="col-md-3">
+                    <label class="form-label"><i class="bi bi-search"></i> Search Student</label>
+                    <input type="text" class="form-control" id="searchInput" placeholder="Name or roll no..." oninput="renderTable()">
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label">Class</label>
+                    <select class="form-select" id="filterClass" onchange="renderTable()">
+                      <option value="">All Classes</option>
+                      <option>Grade 9</option><option>Grade 10</option>
+                      <option>Grade 11</option><option>Grade 12</option>
+                    </select>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label">Fee Category</label>
+                    <select class="form-select" id="filterCat" onchange="renderTable()">
+                      <option value="">All</option>
+                      <option>Regular</option><option>Scholarship</option>
+                      <option>Half Fee</option><option>Free</option>
+                    </select>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label">Month</label>
+                    <input type="month" class="form-control" id="filterMonth" onchange="renderTable()">
+                  </div>
+                  <div class="col-md-3 d-flex gap-2 align-items-end">
+                    <button class="btn btn-outline-secondary" onclick="clearFilters()"><i class="bi bi-x-circle"></i> Clear</button>
+                    <button class="btn btn-success" onclick="printPending()"><i class="bi bi-printer-fill"></i> Print</button>
+                    <a href="collect-fee.html" class="btn btn-primary"><i class="bi bi-cash-coin"></i> Collect Fee</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card shadow">
+              <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+                <h3 class="card-title mb-0"><i class="bi bi-exclamation-triangle-fill"></i> Students with Pending Fees</h3>
+                <span class="badge text-bg-light text-dark" id="showingCount">0 students</span>
+              </div>
+              <div class="card-body p-0">
+                <div class="table-responsive">
+                  <table class="table table-striped table-hover mb-0" style="font-size:0.85rem">
+                    <thead class="table-dark">
+                      <tr>
+                        <th>#</th><th>Roll No</th><th>Name</th><th>Section</th>
+                        <th>Package</th>
+                        <th>Annual</th>
+                        <th>1st Install</th>
+                        <th>2nd Install</th>
+                        <th>3rd Install</th>
+                        <th>4th Install</th>
+                        <th>Total Paid</th>
+                        <th>Remaining</th>
+                      </tr>
+                    </thead>
+                    <tbody id="pendingBody"></tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="card-footer d-flex justify-content-between align-items-center">
+                <small class="text-muted" id="pageInfo">Page 1 of 1</small>
+                <nav><ul class="pagination pagination-sm mb-0" id="pagination"></ul></nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer class="app-footer">
+        <strong>Copyright &copy; 2014-2025 <a href="#" class="text-decoration-none">EDU-SPHERE</a>.</strong> All rights reserved.
+      </footer>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="js/adminlte.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/header.js"></script>
+    <script>
+      AUTH.requireAuth('ADMIN');
+      var PER_PAGE = 10, currentPage = 1, filtered = [];
+
+      async function loadData() {
+        // Load all students and fee records to compute pending
+        var res = await API.fees.pending();
+        if (!res || !res.success) return;
+        var students = res.data || [];
+
+        var totalStudentsRes = await API.students.list({ limit: 1, status: 'ACTIVE' });
+        var totalStudents = (totalStudentsRes && totalStudentsRes.success) ? (totalStudentsRes.data.total || 0) : 0;
+
+        var pendingAmt = students.reduce(function(sum, s) { return sum + Number(s.pendingAmount || 0); }, 0);
+        var cleared = totalStudents - students.length;
+
+        document.getElementById('statDefaulters').textContent = students.length;
+        document.getElementById('statPendingAmt').textContent = 'Rs. ' + pendingAmt.toLocaleString();
+        document.getElementById('statStudents').textContent = totalStudents;
+        document.getElementById('statCleared').textContent = Math.max(0, cleared);
+
+        filtered = students;
+        renderTable();
+      }
+
+      function renderTable() {
+        var q = document.getElementById('searchInput').value.toLowerCase();
+        var cls = document.getElementById('filterClass').value;
+        var cat = document.getElementById('filterCat').value;
+
+        var rows = filtered.filter(function(s) {
+          var name = (s.firstName || '') + ' ' + (s.lastName || '');
+          var mq = !q || name.toLowerCase().indexOf(q) > -1 || (s.rollNo || '').toLowerCase().indexOf(q) > -1;
+          var mc = !cls || (s.class && s.class.name === cls);
+          var mcat = !cat || s.feeCategory === cat.toUpperCase().replace(' ', '_');
+          return mq && mc && mcat;
+        });
+
+        document.getElementById('showingCount').textContent = rows.length + ' students';
+        var totalPages = Math.max(1, Math.ceil(rows.length / PER_PAGE));
+        if (currentPage > totalPages) currentPage = 1;
+        var start = (currentPage - 1) * PER_PAGE;
+        var page = rows.slice(start, start + PER_PAGE);
+        var tbody = document.getElementById('pendingBody');
+
+        if (page.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="12" class="text-center text-muted py-4">No students with pending fees.</td></tr>';
+        } else {
+          tbody.innerHTML = page.map(function(s, i) {
+            var pkg = Number(s.packageTotal || 0);
+            var paid = Number(s.totalPaid || 0);
+            var remaining = Number(s.pendingAmount || (pkg - paid));
+            var name = (s.firstName || '') + ' ' + (s.lastName || '');
+            return '<tr class="table-warning">' +
+              '<td>' + (start + i + 1) + '</td>' +
+              '<td><code>' + (s.rollNo || '-') + '</code></td>' +
+              '<td>' + name + '</td>' +
+              '<td><span class="badge bg-secondary">' + (s.section ? s.section.name : '-') + '</span></td>' +
+              '<td>' + (pkg ? 'Rs. ' + pkg.toLocaleString() : '-') + '</td>' +
+              '<td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>' +
+              '<td><strong>Rs. ' + paid.toLocaleString() + '</strong></td>' +
+              '<td class="text-danger fw-bold">Rs. ' + Math.abs(remaining).toLocaleString() + ' <i class="bi bi-exclamation-circle"></i></td>' +
+              '</tr>';
+          }).join('');
+        }
+
+        document.getElementById('pageInfo').textContent = 'Page ' + currentPage + ' of ' + totalPages;
+        var ul = document.getElementById('pagination');
+        var ph = '<li class="page-item ' + (currentPage === 1 ? 'disabled' : '') + '"><a class="page-link" href="#" onclick="changePage(' + (currentPage - 1) + ');return false;">&#171;</a></li>';
+        for (var p = 1; p <= totalPages; p++) ph += '<li class="page-item ' + (p === currentPage ? 'active' : '') + '"><a class="page-link" href="#" onclick="changePage(' + p + ');return false;">' + p + '</a></li>';
+        ph += '<li class="page-item ' + (currentPage === totalPages ? 'disabled' : '') + '"><a class="page-link" href="#" onclick="changePage(' + (currentPage + 1) + ');return false;">&#187;</a></li>';
+        ul.innerHTML = ph;
+      }
+
+      function changePage(p) {
+        var t = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
+        if (p < 1 || p > t) return; currentPage = p; renderTable();
+      }
+
+      function clearFilters() {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('filterClass').value = '';
+        document.getElementById('filterCat').value = '';
+        document.getElementById('filterMonth').value = '';
+        currentPage = 1; renderTable();
+      }
+
+      function printPending() { window.print(); }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        loadData();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,903 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>EDU-SPHERE | Attendance Reports</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="./css/adminlte.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- __THEME_APPLIED__ -->
+<script>
+(function(){
+  var s = JSON.parse(localStorage.getItem('sysSettings') || '{}');
+  var theme = s.sidebarTheme || 'dark';
+  document.addEventListener('DOMContentLoaded', function() {
+    var el = document.querySelector('.app-sidebar');
+    if (el) el.setAttribute('data-bs-theme', theme);
+  });
+})();
+</script>
+</head>
+<body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+    <div class="app-wrapper">
+        <!-- Header -->
+        <nav class="app-header navbar navbar-expand bg-body">
+            <div class="container-fluid">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
+                            <i class="bi bi-list"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item d-none d-md-block">
+                        <a href="index2.html" class="nav-link">Dashboard</a>
+                    </li>
+                    <li class="nav-item d-none d-md-block">
+                        <a href="#" class="nav-link">Attendance Reports</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-lte-toggle="fullscreen">
+                            <i data-lte-icon="maximize" class="bi bi-arrows-fullscreen"></i>
+                            <i data-lte-icon="minimize" class="bi bi-fullscreen-exit" style="display: none"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown user-menu">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <img src="./assets/img/user2-160x160.jpg" class="user-image rounded-circle shadow" alt="User Image" />
+                            <span class="d-none d-md-inline">Ali Saleem</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Sidebar -->
+        <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+          <div class="sidebar-brand"><a href="index2.html" class="brand-link"><img src="assets/img/eduspherelogo (2).png" alt="Logo" class="brand-image opacity-75 shadow"><span class="brand-text fw-light">EDU-SPHERE</span></a></div>
+          <div class="sidebar-wrapper"><nav class="mt-2"><ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" data-accordion="false">
+            <li class="nav-item"><a href="index2.html" class="nav-link"><i class="nav-icon bi bi-speedometer2"></i><p>Admin Dashboard</p></a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-people-fill"></i><p>Students Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+              <li class="nav-item"><a href="add-student.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Student</p></a></li>
+              <li class="nav-item"><a href="manage-students.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Students</p></a></li>
+              <li class="nav-item"><a href="student-records.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Records</p></a></li>
+              <li class="nav-item"><a href="student-promotions.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Promote Students</p></a></li>
+            </ul></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-person-badge-fill"></i><p>Teachers Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+              <li class="nav-item"><a href="add-teacher.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Teacher</p></a></li>
+              <li class="nav-item"><a href="manage-teachers.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Teachers</p></a></li>
+              <li class="nav-item"><a href="assign-subjects.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Assign Subjects</p></a></li>
+              <li class="nav-item"><a href="teacher-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Schedule</p></a></li>
+            </ul></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-diagram-3-fill"></i><p>Classes &amp; Sections<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+              <li class="nav-item"><a href="Classes &amp; Sections/add-class.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Class</p></a></li>
+              <li class="nav-item"><a href="Classes &amp; Sections/manage-classes.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Classes</p></a></li>
+              <li class="nav-item"><a href="Classes &amp; Sections/manage-sections.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Sections</p></a></li>
+              <li class="nav-item"><a href="Classes &amp; Sections/assign-class-teacher.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Assign Class Teacher</p></a></li>
+              <li class="nav-item"><a href="Classes &amp; Sections/student-allocation.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Allocation</p></a></li>
+              <li class="nav-item"><a href="Classes &amp; Sections/classroom-management.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Classroom Management</p></a></li>
+              <li class="nav-item"><a href="Classes &amp; Sections/subject-allocation.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Subject Allocation</p></a></li>
+              <li class="nav-item"><a href="Classes &amp; Sections/class-promotion.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Class Promotion</p></a></li>
+              <li class="nav-item"><a href="timetable.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Class Timetable</p></a></li>
+            </ul></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-clipboard-data-fill"></i><p>Exams &amp; Results<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+              <li class="nav-item"><a href="create-exam.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create Exam</p></a></li>
+              <li class="nav-item"><a href="exam-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Exam Schedule</p></a></li>
+              <li class="nav-item"><a href="result-management.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Result Management</p></a></li>
+            </ul></li>
+            <li class="nav-item menu-open"><a href="#" class="nav-link active"><i class="nav-icon bi bi-calendar-check-fill"></i><p>Attendance<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+              <li class="nav-item"><a href="student-attendance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Attendance</p></a></li>
+              <li class="nav-item"><a href="teacher-attendance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Attendance</p></a></li>
+              <li class="nav-item"><a href="attendance-reports.html" class="nav-link active"><i class="nav-icon bi bi-circle"></i><p>Attendance Reports</p></a></li>
+            </ul></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-cash-stack"></i><p>Fee Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+              <li class="nav-item"><a href="collect-fee.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Collect Fee</p></a></li>
+              <li class="nav-item"><a href="fee-records.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Records</p></a></li>
+              <li class="nav-item"><a href="pending-fees.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Pending Fees</p></a></li>
+<li class="nav-item"><a href="fee-refunds.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Refunds</p></a></li>
+            </ul></li>
+        
+                <!-- Accounts -->
+        <li class="nav-item">
+          <a href="#" class="nav-link"><i class="nav-icon bi bi-journal-text"></i><p>Accounts<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item"><a href="accounts-entry.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Income / Expense Entry</p></a></li>
+            <li class="nav-item"><a href="accounts-ledger.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Ledger</p></a></li>
+            <li class="nav-item"><a href="accounts-balance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Balance Sheet</p></a></li>
+          </ul>
+        </li>
+<li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-book-fill"></i><p>Library<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+              <li class="nav-item"><a href="add-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Book</p></a></li>
+              <li class="nav-item"><a href="issue-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Issue Book</p></a></li>
+              <li class="nav-item"><a href="return-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Return Book</p></a></li>
+            </ul></li>
+            <li class="nav-item"><a href="announcements.html" class="nav-link"><i class="nav-icon bi bi-megaphone-fill"></i><p>Announcements</p></a></li>
+            <li class="nav-item"><a href="reports.html" class="nav-link"><i class="nav-icon bi bi-bar-chart-fill"></i><p>Reports</p></a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-person-gear"></i><p>User Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+              <li class="nav-item"><a href="create-user.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create User</p></a></li>
+              <li class="nav-item"><a href="manage-users.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Users</p></a></li>
+              <li class="nav-item"><a href="roles-permissions.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Roles &amp; Permissions</p></a></li>
+            </ul></li>
+            <li class="nav-item"><a href="activity-logs.html" class="nav-link"><i class="nav-icon bi bi-clock-history"></i><p>Activity Logs</p></a></li>
+            <li class="nav-item"><a href="backup.html" class="nav-link"><i class="nav-icon bi bi-database-fill-down"></i><p>Backup &amp; Restore</p></a></li>
+            <li class="nav-item"><a href="settings.html" class="nav-link"><i class="nav-icon bi bi-gear-fill"></i><p>System Settings</p></a></li>
+          </ul></nav></div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="app-main">
+            <div class="app-content-header">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3 class="mb-0">Attendance Reports & Analytics</h3>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-end">
+                                <li class="breadcrumb-item"><a href="index2.html">Home</a></li>
+                                <li class="breadcrumb-item">Attendance</li>
+                                <li class="breadcrumb-item active">Reports</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="app-content">
+                <div class="container-fluid">
+                    <div id="notifBanner"></div>
+                    <!-- Report Filters -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="bi bi-funnel me-2"></i>Report Filters
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="reportType" class="form-label">Report Type</label>
+                                    <select class="form-select" id="reportType" onchange="updateReportType()">
+                                        <option value="student">Student Reports</option>
+                                        <option value="teacher">Teacher Reports</option>
+                                        <option value="class">Class Reports</option>
+                                        <option value="overall">Overall Summary</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="timePeriod" class="form-label">Time Period</label>
+                                    <select class="form-select" id="timePeriod">
+                                        <option value="today">Today</option>
+                                        <option value="week">This Week</option>
+                                        <option value="month" selected>This Month</option>
+                                        <option value="quarter">This Quarter</option>
+                                        <option value="year">This Year</option>
+                                        <option value="custom">Custom Range</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="classFilter" class="form-label">Class</label>
+                                    <select class="form-select" id="classFilter">
+                                        <option value="">All Classes</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="sectionFilter" class="form-label">Section</label>
+                                    <select class="form-select" id="sectionFilter">
+                                        <option value="">All Sections</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label">&nbsp;</label>
+                                    <button type="button" class="btn btn-primary d-block" onclick="generateReport()">
+                                        <i class="bi bi-graph-up me-2"></i>Generate
+                                    </button>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label">&nbsp;</label>
+                                    <button type="button" class="btn btn-success d-block" onclick="exportReport()">
+                                        <i class="bi bi-download me-2"></i>Export
+                                    </button>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label">&nbsp;</label>
+                                    <button type="button" class="btn btn-warning d-block" onclick="printReport()">
+                                        <i class="bi bi-printer-fill me-2"></i>Print
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary Cards -->
+                    <div class="row mb-4">
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box text-bg-primary">
+                                <div class="inner">
+                                    <h3 id="totalStudents">0</h3>
+                                    <p>Total Students</p>
+                                </div>
+                                <div class="small-box-icon">
+                                    <i class="bi bi-people-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box text-bg-success">
+                                <div class="inner">
+                                    <h3 id="avgAttendance">0%</h3>
+                                    <p>Average Attendance</p>
+                                </div>
+                                <div class="small-box-icon">
+                                    <i class="bi bi-graph-up"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box text-bg-warning">
+                                <div class="inner">
+                                    <h3 id="lowAttendance">0</h3>
+                                    <p>Low Attendance (&lt;75%)</p>
+                                </div>
+                                <div class="small-box-icon">
+                                    <i class="bi bi-exclamation-triangle-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box text-bg-info">
+                                <div class="inner">
+                                    <h3 id="perfectAttendance">0</h3>
+                                    <p>Perfect Attendance</p>
+                                </div>
+                                <div class="small-box-icon">
+                                    <i class="bi bi-award-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Row -->
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="bi bi-graph-up me-2"></i>Attendance Trends
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="attendanceTrendChart" height="100"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="bi bi-pie-chart me-2"></i>Attendance Distribution
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="attendanceDistributionChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Class-wise Performance -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="bi bi-bar-chart me-2"></i>Class-wise Attendance Performance
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="classPerformanceChart" height="80"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Reports Table -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="bi bi-table me-2"></i>Detailed Attendance Report
+                            </h3>
+                            <div class="card-tools">
+                                <div class="input-group input-group-sm" style="width: 200px;">
+                                    <input type="text" class="form-control" placeholder="Search..." id="searchInput" onkeyup="searchTable()">
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-default">
+                                            <i class="bi bi-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body table-responsive p-0">
+                            <table class="table table-striped table-hover" id="reportTable">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Student Name</th>
+                                        <th>Roll No.</th>
+                                        <th>Class</th>
+                                        <th>Total Days</th>
+                                        <th>Present</th>
+                                        <th>Absent</th>
+                                        <th>Late</th>
+                                        <th>Percentage</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="reportTableBody">
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-5">
+                                    <div class="dataTables_info">Showing 1 to 5 of 1,200 entries</div>
+                                </div>
+                                <div class="col-sm-12 col-md-7">
+                                    <nav aria-label="Table pagination">
+                                        <ul class="pagination pagination-sm float-end">
+                                            <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <div class="float-end d-none d-sm-inline">EDU-SPHERE</div>
+            <strong>Copyright &copy; 2024-2025 <a href="#" class="text-decoration-none">EDU-SPHERE</a>.</strong> All rights reserved.
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="./js/adminlte.js"></script>
+    <script src="./js/auth.js"></script>
+    <script src="./js/api.js"></script>
+    <script src="./js/header.js"></script>
+    <script>
+      AUTH.requireAuth('ADMIN');
+
+      var trendChart, distChart, classChart;
+      var _reportData = [];
+
+      document.addEventListener('DOMContentLoaded', async function() {
+        initializeCharts();
+        await loadClassDropdown();
+        generateReport();
+      });
+
+      async function loadClassDropdown() {
+        try {
+          var res = await API.classes.list();
+          if (res && res.success) {
+            var sel = document.getElementById('classFilter');
+            sel.innerHTML = '<option value="">All Classes</option>';
+            res.data.forEach(function(c) {
+              sel.innerHTML += '<option value="' + c.id + '">' + c.name + '</option>';
+            });
+          }
+        } catch(e) {}
+      }
+
+      function initializeCharts() {
+        var trendCtx = document.getElementById('attendanceTrendChart').getContext('2d');
+        trendChart = new Chart(trendCtx, {
+          type: 'line',
+          data: { labels: [], datasets: [
+            { label: 'Student Attendance %', data: [], borderColor: 'rgb(75,192,192)', backgroundColor: 'rgba(75,192,192,0.2)', tension: 0.1 },
+            { label: 'Teacher Attendance %', data: [], borderColor: 'rgb(255,99,132)', backgroundColor: 'rgba(255,99,132,0.2)', tension: 0.1 }
+          ]},
+          options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100 } } }
+        });
+
+        var distCtx = document.getElementById('attendanceDistributionChart').getContext('2d');
+        distChart = new Chart(distCtx, {
+          type: 'doughnut',
+          data: { labels: ['Present', 'Absent', 'Late', 'Leave'],
+            datasets: [{ data: [0,0,0,0], backgroundColor: ['rgba(40,167,69,0.8)','rgba(220,53,69,0.8)','rgba(255,193,7,0.8)','rgba(108,117,125,0.8)'] }]
+          },
+          options: { responsive: true, maintainAspectRatio: true }
+        });
+
+        var perfCtx = document.getElementById('classPerformanceChart').getContext('2d');
+        classChart = new Chart(perfCtx, {
+          type: 'bar',
+          data: { labels: [], datasets: [{ label: 'Attendance %', data: [], backgroundColor: 'rgba(54,162,235,0.8)', borderColor: 'rgba(54,162,235,1)', borderWidth: 1 }] },
+          options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100 } } }
+        });
+      }
+
+      function updateReportType() { generateReport(); }
+
+      function getDateRange(period) {
+        var today = new Date().toISOString().split('T')[0];
+        var d = new Date();
+        if (period === 'today')   return { startDate: today, endDate: today };
+        if (period === 'week')    { d.setDate(d.getDate()-7); }
+        else if (period === 'month')   { d.setMonth(d.getMonth()-1); }
+        else if (period === 'quarter') { d.setMonth(d.getMonth()-3); }
+        else if (period === 'year')    { d.setFullYear(d.getFullYear()-1); }
+        return { startDate: d.toISOString().split('T')[0], endDate: today };
+      }
+
+      async function generateReport() {
+        var type    = document.getElementById('reportType').value;
+        var period  = document.getElementById('timePeriod').value;
+        var classId = document.getElementById('classFilter').value;
+        var range   = getDateRange(period);
+        var tbody   = document.getElementById('reportTableBody');
+        tbody.innerHTML = '<tr><td colspan="10" class="text-center py-3"><span class="spinner-border spinner-border-sm me-2"></span>Loading...</td></tr>';
+
+        try {
+          var params = { startDate: range.startDate, endDate: range.endDate };
+          if (classId) params.classId = classId;
+
+          if (type === 'teacher') {
+            var res = await API.attendance.listTeachers(params);
+            var data = (res && res.success) ? (res.data || []) : [];
+            renderTeacherReport(data);
+          } else {
+            var res = await API.attendance.report(params);
+            var data = (res && res.success) ? (res.data || []) : [];
+            _reportData = data;
+            renderStudentReport(data);
+            updateCharts(data);
+          }
+
+          // Update summary stats from dashboard
+          var dash = await API.reports.dashboard();
+          if (dash && dash.success) {
+            document.getElementById('totalStudents').textContent = dash.data.totalStudents || 0;
+          }
+        } catch(e) {
+          tbody.innerHTML = '<tr><td colspan="10" class="text-center text-danger py-4">Failed to load report: ' + e.message + '</td></tr>';
+        }
+      }
+
+      function renderStudentReport(data) {
+        var tbody = document.getElementById('reportTableBody');
+        if (!data.length) {
+          tbody.innerHTML = '<tr><td colspan="10" class="text-center text-muted py-4">No attendance data found for the selected period.</td></tr>';
+          document.getElementById('avgAttendance').textContent = '0%';
+          document.getElementById('lowAttendance').textContent = '0';
+          document.getElementById('perfectAttendance').textContent = '0';
+          return;
+        }
+        var totalPct = 0, low = 0, perfect = 0;
+        tbody.innerHTML = data.map(function(r, i) {
+          var pct = r.percentage || (r.total ? Math.round((r.present/r.total)*100) : 0);
+          totalPct += pct;
+          if (pct < 75) low++;
+          if (pct === 100) perfect++;
+          var badge = pct >= 90 ? 'bg-success' : pct >= 75 ? 'bg-warning text-dark' : 'bg-danger';
+          var label = pct >= 90 ? 'Good' : pct >= 75 ? 'Average' : 'Poor';
+          if (pct === 100) label = 'Perfect';
+          var name = r.studentName || r.name || '—';
+          var roll = r.rollNo || '—';
+          var cls  = r.className || r.class || '—';
+          return '<tr>' +
+            '<td>' + name + '</td>' +
+            '<td>' + roll + '</td>' +
+            '<td>' + cls + '</td>' +
+            '<td>' + (r.total || 0) + '</td>' +
+            '<td>' + (r.present || 0) + '</td>' +
+            '<td>' + (r.absent || 0) + '</td>' +
+            '<td>' + (r.late || 0) + '</td>' +
+            '<td>' + pct + '%</td>' +
+            '<td><span class="badge ' + badge + '">' + label + '</span></td>' +
+            '<td><button class="btn btn-sm btn-outline-primary" onclick="viewStudentDetail(\'' + name.replace(/'/g,"\\'") + '\')"><i class="bi bi-eye"></i></button></td></tr>';
+        }).join('');
+        var avg = data.length ? Math.round(totalPct / data.length) : 0;
+        document.getElementById('avgAttendance').textContent = avg + '%';
+        document.getElementById('lowAttendance').textContent = low;
+        document.getElementById('perfectAttendance').textContent = perfect;
+      }
+
+      function renderTeacherReport(data) {
+        var tbody = document.getElementById('reportTableBody');
+        if (!data.length) {
+          tbody.innerHTML = '<tr><td colspan="10" class="text-center text-muted py-4">No teacher attendance data found.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = data.map(function(r) {
+          var pct = r.percentage || (r.total ? Math.round((r.present/r.total)*100) : 0);
+          var badge = pct >= 90 ? 'bg-success' : pct >= 75 ? 'bg-warning text-dark' : 'bg-danger';
+          var name = r.teacherName || r.name || '—';
+          return '<tr>' +
+            '<td>' + name + '</td>' +
+            '<td>—</td>' +
+            '<td>' + (r.department || '—') + '</td>' +
+            '<td>' + (r.total || 0) + '</td>' +
+            '<td>' + (r.present || 0) + '</td>' +
+            '<td>' + (r.absent || 0) + '</td>' +
+            '<td>' + (r.late || 0) + '</td>' +
+            '<td>' + pct + '%</td>' +
+            '<td><span class="badge ' + badge + '">' + (pct>=90?'Good':pct>=75?'Average':'Poor') + '</span></td>' +
+            '<td>—</td></tr>';
+        }).join('');
+      }
+
+      function updateCharts(data) {
+        // Distribution chart
+        var present = 0, absent = 0, late = 0, leave = 0;
+        data.forEach(function(r) { present += r.present||0; absent += r.absent||0; late += r.late||0; leave += r.leave||0; });
+        distChart.data.datasets[0].data = [present, absent, late, leave];
+        distChart.update();
+
+        // Class performance chart
+        var clsMap = {};
+        data.forEach(function(r) {
+          var c = r.className || r.class || 'Unknown';
+          if (!clsMap[c]) clsMap[c] = { p: 0, t: 0 };
+          clsMap[c].p += r.present || 0;
+          clsMap[c].t += r.total || 0;
+        });
+        var clsLabels = Object.keys(clsMap);
+        var clsData = clsLabels.map(function(c) { return clsMap[c].t ? Math.round((clsMap[c].p/clsMap[c].t)*100) : 0; });
+        classChart.data.labels = clsLabels.length ? clsLabels : ['No Data'];
+        classChart.data.datasets[0].data = clsData.length ? clsData : [0];
+        classChart.update();
+
+        // Trend chart — use last 7 days labels as placeholder
+        var days = [];
+        for (var i = 6; i >= 0; i--) {
+          var d = new Date(); d.setDate(d.getDate() - i);
+          days.push(d.toISOString().split('T')[0].substring(5));
+        }
+        var avg = data.length ? Math.round(data.reduce(function(s,r){ return s+(r.percentage||0); },0)/data.length) : 0;
+        trendChart.data.labels = days;
+        trendChart.data.datasets[0].data = days.map(function(){ return avg; });
+        trendChart.data.datasets[1].data = days.map(function(){ return avg; });
+        trendChart.update();
+      }
+
+      function searchTable() {
+        var filter = document.getElementById('searchInput').value.toLowerCase();
+        var rows = document.getElementById('reportTable').getElementsByTagName('tr');
+        for (var i = 1; i < rows.length; i++) {
+          rows[i].style.display = rows[i].textContent.toLowerCase().indexOf(filter) > -1 ? '' : 'none';
+        }
+      }
+
+      function viewStudentDetail(name) {
+        API.toast('Detailed view: check Student Attendance page for ' + name, 'info');
+      }
+
+      function exportReport() {
+        var rows = document.querySelectorAll('#reportTable tr');
+        var csv = [];
+        rows.forEach(function(row) {
+          var cells = row.querySelectorAll('th, td');
+          var line = [];
+          cells.forEach(function(c, i) { if (i < cells.length-1) line.push('"'+c.textContent.trim()+'"'); });
+          csv.push(line.join(','));
+        });
+        var a = document.createElement('a');
+        a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv.join('\n'));
+        a.download = 'attendance-report.csv';
+        a.click();
+      }
+
+      function printReport() {
+        var table = document.getElementById('reportTable');
+        var rows = table.querySelectorAll('tr');
+        var html = '';
+        rows.forEach(function(row) {
+          var cells = row.querySelectorAll('th, td');
+          var tag = row.querySelector('th') ? 'th' : 'td';
+          html += '<tr>';
+          cells.forEach(function(c, i) { if (i < cells.length-1) html += '<'+tag+'>'+c.textContent.trim()+'</'+tag+'>'; });
+          html += '</tr>';
+        });
+        var win = window.open('', '_blank');
+        win.document.write('<!DOCTYPE html><html><head><title>Attendance Report</title><style>body{font-family:Arial,sans-serif;margin:20px}h2,p{text-align:center}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ccc;padding:6px 8px;font-size:12px}th{background:#333;color:#fff}tr:nth-child(even){background:#f9f9f9}</style></head><body><h2>EDU-SPHERE — Attendance Report</h2><p>Printed: '+new Date().toLocaleDateString()+'</p><table>'+html+'</table></body></html>');
+        win.document.close(); win.focus(); win.print();
+      }
+    </script>
+</body>
+</html>
+
+      var trendChart, distChart, classChart;
+
+      // Seed demo attendance if none exists      document.addEventListener('DOMContentLoaded', function() {
+initializeCharts();
+          generateReport();
+          var s = JSON.parse(localStorage.getItem('sysSettings') || '{}');
+          if (s.notifAttendance !== false) {
+            var threshold = s.attendanceThreshold || 75;
+            document.getElementById('notifBanner').innerHTML =
+              '<div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">' +
+              '<i class="bi bi-bell-fill me-2"></i><strong>Attendance Alert:</strong> Students/teachers with attendance below <strong>' + threshold + '%</strong> will be flagged. Check the report below.' +
+              '<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>';
+          }
+      });
+
+      function initializeCharts() {
+          var trendCtx = document.getElementById('attendanceTrendChart').getContext('2d');
+          trendChart = new Chart(trendCtx, {
+              type: 'line',
+              data: { labels: [], datasets: [
+                  { label: 'Student Attendance %', data: [], borderColor: 'rgb(75,192,192)', backgroundColor: 'rgba(75,192,192,0.2)', tension: 0.1 },
+                  { label: 'Teacher Attendance %', data: [], borderColor: 'rgb(255,99,132)', backgroundColor: 'rgba(255,99,132,0.2)', tension: 0.1 }
+              ]},
+              options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100 } } }
+          });
+
+          var distCtx = document.getElementById('attendanceDistributionChart').getContext('2d');
+          distChart = new Chart(distCtx, {
+              type: 'doughnut',
+              data: { labels: ['Present', 'Absent', 'Late', 'Leave'],
+                  datasets: [{ data: [0,0,0,0], backgroundColor: ['rgba(40,167,69,0.8)','rgba(220,53,69,0.8)','rgba(255,193,7,0.8)','rgba(108,117,125,0.8)'] }]
+              },
+              options: { responsive: true, maintainAspectRatio: true }
+          });
+
+          var perfCtx = document.getElementById('classPerformanceChart').getContext('2d');
+          classChart = new Chart(perfCtx, {
+              type: 'bar',
+              data: { labels: [], datasets: [{ label: 'Attendance %', data: [], backgroundColor: 'rgba(54,162,235,0.8)', borderColor: 'rgba(54,162,235,1)', borderWidth: 1 }] },
+              options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100 } } }
+          });
+      }
+
+      function updateReportType() { generateReport(); }
+
+      function generateReport() {
+          var type    = document.getElementById('reportType').value;
+          var period  = document.getElementById('timePeriod').value;
+          var cls     = document.getElementById('classFilter').value;
+          var section = document.getElementById('sectionFilter').value;
+
+          var today = new Date().toISOString().split('T')[0];
+          var fromDate = getFromDate(period, today);
+
+          if (type === 'student' || type === 'overall') {
+              renderStudentReport(fromDate, today, cls, section);
+          } else if (type === 'teacher') {
+              renderTeacherReport(fromDate, today);
+          } else if (type === 'class') {
+              renderClassReport(fromDate, today);
+          }
+          updateCharts(fromDate, today);
+      }
+
+      function getFromDate(period, today) {
+          var d = new Date(today);
+          if (period === 'today')   return today;
+          if (period === 'week')    { d.setDate(d.getDate()-7); }
+          else if (period === 'month')   { d.setMonth(d.getMonth()-1); }
+          else if (period === 'quarter') { d.setMonth(d.getMonth()-3); }
+          else if (period === 'year')    { d.setFullYear(d.getFullYear()-1); }
+          return d.toISOString().split('T')[0];
+      }
+
+      function renderStudentReport(from, to, cls, section) {
+          var recs = getStudentAtt().filter(function(r){ return r.date >= from && r.date <= to; });
+          var students = getStudents();
+          // aggregate per student
+          var map = {};
+          recs.forEach(function(r) {
+              var key = r.studentId || r.studentName;
+              if (!map[key]) {
+                  var s = students.find(function(x){ return x.id === r.studentId; });
+                  map[key] = { name: r.studentName || (s?s.name:'-'), rollNo: r.rollNo||(s?s.rollNo:'-'), cls: r.class||(s?s.class:'-'), section: r.section||(s?s.section:'-'), present:0, absent:0, late:0, total:0 };
+              }
+              map[key].total++;
+              if (r.status==='Present') map[key].present++;
+              else if (r.status==='Absent') map[key].absent++;
+              else if (r.status==='Late') map[key].late++;
+          });
+          var rows = Object.values(map).filter(function(r){
+              return (!cls || r.cls === cls || r.cls === 'Class '+cls) && (!section || r.section === section || r.section === 'Section '+section);
+          });
+
+          updateSummaryCards(rows, 'student');
+          var tbody = document.getElementById('reportTableBody');
+          if (rows.length === 0) {
+              tbody.innerHTML = '<tr><td colspan="10" class="text-center text-muted py-4">No attendance data found. Mark attendance in Student Attendance page first.</td></tr>';
+              return;
+          }
+          tbody.innerHTML = rows.map(function(r) {
+              var pct = r.total ? Math.round((r.present/r.total)*100) : 0;
+              var badge = pct>=90?'bg-success':pct>=75?'bg-warning text-dark':'bg-danger';
+              var label = pct>=90?'Good':pct>=75?'Average':'Poor';
+              if (pct===100) label='Perfect';
+              return '<tr><td>'+r.name+'</td><td>'+r.rollNo+'</td><td>'+r.cls+'</td>' +
+                '<td>'+r.total+'</td><td>'+r.present+'</td><td>'+r.absent+'</td><td>'+r.late+'</td>' +
+                '<td>'+pct+'%</td><td><span class="badge '+badge+'">'+label+'</span></td>' +
+                '<td><button class="btn btn-sm btn-outline-primary" onclick="viewStudentDetail(\''+r.name+'\')"><i class="bi bi-eye"></i></button></td></tr>';
+          }).join('');
+      }
+
+      function renderTeacherReport(from, to) {
+          var recs = getTeacherAtt().filter(function(r){ return r.date >= from && r.date <= to; });
+          var map = {};
+          recs.forEach(function(r) {
+              var key = r.teacherId || r.teacherName;
+              if (!map[key]) map[key] = { name: r.teacherName||'-', dept: r.department||'-', present:0, absent:0, late:0, total:0 };
+              map[key].total++;
+              if (r.status==='Present') map[key].present++;
+              else if (r.status==='Absent') map[key].absent++;
+              else if (r.status==='Late') map[key].late++;
+          });
+          var rows = Object.values(map);
+          updateSummaryCards(rows, 'teacher');
+          var tbody = document.getElementById('reportTableBody');
+          if (rows.length === 0) {
+              tbody.innerHTML = '<tr><td colspan="10" class="text-center text-muted py-4">No teacher attendance data found. Mark attendance in Teacher Attendance page first.</td></tr>';
+              return;
+          }
+          tbody.innerHTML = rows.map(function(r) {
+              var pct = r.total ? Math.round((r.present/r.total)*100) : 0;
+              var badge = pct>=90?'bg-success':pct>=75?'bg-warning text-dark':'bg-danger';
+              return '<tr><td>'+r.name+'</td><td>-</td><td>'+r.dept+'</td>' +
+                '<td>'+r.total+'</td><td>'+r.present+'</td><td>'+r.absent+'</td><td>'+r.late+'</td>' +
+                '<td>'+pct+'%</td><td><span class="badge '+badge+'">'+(pct>=90?'Good':pct>=75?'Average':'Poor')+'</span></td><td>-</td></tr>';
+          }).join('');
+      }
+
+      function renderClassReport(from, to) {
+          var recs = getStudentAtt().filter(function(r){ return r.date >= from && r.date <= to; });
+          var map = {};
+          recs.forEach(function(r) {
+              var key = r.class || '-';
+              if (!map[key]) map[key] = { cls: key, present:0, absent:0, late:0, total:0 };
+              map[key].total++;
+              if (r.status==='Present') map[key].present++;
+              else if (r.status==='Absent') map[key].absent++;
+              else if (r.status==='Late') map[key].late++;
+          });
+          var rows = Object.values(map);
+          var tbody = document.getElementById('reportTableBody');
+          if (rows.length === 0) {
+              tbody.innerHTML = '<tr><td colspan="10" class="text-center text-muted py-4">No data found.</td></tr>';
+              return;
+          }
+          tbody.innerHTML = rows.map(function(r) {
+              var pct = r.total ? Math.round((r.present/r.total)*100) : 0;
+              var badge = pct>=90?'bg-success':pct>=75?'bg-warning text-dark':'bg-danger';
+              return '<tr><td>'+r.cls+'</td><td>-</td><td>'+r.cls+'</td>' +
+                '<td>'+r.total+'</td><td>'+r.present+'</td><td>'+r.absent+'</td><td>'+r.late+'</td>' +
+                '<td>'+pct+'%</td><td><span class="badge '+badge+'">'+(pct>=90?'Good':pct>=75?'Average':'Poor')+'</span></td><td>-</td></tr>';
+          }).join('');
+      }
+
+      function updateSummaryCards(rows, type) {
+          var total = rows.length;
+          var allPresent = 0, allTotal = 0;
+          rows.forEach(function(r){ allPresent += r.present; allTotal += r.total; });
+          var avg = allTotal ? Math.round((allPresent/allTotal)*100) : 0;
+          var low = rows.filter(function(r){ return r.total ? (r.present/r.total)*100 < 75 : false; }).length;
+          var perfect = rows.filter(function(r){ return r.total && r.present === r.total; }).length;
+          document.getElementById('totalStudents').textContent = total;
+          document.getElementById('avgAttendance').textContent = avg + '%';
+          document.getElementById('lowAttendance').textContent = low;
+          document.getElementById('perfectAttendance').textContent = perfect;
+      }
+
+      function updateCharts(from, to) {
+          // Trend: group student attendance by week
+          var sRecs = getStudentAtt().filter(function(r){ return r.date >= from && r.date <= to; });
+          var tRecs = getTeacherAtt().filter(function(r){ return r.date >= from && r.date <= to; });
+          var dates = {};
+          sRecs.forEach(function(r){ if (!dates[r.date]) dates[r.date]={sp:0,st:0}; dates[r.date].sp += r.status==='Present'?1:0; dates[r.date].st++; });
+          var sortedDates = Object.keys(dates).sort().slice(-7);
+          var sData = sortedDates.map(function(d){ return dates[d].st ? Math.round((dates[d].sp/dates[d].st)*100) : 0; });
+          var tDates = {};
+          tRecs.forEach(function(r){ if (!tDates[r.date]) tDates[r.date]={tp:0,tt:0}; tDates[r.date].tp += r.status==='Present'?1:0; tDates[r.date].tt++; });
+          var tData = sortedDates.map(function(d){ return tDates[d] && tDates[d].tt ? Math.round((tDates[d].tp/tDates[d].tt)*100) : 0; });
+          trendChart.data.labels = sortedDates.length ? sortedDates : ['No Data'];
+          trendChart.data.datasets[0].data = sData.length ? sData : [0];
+          trendChart.data.datasets[1].data = tData.length ? tData : [0];
+          trendChart.update();
+
+          // Distribution
+          var sp=0, sa=0, sl=0, slv=0, st=sRecs.length;
+          sRecs.forEach(function(r){ if(r.status==='Present')sp++; else if(r.status==='Absent')sa++; else if(r.status==='Late')sl++; else slv++; });
+          distChart.data.datasets[0].data = [sp, sa, sl, slv];
+          distChart.update();
+
+          // Class performance
+          var clsMap = {};
+          sRecs.forEach(function(r){ var c=r.class||'Unknown'; if(!clsMap[c])clsMap[c]={p:0,t:0}; clsMap[c].t++; if(r.status==='Present')clsMap[c].p++; });
+          var clsLabels = Object.keys(clsMap);
+          var clsData = clsLabels.map(function(c){ return clsMap[c].t ? Math.round((clsMap[c].p/clsMap[c].t)*100) : 0; });
+          classChart.data.labels = clsLabels.length ? clsLabels : ['No Data'];
+          classChart.data.datasets[0].data = clsData.length ? clsData : [0];
+          classChart.update();
+      }
+
+      function searchTable() {
+          var filter = document.getElementById('searchInput').value.toLowerCase();
+          var rows = document.getElementById('reportTable').getElementsByTagName('tr');
+          for (var i = 1; i < rows.length; i++) {
+              var text = rows[i].textContent.toLowerCase();
+              rows[i].style.display = text.indexOf(filter) > -1 ? '' : 'none';
+          }
+      }
+
+      function viewStudentDetail(name) {
+          var recs = getStudentAtt().filter(function(r){ return r.studentName === name; });
+          if (recs.length === 0) { alert('No records found for ' + name); return; }
+          var rows = recs.map(function(r, i){
+              return '<tr><td>'+(i+1)+'</td><td>'+r.date+'</td><td>'+r.status+'</td><td>'+(r.timeIn||'-')+'</td><td>'+(r.remarks||'-')+'</td></tr>';
+          }).join('');
+          var win = window.open('', '_blank');
+          win.document.write('<!DOCTYPE html><html><head><title>Attendance - '+name+'</title>' +
+            '<style>body{font-family:Arial,sans-serif;margin:20px}h2,p{text-align:center}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ccc;padding:6px 10px}th{background:#333;color:#fff}tr:nth-child(even){background:#f9f9f9}</style></head><body>' +
+            '<h2>EDU-SPHERE &mdash; Attendance Detail</h2><p>Student: '+name+'</p>' +
+            '<table><thead><tr><th>#</th><th>Date</th><th>Status</th><th>Time In</th><th>Remarks</th></tr></thead><tbody>'+rows+'</tbody></table></body></html>');
+          win.document.close(); win.focus(); win.print();
+      }
+
+      function exportReport() {
+          var rows = document.querySelectorAll('#reportTable tr');
+          var csv = [];
+          rows.forEach(function(row) {
+              var cells = row.querySelectorAll('th, td');
+              var line = [];
+              cells.forEach(function(c, i) { if (i < cells.length-1) line.push('"'+c.textContent.trim()+'"'); });
+              csv.push(line.join(','));
+          });
+          var blob = new Blob([csv.join('\n')], {type:'text/csv'});
+          var a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'attendance-report.csv';
+          a.click();
+      }
+
+      function printReport() {
+          var table = document.getElementById('reportTable');
+          var rows = table.querySelectorAll('tr');
+          var html = '';
+          rows.forEach(function(row) {
+              var cells = row.querySelectorAll('th, td');
+              var tag = row.querySelector('th') ? 'th' : 'td';
+              html += '<tr>';
+              cells.forEach(function(c, i) {
+                  if (i < cells.length - 1) html += '<'+tag+'>'+c.textContent.trim()+'</'+tag+'>';
+              });
+              html += '</tr>';
+          });
+          var type = document.getElementById('reportType').value;
+          var period = document.getElementById('timePeriod').value;
+          var win = window.open('', '_blank');
+          win.document.write('<!DOCTYPE html><html><head><title>Attendance Report - EDU-SPHERE</title>' +
+            '<style>body{font-family:Arial,sans-serif;margin:20px}h2,p{text-align:center}' +
+            'table{width:100%;border-collapse:collapse}th,td{border:1px solid #ccc;padding:6px 8px;text-align:left;font-size:12px}' +
+            'th{background:#333;color:#fff}tr:nth-child(even){background:#f9f9f9}</style></head><body>' +
+            '<h2>EDU-SPHERE &mdash; Attendance Report</h2>' +
+            '<p>Type: '+type+' | Period: '+period+' | Printed: '+new Date().toLocaleDateString()+'</p>' +
+            '<table>'+html+'</table></body></html>');
+          win.document.close(); win.focus(); win.print();
+      }
+    </script>
+</body>
+</html>

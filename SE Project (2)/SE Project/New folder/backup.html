@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Backup &amp; Restore | EDU-SPHERE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <link rel="preload" href="css/adminlte.css" as="style" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" media="print" onload="this.media='all'" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="css/adminlte.css" />
+  <!-- __THEME_APPLIED__ -->
+<script>
+(function(){
+  var s = JSON.parse(localStorage.getItem('sysSettings') || '{}');
+  var theme = s.sidebarTheme || 'dark';
+  document.addEventListener('DOMContentLoaded', function() {
+    var el = document.querySelector('.app-sidebar');
+    if (el) el.setAttribute('data-bs-theme', theme);
+  });
+})();
+</script>
+</head>
+  <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+    <div class="app-wrapper">
+      <nav class="app-header navbar navbar-expand bg-body">
+        <div class="container-fluid">
+          <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" data-lte-toggle="sidebar" href="#" role="button"><i class="bi bi-list"></i></a></li>
+            <li class="nav-item d-none d-md-block"><a href="index2.html" class="nav-link">Dashboard</a></li>
+            <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Backup &amp; Restore</a></li>
+          </ul>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link" data-bs-toggle="dropdown" href="#"><i class="bi bi-bell-fill"></i><span class="navbar-badge badge text-bg-warning">15</span></a>
+              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <span class="dropdown-item dropdown-header">15 Notifications</span>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown user-menu">
+              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                <img src="assets/img/user2-160x160.jpg" class="user-image rounded-circle shadow" alt="User">
+                <span class="d-none d-md-inline">Ali Saleem</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <li class="user-header text-bg-primary"><img src="assets/img/user2-160x160.jpg" class="rounded-circle shadow" alt="User"><p>Ali Saleem - System Administrator <small>Member since Nov. 2023</small></p></li>
+                <li class="user-footer"><a href="#" class="btn btn-default btn-flat">Profile</a><a href="#" class="btn btn-default btn-flat float-end">Sign out</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+        <div class="sidebar-brand"><a href="index2.html" class="brand-link"><img src="assets/img/eduspherelogo (2).png" alt="Logo" class="brand-image opacity-75 shadow"><span class="brand-text fw-light">EDU-SPHERE</span></a></div>
+        <div class="sidebar-wrapper"><nav class="mt-2"><ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" data-accordion="false">
+          <li class="nav-item"><a href="index2.html" class="nav-link"><i class="nav-icon bi bi-speedometer2"></i><p>Admin Dashboard</p></a></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-people-fill"></i><p>Students Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="add-student.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Student</p></a></li>
+            <li class="nav-item"><a href="manage-students.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Students</p></a></li>
+            <li class="nav-item"><a href="student-records.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Records</p></a></li>
+            <li class="nav-item"><a href="student-promotions.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Promote Students</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-person-badge-fill"></i><p>Teachers Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="add-teacher.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Teacher</p></a></li>
+            <li class="nav-item"><a href="manage-teachers.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Teachers</p></a></li>
+            <li class="nav-item"><a href="assign-subjects.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Assign Subjects</p></a></li>
+            <li class="nav-item"><a href="teacher-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Schedule</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-diagram-3-fill"></i><p>Classes &amp; Sections<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="Classes &amp; Sections/add-class.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Class</p></a></li>
+            <li class="nav-item"><a href="Classes &amp; Sections/manage-classes.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Classes</p></a></li>
+            <li class="nav-item"><a href="Classes &amp; Sections/manage-sections.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Sections</p></a></li>
+            <li class="nav-item"><a href="Classes &amp; Sections/assign-class-teacher.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Assign Class Teacher</p></a></li>
+            <li class="nav-item"><a href="Classes &amp; Sections/student-allocation.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Allocation</p></a></li>
+            <li class="nav-item"><a href="Classes &amp; Sections/classroom-management.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Classroom Management</p></a></li>
+            <li class="nav-item"><a href="Classes &amp; Sections/subject-allocation.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Subject Allocation</p></a></li>
+            <li class="nav-item"><a href="Classes &amp; Sections/class-promotion.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Class Promotion</p></a></li>
+            <li class="nav-item"><a href="timetable.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Class Timetable</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-clipboard-data-fill"></i><p>Exams &amp; Results<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="create-exam.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create Exam</p></a></li>
+            <li class="nav-item"><a href="exam-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Exam Schedule</p></a></li>
+            <li class="nav-item"><a href="result-management.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Result Management</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-calendar-check-fill"></i><p>Attendance<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="student-attendance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Attendance</p></a></li>
+            <li class="nav-item"><a href="teacher-attenadance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Attendance</p></a></li>
+            <li class="nav-item"><a href="attendance-reports.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Attendance Reports</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-cash-stack"></i><p>Fee Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="collect-fee.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Collect Fee</p></a></li>
+            <li class="nav-item"><a href="fee-records.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Records</p></a></li>
+            <li class="nav-item"><a href="pending-fees.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Pending Fees</p></a></li>
+<li class="nav-item"><a href="fee-refunds.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Refunds</p></a></li>
+          </ul></li>
+        
+                <!-- Accounts -->
+        <li class="nav-item">
+          <a href="#" class="nav-link"><i class="nav-icon bi bi-journal-text"></i><p>Accounts<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item"><a href="accounts-entry.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Income / Expense Entry</p></a></li>
+            <li class="nav-item"><a href="accounts-ledger.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Ledger</p></a></li>
+            <li class="nav-item"><a href="accounts-balance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Balance Sheet</p></a></li>
+          </ul>
+        </li>
+<li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-book-fill"></i><p>Library<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="add-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Book</p></a></li>
+            <li class="nav-item"><a href="issue-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Issue Book</p></a></li>
+            <li class="nav-item"><a href="return-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Return Book</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="announcements.html" class="nav-link"><i class="nav-icon bi bi-megaphone-fill"></i><p>Announcements</p></a></li>
+          <li class="nav-item"><a href="reports.html" class="nav-link"><i class="nav-icon bi bi-bar-chart-fill"></i><p>Reports</p></a></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-person-gear"></i><p>User Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="create-user.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create User</p></a></li>
+            <li class="nav-item"><a href="manage-users.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Users</p></a></li>
+            <li class="nav-item"><a href="roles-permissions.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Roles &amp; Permissions</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="activity-logs.html" class="nav-link"><i class="nav-icon bi bi-clock-history"></i><p>Activity Logs</p></a></li>
+          <li class="nav-item active"><a href="backup.html" class="nav-link active"><i class="nav-icon bi bi-database-fill-down"></i><p>Backup &amp; Restore</p></a></li>
+          <li class="nav-item"><a href="settings.html" class="nav-link"><i class="nav-icon bi bi-gear-fill"></i><p>System Settings</p></a></li>
+        </ul></nav></div>
+      </aside>
+      <main class="app-main">
+        <div class="app-content-header"><div class="container-fluid"><div class="row">
+          <div class="col-sm-6"><h3 class="mb-0">Backup &amp; Restore</h3></div>
+          <div class="col-sm-6"><ol class="breadcrumb float-sm-end">
+            <li class="breadcrumb-item"><a href="index2.html">Home</a></li>
+            <li class="breadcrumb-item active">Backup &amp; Restore</li>
+          </ol></div>
+        </div></div></div>
+        <div class="app-content"><div class="container-fluid">
+
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <div class="card shadow">
+                <div class="card-header bg-success text-white"><h3 class="card-title mb-0"><i class="bi bi-database-fill-down"></i> Backup Data</h3></div>
+                <div class="card-body">
+                  <p class="text-muted">Export all system data as a JSON backup file. This includes students, teachers, fee records, exams, library, and all other data stored in the system.</p>
+                  <div id="backupStats" class="mb-3"></div>
+                  <button class="btn btn-success btn-lg w-100" onclick="downloadBackup()">
+                    <i class="bi bi-download"></i> Download Full Backup
+                  </button>
+                  <hr>
+                  <p class="text-muted small mb-2">Or backup individual modules:</p>
+                  <div class="row g-2" id="moduleBackups"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card shadow">
+                <div class="card-header bg-warning text-dark"><h3 class="card-title mb-0"><i class="bi bi-database-fill-up"></i> Restore Data</h3></div>
+                <div class="card-body">
+                  <div class="alert alert-danger py-2"><i class="bi bi-exclamation-triangle-fill"></i> Restoring will <strong>overwrite</strong> existing data. Make a backup first.</div>
+                  <div class="mb-3">
+                    <label class="form-label">Select Backup File (.json)</label>
+                    <input type="file" class="form-control" id="restoreFile" accept=".json">
+                  </div>
+                  <div id="restorePreview" class="mb-3 d-none">
+                    <div class="alert alert-info py-2" id="restoreInfo"></div>
+                  </div>
+                  <button class="btn btn-warning btn-lg w-100" onclick="restoreBackup()">
+                    <i class="bi bi-upload"></i> Restore from File
+                  </button>
+                  <hr>
+                  <button class="btn btn-outline-danger w-100" onclick="clearAllData()">
+                    <i class="bi bi-trash-fill"></i> Clear All Data (Reset System)
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Backup History -->
+          <div class="card shadow">
+            <div class="card-header bg-secondary text-white"><h3 class="card-title mb-0"><i class="bi bi-clock-history"></i> Backup History</h3></div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-striped mb-0">
+                  <thead class="table-dark"><tr><th>#</th><th>Filename</th><th>Size</th><th>Date</th><th>Status</th></tr></thead>
+                  <tbody id="historyBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div></div>
+      </main>
+      <footer class="app-footer"><strong>Copyright &copy; 2014-2025 <a href="#" class="text-decoration-none">EDU-SPHERE</a>.</strong> All rights reserved.</footer>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="js/adminlte.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/header.js"></script>
+    <script>
+      AUTH.requireAuth('ADMIN');
+
+      var _backupHistory = JSON.parse(localStorage.getItem('backupHistory') || '[]');
+
+      var MODULE_DEFS = [
+        { key: 'students',      label: 'Students',      fetch: function(){ return API.students.list({ limit: 5000 }); } },
+        { key: 'teachers',      label: 'Teachers',      fetch: function(){ return API.teachers.list({ limit: 1000 }); } },
+        { key: 'fees',          label: 'Fee Records',   fetch: function(){ return API.fees.list({ limit: 5000 }); } },
+        { key: 'exams',         label: 'Exams',         fetch: function(){ return API.exams.list({ limit: 1000 }); } },
+        { key: 'results',       label: 'Exam Results',  fetch: function(){ return API.results.list({ limit: 5000 }); } },
+        { key: 'library',       label: 'Library Issues',fetch: function(){ return API.library.issues({ limit: 5000 }); } },
+        { key: 'books',         label: 'Library Books', fetch: function(){ return API.library.books({ limit: 1000 }); } },
+        { key: 'announcements', label: 'Announcements', fetch: function(){ return API.announcements.list({ limit: 500 }); } },
+        { key: 'users',         label: 'System Users',  fetch: function(){ return API.users.list(); } },
+      ];
+
+      async function renderStats() {
+        var html = '<div class="row g-2">';
+        try {
+          var dash = await API.reports.dashboard();
+          if (dash && dash.success) {
+            var d = dash.data;
+            var items = [
+              { label: 'Students', count: d.totalStudents || 0 },
+              { label: 'Teachers', count: d.totalTeachers || 0 },
+              { label: 'Exams', count: d.totalExams || 0 },
+              { label: 'Books Issued', count: d.booksIssued || 0 },
+              { label: 'Announcements', count: d.totalAnnouncements || 0 },
+            ];
+            items.forEach(function(item) {
+              html += '<div class="col-6"><div class="d-flex justify-content-between border rounded px-2 py-1"><small>'+item.label+'</small><span class="badge bg-primary">'+item.count+'</span></div></div>';
+            });
+          }
+        } catch(e) {
+          html += '<div class="col-12"><small class="text-muted">Could not load stats.</small></div>';
+        }
+        html += '</div>';
+        document.getElementById('backupStats').innerHTML = html;
+      }
+
+      function renderModuleBackups() {
+        document.getElementById('moduleBackups').innerHTML = MODULE_DEFS.map(function(m){
+          return '<div class="col-6"><button class="btn btn-sm btn-outline-success w-100" onclick="downloadModule(\''+m.key+'\',\''+m.label+'\')"><i class="bi bi-download"></i> '+m.label+'</button></div>';
+        }).join('');
+      }
+
+      async function downloadBackup() {
+        var btn = document.querySelector('[onclick="downloadBackup()"]');
+        if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Preparing...'; }
+        try {
+          var backup = { version: '2.0', date: new Date().toISOString(), source: 'EDU-SPHERE PostgreSQL', data: {} };
+          for (var i = 0; i < MODULE_DEFS.length; i++) {
+            var m = MODULE_DEFS[i];
+            try {
+              var res = await m.fetch();
+              backup.data[m.key] = (res && res.success) ? (res.data.data || res.data || []) : [];
+            } catch(e) { backup.data[m.key] = []; }
+          }
+          var json = JSON.stringify(backup, null, 2);
+          var filename = 'edusphere-backup-' + new Date().toISOString().split('T')[0] + '.json';
+          triggerDownload(json, filename);
+          logBackup(filename, json.length);
+          renderHistory();
+          API.toast('Backup downloaded: ' + filename, 'success');
+        } catch(e) {
+          API.toast('Backup failed: ' + e.message, 'danger');
+        } finally {
+          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="bi bi-download"></i> Download Full Backup'; }
+        }
+      }
+
+      async function downloadModule(key, label) {
+        var m = MODULE_DEFS.find(function(x){ return x.key === key; });
+        if (!m) return;
+        try {
+          var res = await m.fetch();
+          var data = (res && res.success) ? (res.data.data || res.data || []) : [];
+          var json = JSON.stringify({ version: '2.0', date: new Date().toISOString(), module: key, data: data }, null, 2);
+          var filename = 'edusphere-' + key + '-' + new Date().toISOString().split('T')[0] + '.json';
+          triggerDownload(json, filename);
+          logBackup(filename, json.length);
+          renderHistory();
+          API.toast(label + ' backup downloaded.', 'success');
+        } catch(e) {
+          API.toast('Failed to backup ' + label + ': ' + e.message, 'danger');
+        }
+      }
+
+      function triggerDownload(content, filename) {
+        var a = document.createElement('a');
+        a.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(content);
+        a.download = filename; a.click();
+      }
+
+      function logBackup(filename, size) {
+        _backupHistory.unshift({ filename: filename, size: Math.round(size/1024*10)/10 + ' KB', date: new Date().toLocaleString(), status: 'Success' });
+        if (_backupHistory.length > 20) _backupHistory = _backupHistory.slice(0, 20);
+        localStorage.setItem('backupHistory', JSON.stringify(_backupHistory));
+      }
+
+      function renderHistory() {
+        var tbody = document.getElementById('historyBody');
+        if (!_backupHistory.length) { tbody.innerHTML='<tr><td colspan="5" class="text-center text-muted py-3">No backups yet.</td></tr>'; return; }
+        tbody.innerHTML = _backupHistory.map(function(h,i){
+          return '<tr><td>'+(i+1)+'</td><td><i class="bi bi-file-earmark-code text-success me-1"></i>'+h.filename+'</td><td>'+h.size+'</td><td>'+h.date+'</td><td><span class="badge bg-success">'+h.status+'</span></td></tr>';
+        }).join('');
+      }
+
+      document.getElementById('restoreFile').addEventListener('change', function(e) {
+        var file = e.target.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function(ev) {
+          try {
+            var backup = JSON.parse(ev.target.result);
+            var info = 'File: ' + file.name + ' | Date: ' + (backup.date||'Unknown');
+            if (backup.data) {
+              var keys = Object.keys(backup.data);
+              info += ' | Modules: ' + keys.join(', ');
+            }
+            document.getElementById('restoreInfo').textContent = info;
+            document.getElementById('restorePreview').classList.remove('d-none');
+          } catch(err) {
+            API.toast('Invalid backup file.', 'danger');
+          }
+        };
+        reader.readAsText(file);
+      });
+
+      function restoreBackup() {
+        API.toast('Restore is not supported via API. Please use database tools to restore from backup.', 'warning');
+      }
+
+      function clearAllData() {
+        API.toast('Data clearing is not supported via API. Please use database tools.', 'warning');
+      }
+
+      document.addEventListener('DOMContentLoaded', function(){
+        renderStats();
+        renderModuleBackups();
+        renderHistory();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>EDU-SPHERE | Student Attendance Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="./css/adminlte.css" />
+<!-- __THEME_APPLIED__ -->
+<script>
+(function(){
+  var s = JSON.parse(localStorage.getItem('sysSettings') || '{}');
+  var theme = s.sidebarTheme || 'dark';
+  document.addEventListener('DOMContentLoaded', function() {
+    var el = document.querySelector('.app-sidebar');
+    if (el) el.setAttribute('data-bs-theme', theme);
+  });
+})();
+</script>
+</head>
+<body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+    <div class="app-wrapper">
+        <!-- Header -->
+        <nav class="app-header navbar navbar-expand bg-body">
+            <div class="container-fluid">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
+                            <i class="bi bi-list"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item d-none d-md-block">
+                        <a href="index2.html" class="nav-link">Dashboard</a>
+                    </li>
+                    <li class="nav-item d-none d-md-block">
+                        <a href="#" class="nav-link">Attendance</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-lte-toggle="fullscreen">
+                            <i data-lte-icon="maximize" class="bi bi-arrows-fullscreen"></i>
+                            <i data-lte-icon="minimize" class="bi bi-fullscreen-exit" style="display: none"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown user-menu">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <img src="./assets/img/user2-160x160.jpg" class="user-image rounded-circle shadow" alt="User Image" />
+                            <span class="d-none d-md-inline">Ali Saleem</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Sidebar -->
+        <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+          <div class="sidebar-brand"><a href="index2.html" class="brand-link"><img src="assets/img/eduspherelogo (2).png" alt="Logo" class="brand-image opacity-75 shadow"><span class="brand-text fw-light">EDU-SPHERE</span></a></div>
+          <div class="sidebar-wrapper"><nav class="mt-2"><ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" data-accordion="false">
+            <li class="nav-item"><a href="index2.html" class="nav-link"><i class="nav-icon bi bi-speedometer2"></i><p>Admin Dashboard</p></a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-people-fill"></i><p>Students Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+              <li class="nav-item"><a href="add-student.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Student</p></a></li>
+              <li class="nav-item"><a href="manage-students.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Students</p></a></li>
+              <li class="nav-item"><a href="student-records.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Records</p></a></li>
+              <li class="nav-item"><a href="student-promotions.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Promote Students</p></a></li>
+            </ul></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-person-badge-fill"></i><p>Teachers Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+              <li class="nav-item"><a href="add-teacher.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Teacher</p></a></li>
+              <li class="nav-item"><a href="manage-teachers.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Teachers</p></a></li>
+              <li class="nav-item"><a href="assign-subjects.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Assign Subjects</p></a></li>
+              <li class="nav-item"><a href="teacher-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Schedule</p></a></li>
+            </ul></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-diagram-3-fill"></i><p>Classes &amp; Sections<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+              <li class="nav-item"><a href="Classes &amp; Sections/add-class.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Class</p></a></li>
+              <li class="nav-item"><a href="Classes &amp; Sections/manage-classes.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Classes</p></a></li>
+              <li class="nav-item"><a href="Classes &amp; Sections/manage-sections.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Sections</p></a></li>
+              <li class="nav-item"><a href="Classes &amp; Sections/assign-class-teacher.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Assign Class Teacher</p></a></li>
+              <li class="nav-item"><a href="Classes &amp; Sections/student-allocation.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Allocation</p></a></li>
+              <li class="nav-item"><a href="Classes &amp; Sections/classroom-management.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Classroom Management</p></a></li>
+              <li class="nav-item"><a href="Classes &amp; Sections/subject-allocation.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Subject Allocation</p></a></li>
+              <li class="nav-item"><a href="Classes &amp; Sections/class-promotion.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Class Promotion</p></a></li>
+              <li class="nav-item"><a href="timetable.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Class Timetable</p></a></li>
+            </ul></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-clipboard-data-fill"></i><p>Exams &amp; Results<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+              <li class="nav-item"><a href="create-exam.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create Exam</p></a></li>
+              <li class="nav-item"><a href="exam-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Exam Schedule</p></a></li>
+              <li class="nav-item"><a href="result-management.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Result Management</p></a></li>
+            </ul></li>
+            <li class="nav-item menu-open"><a href="#" class="nav-link active"><i class="nav-icon bi bi-calendar-check-fill"></i><p>Attendance<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+              <li class="nav-item"><a href="student-attendance.html" class="nav-link active"><i class="nav-icon bi bi-circle"></i><p>Student Attendance</p></a></li>
+              <li class="nav-item"><a href="teacher-attenadance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Attendance</p></a></li>
+              <li class="nav-item"><a href="attendance-reports.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Attendance Reports</p></a></li>
+            </ul></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-cash-stack"></i><p>Fee Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+              <li class="nav-item"><a href="collect-fee.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Collect Fee</p></a></li>
+              <li class="nav-item"><a href="fee-records.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Records</p></a></li>
+              <li class="nav-item"><a href="pending-fees.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Pending Fees</p></a></li>
+<li class="nav-item"><a href="fee-refunds.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Refunds</p></a></li>
+            </ul></li>
+        
+                <!-- Accounts -->
+        <li class="nav-item">
+          <a href="#" class="nav-link"><i class="nav-icon bi bi-journal-text"></i><p>Accounts<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item"><a href="accounts-entry.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Income / Expense Entry</p></a></li>
+            <li class="nav-item"><a href="accounts-ledger.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Ledger</p></a></li>
+            <li class="nav-item"><a href="accounts-balance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Balance Sheet</p></a></li>
+          </ul>
+        </li>
+<li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-book-fill"></i><p>Library<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+              <li class="nav-item"><a href="add-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Book</p></a></li>
+              <li class="nav-item"><a href="issue-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Issue Book</p></a></li>
+              <li class="nav-item"><a href="return-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Return Book</p></a></li>
+            </ul></li>
+            <li class="nav-item"><a href="announcements.html" class="nav-link"><i class="nav-icon bi bi-megaphone-fill"></i><p>Announcements</p></a></li>
+            <li class="nav-item"><a href="reports.html" class="nav-link"><i class="nav-icon bi bi-bar-chart-fill"></i><p>Reports</p></a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-person-gear"></i><p>User Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+              <li class="nav-item"><a href="create-user.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create User</p></a></li>
+              <li class="nav-item"><a href="manage-users.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Users</p></a></li>
+              <li class="nav-item"><a href="roles-permissions.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Roles &amp; Permissions</p></a></li>
+            </ul></li>
+            <li class="nav-item"><a href="activity-logs.html" class="nav-link"><i class="nav-icon bi bi-clock-history"></i><p>Activity Logs</p></a></li>
+            <li class="nav-item"><a href="backup.html" class="nav-link"><i class="nav-icon bi bi-database-fill-down"></i><p>Backup &amp; Restore</p></a></li>
+            <li class="nav-item"><a href="settings.html" class="nav-link"><i class="nav-icon bi bi-gear-fill"></i><p>System Settings</p></a></li>
+          </ul></nav></div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="app-main">
+            <div class="app-content-header">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3 class="mb-0">Student Attendance Management</h3>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-end">
+                                <li class="breadcrumb-item"><a href="index2.html">Home</a></li>
+                                <li class="breadcrumb-item">Attendance</li>
+                                <li class="breadcrumb-item active">Student Attendance</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="app-content">
+                <div class="container-fluid">
+                    <!-- Quick Stats -->
+                    <div class="row mb-4">
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box text-bg-info">
+                                <div class="inner">
+                                    <h3 id="todayPresent">0</h3>
+                                    <p>Present Today</p>
+                                </div>
+                                <div class="small-box-icon">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box text-bg-success">
+                                <div class="inner">
+                                    <h3 id="todayAbsent">0</h3>
+                                    <p>Absent Today</p>
+                                </div>
+                                <div class="small-box-icon">
+                                    <i class="bi bi-x-circle-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box text-bg-warning">
+                                <div class="inner">
+                                    <h3 id="todayLate">25</h3>
+                                    <p>Late Today</p>
+                                </div>
+                                <div class="small-box-icon">
+                                    <i class="bi bi-clock-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box text-bg-danger">
+                                <div class="inner">
+                                    <h3 id="attendanceRate">89.2%</h3>
+                                    <p>Attendance Rate</p>
+                                </div>
+                                <div class="small-box-icon">
+                                    <i class="bi bi-graph-up"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Attendance Management Tabs -->
+                    <div class="card">
+                        <div class="card-header p-0 pt-1">
+                            <ul class="nav nav-tabs" id="attendanceTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="mark-attendance-tab" data-bs-toggle="tab" data-bs-target="#mark-attendance" type="button" role="tab">
+                                        <i class="bi bi-check-square me-2"></i>Mark Attendance
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="view-attendance-tab" data-bs-toggle="tab" data-bs-target="#view-attendance" type="button" role="tab">
+                                        <i class="bi bi-table me-2"></i>View Attendance
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="bulk-attendance-tab" data-bs-toggle="tab" data-bs-target="#bulk-attendance" type="button" role="tab">
+                                        <i class="bi bi-upload me-2"></i>Bulk Import
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content" id="attendanceTabContent">
+                                <!-- Mark Attendance Tab -->
+                                <div class="tab-pane fade show active" id="mark-attendance" role="tabpanel">
+                                    <div class="row mb-3">
+                                        <div class="col-md-3">
+                                            <label for="attendanceDate" class="form-label">Date</label>
+                                            <input type="date" class="form-control" id="attendanceDate" value="">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="classSelect" class="form-label">Class</label>
+                                            <select class="form-select" id="classSelect">
+                                                <option value="">Select Class</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="sectionSelect" class="form-label">Section</label>
+                                            <select class="form-select" id="sectionSelect">
+                                                <option value="">All Sections</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">&nbsp;</label>
+                                            <button type="button" class="btn btn-primary d-block" onclick="loadStudents()">
+                                                <i class="bi bi-search me-2"></i>Load Students
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div id="studentsList" class="d-none">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h5>Mark Attendance</h5>
+                                            <div>
+                                                <button type="button" class="btn btn-success btn-sm me-2" onclick="markAllPresent()">
+                                                    <i class="bi bi-check-all me-1"></i>Mark All Present
+                                                </button>
+                                                <button type="button" class="btn btn-danger btn-sm me-2" onclick="markAllAbsent()">
+                                                    <i class="bi bi-x-circle me-1"></i>Mark All Absent
+                                                </button>
+                                                <button type="button" class="btn btn-primary" onclick="saveAttendance()">
+                                                    <i class="bi bi-save me-1"></i>Save Attendance
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-hover">
+                                                <thead class="table-dark">
+                                                    <tr>
+                                                        <th>Roll No.</th>
+                                                        <th>Student Name</th>
+                                                        <th>Status</th>
+                                                        <th>Time</th>
+                                                        <th>Remarks</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="studentsTableBody">
+                                                    <!-- Students will be loaded here -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- View Attendance Tab -->
+                                <div class="tab-pane fade" id="view-attendance" role="tabpanel">
+                                    <div class="row mb-3">
+                                        <div class="col-md-2">
+                                            <label for="viewClass" class="form-label">Class</label>
+                                            <select class="form-select" id="viewClass">
+                                                <option value="">All Classes</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label for="viewSection" class="form-label">Section</label>
+                                            <select class="form-select" id="viewSection">
+                                                <option value="">All Sections</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label for="fromDate" class="form-label">From Date</label>
+                                            <input type="date" class="form-control" id="fromDate">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label for="toDate" class="form-label">To Date</label>
+                                            <input type="date" class="form-control" id="toDate">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label">&nbsp;</label>
+                                            <button type="button" class="btn btn-info d-block" onclick="viewAttendance()">
+                                                <i class="bi bi-eye me-2"></i>View
+                                            </button>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label">&nbsp;</label>
+                                            <button type="button" class="btn btn-success d-block" onclick="exportAttendance()">
+                                                <i class="bi bi-download me-2"></i>Export
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div id="attendanceReport" class="table-responsive">
+                                        <table class="table table-striped table-hover">
+                                            <thead class="table-dark">
+                                                <tr>
+                                                    <th>Student Name</th>
+                                                    <th>Roll No.</th>
+                                                    <th>Class</th>
+                                                    <th>Total Days</th>
+                                                    <th>Present</th>
+                                                    <th>Absent</th>
+                                                    <th>Late</th>
+                                                    <th>Percentage</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="attendanceReportBody">
+                                                <tr><td colspan="9" class="text-center text-muted py-3">Select date range and click "View Report".</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Bulk Import Tab -->
+                                <div class="tab-pane fade" id="bulk-attendance" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h5 class="card-title">Upload Attendance File</h5>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="mb-3">
+                                                        <label for="attendanceFile" class="form-label">Select CSV File</label>
+                                                        <input type="file" class="form-control" id="attendanceFile" accept=".csv">
+                                                        <div class="form-text">Upload a CSV file with student attendance data</div>
+                                                    </div>
+                                                    <button type="button" class="btn btn-primary" onclick="uploadAttendance()">
+                                                        <i class="bi bi-upload me-2"></i>Upload Attendance
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h5 class="card-title">CSV Format Guide</h5>
+                                                </div>
+                                                <div class="card-body">
+                                                    <p>Your CSV file should have the following columns:</p>
+                                                    <ul>
+                                                        <li><strong>student_id:</strong> Student ID or Roll Number</li>
+                                                        <li><strong>date:</strong> Date (YYYY-MM-DD format)</li>
+                                                        <li><strong>status:</strong> Present, Absent, or Late</li>
+                                                        <li><strong>time:</strong> Time (HH:MM format, optional)</li>
+                                                        <li><strong>remarks:</strong> Additional notes (optional)</li>
+                                                    </ul>
+                                                    <a href="#" class="btn btn-outline-primary btn-sm" onclick="downloadTemplate()">
+                                                        <i class="bi bi-download me-1"></i>Download Template
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <div class="float-end d-none d-sm-inline">EDU-SPHERE</div>
+            <strong>Copyright &copy; 2024-2025 <a href="#" class="text-decoration-none">EDU-SPHERE</a>.</strong> All rights reserved.
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="./js/adminlte.js"></script>
+    <script src="./js/auth.js"></script>
+    <script src="./js/api.js"></script>
+    <script src="./js/header.js"></script>
+    <script>
+      AUTH.requireAuth('ADMIN');
+
+      document.getElementById('attendanceDate').value = new Date().toISOString().split('T')[0];
+      document.getElementById('fromDate').value = new Date().toISOString().split('T')[0];
+      document.getElementById('toDate').value = new Date().toISOString().split('T')[0];
+
+      var loadedStudents = [];
+
+      // Load class dropdowns from API
+      async function loadClassDropdowns() {
+        try {
+          var res = await API.classes.list();
+          if (!res || !res.success) return;
+          var classes = res.data || [];
+          var selIds = ['classSelect', 'viewClass'];
+          selIds.forEach(function(selId) {
+            var sel = document.getElementById(selId);
+            if (!sel) return;
+            var first = sel.options[0];
+            sel.innerHTML = '';
+            sel.appendChild(first);
+            classes.forEach(function(c) {
+              sel.innerHTML += '<option value="' + c.id + '">' + c.name + '</option>';
+            });
+          });
+        } catch(e) {}
+      }
+
+      async function loadSectionDropdown(classId, selId) {
+        var sel = document.getElementById(selId);
+        if (!sel) return;
+        var first = sel.options[0];
+        sel.innerHTML = '';
+        sel.appendChild(first);
+        if (!classId) return;
+        try {
+          var res = await API.classes.sections(classId);
+          if (res && res.success) {
+            res.data.forEach(function(s) {
+              sel.innerHTML += '<option value="' + s.id + '">' + s.name + '</option>';
+            });
+          }
+        } catch(e) {}
+      }
+
+      document.getElementById('classSelect').addEventListener('change', function() {
+        loadSectionDropdown(this.value, 'sectionSelect');
+      });
+
+      async function loadStudents() {
+        var classId   = document.getElementById('classSelect').value;
+        var sectionId = document.getElementById('sectionSelect').value;
+        var date      = document.getElementById('attendanceDate').value;
+        if (!classId) { API.toast('Please select a class.', 'warning'); return; }
+
+        var tbody = document.getElementById('studentsTableBody');
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center py-3"><span class="spinner-border spinner-border-sm me-2"></span>Loading...</td></tr>';
+        document.getElementById('studentsList').classList.remove('d-none');
+
+        var params = { classId: classId, limit: 200 };
+        if (sectionId) params.sectionId = sectionId;
+        var sRes = await API.students.list(params);
+        loadedStudents = (sRes && sRes.success) ? (sRes.data.data || []) : [];
+
+        // Load existing attendance for this date+class
+        var existingMap = {};
+        try {
+          var aRes = await API.attendance.listStudents({ date: date, classId: classId });
+          if (aRes && aRes.success) {
+            aRes.data.forEach(function(a) { existingMap[a.studentId] = a; });
+          }
+        } catch(e) {}
+
+        if (!loadedStudents.length) {
+          tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-3">No students found for this class.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = loadedStudents.map(function(s) {
+          var existing = existingMap[s.id];
+          var status  = existing ? existing.status : 'PRESENT';
+          var remarks = existing ? (existing.remarks || '') : '';
+          var fullName = (s.firstName || '') + ' ' + (s.lastName || '');
+          return '<tr>' +
+            '<td>' + (s.rollNo || '—') + '</td>' +
+            '<td>' + fullName.trim() + '</td>' +
+            '<td><div class="btn-group" role="group">' +
+              '<input type="radio" class="btn-check" name="status_' + s.id + '" id="present_' + s.id + '" value="PRESENT"' + (status === 'PRESENT' ? ' checked' : '') + '>' +
+              '<label class="btn btn-outline-success btn-sm" for="present_' + s.id + '">Present</label>' +
+              '<input type="radio" class="btn-check" name="status_' + s.id + '" id="absent_' + s.id + '" value="ABSENT"' + (status === 'ABSENT' ? ' checked' : '') + '>' +
+              '<label class="btn btn-outline-danger btn-sm" for="absent_' + s.id + '">Absent</label>' +
+              '<input type="radio" class="btn-check" name="status_' + s.id + '" id="late_' + s.id + '" value="LATE"' + (status === 'LATE' ? ' checked' : '') + '>' +
+              '<label class="btn btn-outline-warning btn-sm" for="late_' + s.id + '">Late</label>' +
+              '<input type="radio" class="btn-check" name="status_' + s.id + '" id="leave_' + s.id + '" value="LEAVE"' + (status === 'LEAVE' ? ' checked' : '') + '>' +
+              '<label class="btn btn-outline-secondary btn-sm" for="leave_' + s.id + '">Leave</label>' +
+            '</div></td>' +
+            '<td><small class="text-muted">—</small></td>' +
+            '<td><input type="text" class="form-control form-control-sm" id="remarks_' + s.id + '" value="' + remarks + '" placeholder="Optional"></td>' +
+            '</tr>';
+        }).join('');
+        updateStats();
+      }
+
+      function markAllPresent() {
+        loadedStudents.forEach(function(s) {
+          var el = document.getElementById('present_' + s.id);
+          if (el) el.checked = true;
+        });
+      }
+
+      function markAllAbsent() {
+        loadedStudents.forEach(function(s) {
+          var el = document.getElementById('absent_' + s.id);
+          if (el) el.checked = true;
+        });
+      }
+
+      async function saveAttendance() {
+        var classId = document.getElementById('classSelect').value;
+        var date    = document.getElementById('attendanceDate').value;
+        if (!classId || !date) { API.toast('Please select class and date.', 'danger'); return; }
+        if (!loadedStudents.length) { API.toast('Load students first.', 'danger'); return; }
+
+        var records = loadedStudents.map(function(s) {
+          var radios = document.getElementsByName('status_' + s.id);
+          var status = 'PRESENT';
+          for (var i = 0; i < radios.length; i++) { if (radios[i].checked) { status = radios[i].value; break; } }
+          var remarks = document.getElementById('remarks_' + s.id) ? document.getElementById('remarks_' + s.id).value : '';
+          return { studentId: s.id, classId: parseInt(classId), date: date, status: status, remarks: remarks || null };
+        });
+
+        var res = await API.attendance.markStudents({ records: records });
+        if (res && res.success) {
+          API.toast('Attendance saved for ' + loadedStudents.length + ' students.', 'success');
+          updateStats();
+        } else {
+          API.toast((res && res.message) || 'Save failed', 'danger');
+        }
+      }
+
+      async function updateStats() {
+        try {
+          var res = await API.attendance.today();
+          if (res && res.success) {
+            var d = res.data;
+            document.getElementById('todayPresent').textContent = d.present || 0;
+            document.getElementById('todayAbsent').textContent  = d.absent  || 0;
+            document.getElementById('todayLate').textContent    = d.late    || 0;
+            var total = d.total || 0;
+            document.getElementById('attendanceRate').textContent = total > 0 ? Math.round((d.present / total) * 100) + '%' : '0%';
+          }
+        } catch(e) {}
+      }
+
+      async function viewAttendance() {
+        var from    = document.getElementById('fromDate').value;
+        var to      = document.getElementById('toDate').value;
+        var classId = document.getElementById('viewClass').value;
+        var params  = {};
+        if (from)    params.startDate = from;
+        if (to)      params.endDate   = to;
+        if (classId) params.classId   = classId;
+
+        var tbody = document.getElementById('attendanceReportBody');
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center py-3"><span class="spinner-border spinner-border-sm me-2"></span>Loading...</td></tr>';
+
+        try {
+          var res = await API.attendance.report(params);
+          if (!res || !res.success) {
+            tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-3">No records found.</td></tr>';
+            return;
+          }
+          var data = res.data || [];
+          if (!data.length) {
+            tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-3">No attendance records found for the selected period.</td></tr>';
+            return;
+          }
+          tbody.innerHTML = data.map(function(s, i) {
+            var pct = s.total ? Math.round((s.present / s.total) * 100) : 0;
+            var badge = pct >= 75 ? 'bg-success' : pct >= 50 ? 'bg-warning text-dark' : 'bg-danger';
+            return '<tr><td>' + (i+1) + '</td>' +
+              '<td>' + (s.studentName || s.name || '—') + '</td>' +
+              '<td>' + (s.rollNo || '—') + '</td>' +
+              '<td>' + (s.className || '—') + '</td>' +
+              '<td>' + (s.total || 0) + '</td>' +
+              '<td>' + (s.present || 0) + '</td>' +
+              '<td>' + (s.absent || 0) + '</td>' +
+              '<td>' + (s.late || 0) + '</td>' +
+              '<td><span class="badge ' + badge + '">' + pct + '%</span></td></tr>';
+          }).join('');
+        } catch(e) {
+          tbody.innerHTML = '<tr><td colspan="8" class="text-center text-danger py-3">Error: ' + e.message + '</td></tr>';
+        }
+      }
+
+      function exportAttendance() {
+        API.toast('Use the Attendance Reports page for detailed exports.', 'info');
+      }
+
+      function uploadAttendance() {
+        API.toast('Bulk import via CSV is not yet supported.', 'info');
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        loadClassDropdowns();
+        updateStats();
+      });
+    </script>
+</body>
+</html>

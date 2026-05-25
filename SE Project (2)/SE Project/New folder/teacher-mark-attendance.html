@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Mark Attendance | Teacher Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="css/adminlte.css" />
+</head>
+<body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+<div class="app-wrapper">
+<nav class="app-header navbar navbar-expand bg-body">
+  <div class="container-fluid">
+    <ul class="navbar-nav"><li class="nav-item"><a class="nav-link" data-lte-toggle="sidebar" href="#" role="button"><i class="bi bi-list"></i></a></li><li class="nav-item d-none d-md-block"><span class="nav-link fw-semibold text-success"><i class="bi bi-person-badge-fill me-1"></i>Teacher Portal</span></li></ul>
+    <ul class="navbar-nav ms-auto"><li class="nav-item dropdown user-menu"><a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><img src="assets/img/avatar.png" class="user-image rounded-circle shadow" id="navPhoto" alt="Teacher"><span class="d-none d-md-inline" id="navName">Teacher</span></a><ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end"><li class="user-header text-bg-success"><img src="assets/img/avatar.png" class="rounded-circle shadow" id="navPhoto2" alt="Teacher"><p id="navNameFull">Teacher</p></li><li class="user-footer"><a href="teacher-profile.html" class="btn btn-default btn-flat">My Profile</a><a href="#" class="btn btn-default btn-flat float-end" onclick="logout()">Sign out</a></li></ul></li></ul>
+  </div>
+</nav>
+<aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+  <div class="sidebar-brand"><a href="teacher-dashboard.html" class="brand-link"><img src="assets/img/eduspherelogo (2).png" alt="Logo" class="brand-image opacity-75 shadow"><span class="brand-text fw-light">EDU-SPHERE</span></a></div>
+  <div class="sidebar-wrapper"><nav class="mt-2"><ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" data-accordion="false">
+    <li class="nav-item"><a href="teacher-dashboard.html" class="nav-link"><i class="nav-icon bi bi-speedometer2"></i><p>Dashboard</p></a></li>
+    <li class="nav-item"><a href="teacher-profile.html" class="nav-link"><i class="nav-icon bi bi-person-circle"></i><p>My Profile</p></a></li>
+    <li class="nav-item"><a href="teacher-my-students.html" class="nav-link"><i class="nav-icon bi bi-people-fill"></i><p>My Students</p></a></li>
+    <li class="nav-item"><a href="teacher-mark-attendance.html" class="nav-link active"><i class="nav-icon bi bi-calendar-check-fill"></i><p>Mark Attendance</p></a></li>
+    <li class="nav-item"><a href="teacher-enter-results.html" class="nav-link"><i class="nav-icon bi bi-clipboard-data-fill"></i><p>Enter Results</p></a></li>
+    <li class="nav-item"><a href="teacher-my-schedule.html" class="nav-link"><i class="nav-icon bi bi-calendar3"></i><p>My Schedule</p></a></li>
+    <li class="nav-item"><a href="teacher-exams-view.html" class="nav-link"><i class="nav-icon bi bi-pencil-square"></i><p>Exam Schedule</p></a></li>
+    <li class="nav-item"><a href="teacher-announcements-view.html" class="nav-link"><i class="nav-icon bi bi-megaphone-fill"></i><p>Announcements</p></a></li>
+  </ul></nav></div>
+</aside>
+<main class="app-main">
+  <div class="app-content-header"><div class="container-fluid"><div class="row"><div class="col-sm-6"><h3 class="mb-0">Mark Attendance</h3></div><div class="col-sm-6"><ol class="breadcrumb float-sm-end"><li class="breadcrumb-item"><a href="teacher-dashboard.html">Home</a></li><li class="breadcrumb-item active">Mark Attendance</li></ol></div></div></div></div>
+  <div class="app-content"><div class="container-fluid">
+
+    <div class="card shadow mb-4">
+      <div class="card-header bg-success text-white"><h5 class="card-title mb-0"><i class="bi bi-calendar-check-fill me-2"></i>Mark Student Attendance</h5></div>
+      <div class="card-body">
+        <div class="row g-3 mb-3">
+          <div class="col-md-3">
+            <label class="form-label">Date <span class="text-danger">*</span></label>
+            <input type="date" class="form-control" id="attDate">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Class <span class="text-danger">*</span></label>
+            <select class="form-select" id="attClass" onchange="loadStudents()"><option value="">Select Class</option></select>
+          </div>
+          <div class="col-md-3 d-flex align-items-end">
+            <div class="d-flex gap-2">
+              <button class="btn btn-success btn-sm" onclick="markAll('Present')"><i class="bi bi-check-all"></i> All Present</button>
+              <button class="btn btn-danger btn-sm" onclick="markAll('Absent')"><i class="bi bi-x-circle"></i> All Absent</button>
+            </div>
+          </div>
+        </div>
+        <div id="alreadyMarked" class="alert alert-warning d-none"><i class="bi bi-exclamation-triangle me-2"></i>Attendance already marked for this class on this date. You can update it.</div>
+        <div class="table-responsive">
+          <table class="table table-bordered table-sm mb-0">
+            <thead class="table-dark"><tr><th>#</th><th>Roll No</th><th>Name</th><th>Status</th><th>Remarks</th></tr></thead>
+            <tbody id="attBody"></tbody>
+          </table>
+        </div>
+        <div class="mt-3 text-end">
+          <button class="btn btn-success px-4" onclick="saveAttendance()"><i class="bi bi-check-circle me-2"></i>Save Attendance</button>
+        </div>
+      </div>
+    </div>
+
+  </div></div>
+</main>
+<footer class="app-footer"><strong>Copyright &copy; 2025 EDU-SPHERE.</strong> Teacher Portal</footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="js/adminlte.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/api.js"></script>
+<script>
+  AUTH.requireAuth('TEACHER');
+  var user = AUTH.getUser() || JSON.parse(sessionStorage.getItem('teacherSession') || '{}');
+  var teacherId = user.teacherId || user.id;
+  var classCache = [];
+  var studentCache = [];
+
+  async function initPage() {
+    // Load teacher profile
+    var tRes = await API.teachers.get(teacherId);
+    if (tRes && tRes.success) {
+      var t = tRes.data;
+      var photo = t.photo ? 'http://localhost:5000' + t.photo : 'assets/img/avatar.png';
+      document.getElementById('navPhoto').src = photo;
+      document.getElementById('navPhoto2').src = photo;
+      document.getElementById('navName').textContent = t.name || 'Teacher';
+      document.getElementById('navNameFull').textContent = t.name || 'Teacher';
+    }
+    // Load teacher's classes from subjects
+    var sRes = await API.teachers.subjects(teacherId);
+    var sel = document.getElementById('attClass');
+    sel.innerHTML = '<option value="">Select Class</option>';
+    if (sRes && sRes.success) {
+      var seen = {};
+      sRes.data.forEach(function(s) {
+        if (!seen[s.classId]) {
+          seen[s.classId] = true;
+          sel.innerHTML += '<option value="'+s.classId+'">'+(s.class ? s.class.name : 'Class '+s.classId)+'</option>';
+        }
+      });
+    }
+    document.getElementById('attDate').value = new Date().toISOString().split('T')[0];
+  }
+
+  async function loadStudents() {
+    var classId = document.getElementById('attClass').value;
+    var date    = document.getElementById('attDate').value;
+    var tbody   = document.getElementById('attBody');
+    if (!classId) { tbody.innerHTML = ''; return; }
+
+    tbody.innerHTML = '<tr><td colspan="5" class="text-center py-3"><span class="spinner-border spinner-border-sm me-2"></span>Loading...</td></tr>';
+
+    var sRes = await API.students.list({ classId: classId, limit: 200 });
+    if (!sRes || !sRes.success) { tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger py-3">Failed to load students.</td></tr>'; return; }
+    studentCache = sRes.data.data || [];
+
+    // Load existing attendance for this date+class
+    var aRes = await API.attendance.listStudents({ date: date, classId: classId });
+    var existingMap = {};
+    if (aRes && aRes.success) {
+      aRes.data.forEach(function(a){ existingMap[a.studentId] = a; });
+    }
+    document.getElementById('alreadyMarked').classList.toggle('d-none', Object.keys(existingMap).length === 0);
+
+    if (!studentCache.length) { tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-3">No students in this class.</td></tr>'; return; }
+
+    tbody.innerHTML = studentCache.map(function(s, i) {
+      var existing = existingMap[s.id];
+      var status  = existing ? existing.status : 'PRESENT';
+      var remarks = existing ? (existing.remarks||'') : '';
+      return '<tr>' +
+        '<td>'+(i+1)+'</td>' +
+        '<td><span class="badge text-bg-secondary">'+(s.rollNo||'—')+'</span></td>' +
+        '<td><strong>'+s.firstName+' '+(s.lastName||'')+'</strong></td>' +
+        '<td>' +
+          '<div class="btn-group btn-group-sm" role="group">' +
+          '<input type="radio" class="btn-check" name="att_'+s.id+'" id="p_'+s.id+'" value="PRESENT" '+(status==='PRESENT'?'checked':'')+'>'+
+          '<label class="btn btn-outline-success" for="p_'+s.id+'">Present</label>' +
+          '<input type="radio" class="btn-check" name="att_'+s.id+'" id="a_'+s.id+'" value="ABSENT" '+(status==='ABSENT'?'checked':'')+'>'+
+          '<label class="btn btn-outline-danger" for="a_'+s.id+'">Absent</label>' +
+          '<input type="radio" class="btn-check" name="att_'+s.id+'" id="l_'+s.id+'" value="LEAVE" '+(status==='LEAVE'?'checked':'')+'>'+
+          '<label class="btn btn-outline-warning" for="l_'+s.id+'">Leave</label>' +
+          '</div>' +
+        '</td>' +
+        '<td><input type="text" class="form-control form-control-sm" id="rem_'+s.id+'" placeholder="Optional" value="'+remarks+'"></td>' +
+        '</tr>';
+    }).join('');
+  }
+
+  function markAll(status) {
+    studentCache.forEach(function(s) {
+      var radio = document.getElementById((status==='PRESENT'?'p_':status==='ABSENT'?'a_':'l_')+s.id);
+      if (radio) radio.checked = true;
+    });
+  }
+
+  async function saveAttendance() {
+    var classId = document.getElementById('attClass').value;
+    var date    = document.getElementById('attDate').value;
+    if (!classId || !date) { API.toast('Please select class and date.', 'danger'); return; }
+    if (!studentCache.length) { API.toast('No students loaded.', 'danger'); return; }
+
+    var records = studentCache.map(function(s) {
+      var radios = document.getElementsByName('att_'+s.id);
+      var status = 'PRESENT';
+      for (var i = 0; i < radios.length; i++) { if (radios[i].checked) { status = radios[i].value; break; } }
+      var remarks = document.getElementById('rem_'+s.id) ? document.getElementById('rem_'+s.id).value : '';
+      return { studentId: s.id, classId: parseInt(classId), date: date, status: status, remarks: remarks || null };
+    });
+
+    var res = await API.attendance.markStudents({ records: records });
+    if (res && res.success) {
+      API.toast('Attendance saved for ' + studentCache.length + ' students.');
+      loadStudents();
+    } else {
+      API.toast((res && res.message) || 'Save failed', 'danger');
+    }
+  }
+
+  function logout() { AUTH.logout('teacher-login.html'); }
+
+  document.getElementById('attDate').addEventListener('change', loadStudents);
+  document.getElementById('attClass').addEventListener('change', loadStudents);
+  document.addEventListener('DOMContentLoaded', initPage);
+</script>
+</body>
+</html>

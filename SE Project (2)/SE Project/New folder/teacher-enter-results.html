@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Enter Results | Teacher Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="css/adminlte.css" />
+</head>
+<body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+<div class="app-wrapper">
+<nav class="app-header navbar navbar-expand bg-body">
+  <div class="container-fluid">
+    <ul class="navbar-nav"><li class="nav-item"><a class="nav-link" data-lte-toggle="sidebar" href="#" role="button"><i class="bi bi-list"></i></a></li><li class="nav-item d-none d-md-block"><span class="nav-link fw-semibold text-success"><i class="bi bi-person-badge-fill me-1"></i>Teacher Portal</span></li></ul>
+    <ul class="navbar-nav ms-auto"><li class="nav-item dropdown user-menu"><a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><img src="assets/img/avatar.png" class="user-image rounded-circle shadow" id="navPhoto" alt="Teacher"><span class="d-none d-md-inline" id="navName">Teacher</span></a><ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end"><li class="user-header text-bg-success"><img src="assets/img/avatar.png" class="rounded-circle shadow" id="navPhoto2" alt="Teacher"><p id="navNameFull">Teacher</p></li><li class="user-footer"><a href="teacher-profile.html" class="btn btn-default btn-flat">My Profile</a><a href="#" class="btn btn-default btn-flat float-end" onclick="logout()">Sign out</a></li></ul></li></ul>
+  </div>
+</nav>
+<aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+  <div class="sidebar-brand"><a href="teacher-dashboard.html" class="brand-link"><img src="assets/img/eduspherelogo (2).png" alt="Logo" class="brand-image opacity-75 shadow"><span class="brand-text fw-light">EDU-SPHERE</span></a></div>
+  <div class="sidebar-wrapper"><nav class="mt-2"><ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" data-accordion="false">
+    <li class="nav-item"><a href="teacher-dashboard.html" class="nav-link"><i class="nav-icon bi bi-speedometer2"></i><p>Dashboard</p></a></li>
+    <li class="nav-item"><a href="teacher-profile.html" class="nav-link"><i class="nav-icon bi bi-person-circle"></i><p>My Profile</p></a></li>
+    <li class="nav-item"><a href="teacher-my-students.html" class="nav-link"><i class="nav-icon bi bi-people-fill"></i><p>My Students</p></a></li>
+    <li class="nav-item"><a href="teacher-mark-attendance.html" class="nav-link"><i class="nav-icon bi bi-calendar-check-fill"></i><p>Mark Attendance</p></a></li>
+    <li class="nav-item"><a href="teacher-enter-results.html" class="nav-link active"><i class="nav-icon bi bi-clipboard-data-fill"></i><p>Enter Results</p></a></li>
+    <li class="nav-item"><a href="teacher-my-schedule.html" class="nav-link"><i class="nav-icon bi bi-calendar3"></i><p>My Schedule</p></a></li>
+    <li class="nav-item"><a href="teacher-exams-view.html" class="nav-link"><i class="nav-icon bi bi-pencil-square"></i><p>Exam Schedule</p></a></li>
+    <li class="nav-item"><a href="teacher-announcements-view.html" class="nav-link"><i class="nav-icon bi bi-megaphone-fill"></i><p>Announcements</p></a></li>
+  </ul></nav></div>
+</aside>
+<main class="app-main">
+  <div class="app-content-header"><div class="container-fluid"><div class="row"><div class="col-sm-6"><h3 class="mb-0">Enter Results</h3></div><div class="col-sm-6"><ol class="breadcrumb float-sm-end"><li class="breadcrumb-item"><a href="teacher-dashboard.html">Home</a></li><li class="breadcrumb-item active">Enter Results</li></ol></div></div></div></div>
+  <div class="app-content"><div class="container-fluid">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white"><h5 class="card-title mb-0"><i class="bi bi-clipboard-data-fill me-2"></i>Enter Exam Results</h5></div>
+      <div class="card-body">
+        <div class="row g-3 mb-4">
+          <div class="col-md-4">
+            <label class="form-label">Select Exam <span class="text-danger">*</span></label>
+            <select class="form-select" id="selectExam" onchange="loadExamStudents()"><option value="">-- Select Exam --</option></select>
+          </div>
+          <div class="col-md-4" id="examInfoBox" style="display:none">
+            <div class="alert alert-info py-2 mb-0">
+              <small>Total Marks: <strong id="examTotalMarks">—</strong> | Passing: <strong id="examPassingMarks">—</strong> | Subject: <strong id="examSubject">—</strong></small>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-bordered table-sm mb-0">
+            <thead class="table-dark"><tr><th>#</th><th>Roll No</th><th>Name</th><th>Obtained Marks</th><th>Percentage</th><th>Grade</th><th>Result</th></tr></thead>
+            <tbody id="resultsBody"></tbody>
+          </table>
+        </div>
+        <div class="mt-3 text-end" id="saveBtn" style="display:none">
+          <button class="btn btn-success px-4" onclick="saveResults()"><i class="bi bi-check-circle me-2"></i>Save Results</button>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</main>
+<footer class="app-footer"><strong>Copyright &copy; 2025 EDU-SPHERE.</strong> Teacher Portal</footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="js/adminlte.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/api.js"></script>
+<script>
+  AUTH.requireAuth('TEACHER');
+  var user = AUTH.getUser();
+  var teacherId = user && user.teacherId;
+  var allExams = [];
+  var classStudents = [];
+
+  async function init() {
+    if (!teacherId) { AUTH.logout('teacher-login.html'); return; }
+    document.getElementById('navName').textContent = user.name || 'Teacher';
+    document.getElementById('navNameFull').textContent = user.name || 'Teacher';
+
+    // Load exams
+    var res = await API.exams.list({ limit: 200 });
+    if (!res || !res.success) return;
+    allExams = res.data.data || res.data || [];
+    var sel = document.getElementById('selectExam');
+    sel.innerHTML = '<option value="">-- Select Exam --</option>';
+    allExams.forEach(function(e) {
+      var label = e.title + (e.subject ? ' — ' + e.subject.name : '') + (e.class ? ' (' + e.class.name + ')' : '');
+      sel.innerHTML += '<option value="' + e.id + '">' + label + '</option>';
+    });
+  }
+
+  async function loadExamStudents() {
+    var examId = parseInt(document.getElementById('selectExam').value);
+    if (!examId) {
+      document.getElementById('resultsBody').innerHTML = '';
+      document.getElementById('examInfoBox').style.display = 'none';
+      document.getElementById('saveBtn').style.display = 'none';
+      return;
+    }
+    var exam = allExams.find(function(e) { return e.id === examId; });
+    if (!exam) return;
+
+    document.getElementById('examTotalMarks').textContent   = exam.totalMarks || '—';
+    document.getElementById('examPassingMarks').textContent = exam.passingMarks || '—';
+    document.getElementById('examSubject').textContent      = exam.subject ? exam.subject.name : '—';
+    document.getElementById('examInfoBox').style.display    = '';
+    document.getElementById('saveBtn').style.display        = '';
+
+    // Load students for this exam's class
+    var params = { limit: 200, status: 'ACTIVE' };
+    if (exam.classId) params.classId = exam.classId;
+    var studRes = await API.students.list(params);
+    classStudents = (studRes && studRes.success) ? (studRes.data.data || studRes.data || []) : [];
+
+    // Load existing results for this exam
+    var resRes = await API.results.byExam(examId);
+    var savedResults = (resRes && resRes.success) ? (resRes.data || []) : [];
+
+    var tbody = document.getElementById('resultsBody');
+    if (!classStudents.length) {
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-3">No students found for this exam.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = classStudents.map(function(s, i) {
+      var existing = savedResults.find(function(r) { return r.studentId === s.id; });
+      var obtained = existing ? Number(existing.obtainedMarks) : '';
+      var pct   = obtained !== '' && exam.totalMarks ? Math.round((obtained / exam.totalMarks) * 100) : '';
+      var grade = existing ? existing.grade : (pct !== '' ? calcGradeVal(pct) : '');
+      var pass  = existing ? existing.isPassed : (obtained !== '' ? obtained >= (exam.passingMarks || 0) : null);
+      var fullName = (s.firstName || '') + ' ' + (s.lastName || '');
+      return '<tr><td>' + (i+1) + '</td>' +
+        '<td><span class="badge text-bg-secondary">' + (s.rollNo||'—') + '</span></td>' +
+        '<td><strong>' + fullName.trim() + '</strong></td>' +
+        '<td><input type="number" class="form-control form-control-sm" id="marks_' + s.id + '" value="' + (obtained !== '' ? obtained : '') + '" min="0" max="' + exam.totalMarks + '" oninput="calcGrade(' + s.id + ',' + exam.totalMarks + ',' + (exam.passingMarks||0) + ')"></td>' +
+        '<td id="pct_' + s.id + '">' + (pct !== '' ? pct + '%' : '—') + '</td>' +
+        '<td id="grade_' + s.id + '">' + (grade ? '<span class="badge ' + (pct >= 50 ? 'bg-success' : 'bg-danger') + '">' + grade + '</span>' : '—') + '</td>' +
+        '<td id="res_' + s.id + '">' + (pass !== null ? '<span class="badge ' + (pass ? 'bg-success' : 'bg-danger') + '">' + (pass ? 'Pass' : 'Fail') + '</span>' : '—') + '</td>' +
+        '</tr>';
+    }).join('');
+  }
+
+  function calcGradeVal(pct) {
+    return pct >= 90 ? 'A+' : pct >= 80 ? 'A' : pct >= 70 ? 'B' : pct >= 60 ? 'C' : pct >= 50 ? 'D' : 'F';
+  }
+
+  function calcGrade(studentId, totalMarks, passingMarks) {
+    var val = parseFloat(document.getElementById('marks_' + studentId).value);
+    if (isNaN(val)) {
+      document.getElementById('pct_' + studentId).textContent = '—';
+      document.getElementById('grade_' + studentId).textContent = '—';
+      document.getElementById('res_' + studentId).textContent = '—';
+      return;
+    }
+    var pct   = Math.round((val / totalMarks) * 100);
+    var grade = calcGradeVal(pct);
+    var pass  = val >= passingMarks;
+    document.getElementById('pct_' + studentId).textContent = pct + '%';
+    document.getElementById('grade_' + studentId).innerHTML = '<span class="badge ' + (pct >= 50 ? 'bg-success' : 'bg-danger') + '">' + grade + '</span>';
+    document.getElementById('res_' + studentId).innerHTML   = '<span class="badge ' + (pass ? 'bg-success' : 'bg-danger') + '">' + (pass ? 'Pass' : 'Fail') + '</span>';
+  }
+
+  async function saveResults() {
+    var examId = parseInt(document.getElementById('selectExam').value);
+    if (!examId) return;
+    var exam = allExams.find(function(e) { return e.id === examId; });
+    if (!exam) return;
+
+    var results = [];
+    classStudents.forEach(function(s) {
+      var inp = document.getElementById('marks_' + s.id);
+      if (!inp || inp.value === '') return;
+      var val = parseFloat(inp.value);
+      if (isNaN(val)) return;
+      var pct   = exam.totalMarks ? Math.round((val / exam.totalMarks) * 100) : 0;
+      var grade = calcGradeVal(pct);
+      var pass  = val >= (exam.passingMarks || 0);
+      results.push({
+        examId:        examId,
+        studentId:     s.id,
+        obtainedMarks: val,
+        percentage:    pct,
+        grade:         grade,
+        isPassed:      pass,
+        enteredById:   teacherId
+      });
+    });
+
+    if (!results.length) { API.toast('No marks entered.', 'warning'); return; }
+
+    var res = await API.results.saveBulk({ results: results });
+    if (res && res.success) {
+      API.toast('Results saved successfully!', 'success');
+      await loadExamStudents();
+    } else {
+      API.toast((res && res.message) || 'Save failed', 'danger');
+    }
+  }
+
+  function logout() { AUTH.logout('teacher-login.html'); }
+  init();
+</script>
+</body>
+</html>

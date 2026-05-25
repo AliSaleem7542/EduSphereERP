@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Admin Login | EDU-SPHERE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="css/adminlte.css" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #c0392b 0%, #e74c3c 50%, #ec7063 100%);
+      min-height: 100vh;
+    }
+    .login-box { width: 380px; }
+    .card { border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); border: none; }
+    .card-body { padding: 2rem; }
+    .input-group-text { background: #f8f9fa; border-left: none; }
+    .form-control { border-right: none; }
+    .form-control:focus { box-shadow: none; border-color: #ced4da; }
+    .btn-login {
+      background: linear-gradient(135deg, #c0392b, #e74c3c);
+      border: none; padding: 10px; font-size: 1rem; letter-spacing: 0.5px;
+    }
+    .btn-login:hover { background: linear-gradient(135deg, #a93226, #cb4335); }
+    .btn-login:disabled { opacity: 0.7; cursor: not-allowed; }
+    .school-name { color: white; font-size: 1.5rem; font-weight: 700; letter-spacing: 1px; }
+    .school-sub  { color: rgba(255,255,255,0.7); font-size: 0.85rem; }
+    .alert-danger { font-size: 0.875rem; }
+    .spinner-border-sm { width: 1rem; height: 1rem; border-width: 0.15em; }
+  </style>
+</head>
+<body class="login-page" style="background:transparent">
+
+<div class="login-box mx-auto" style="padding-top:60px">
+  <div class="text-center mb-4">
+    <img src="assets/img/eduspherelogo (2).png" alt="Logo"
+         style="width:70px;height:70px;border-radius:50%;border:3px solid rgba(255,255,255,0.4);margin-bottom:12px">
+    <div class="school-name">EDU-SPHERE</div>
+    <div class="school-sub">Admin Portal</div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <p class="text-center text-muted mb-4" style="font-size:0.95rem">Sign in to Admin Dashboard</p>
+
+      <div id="errorAlert" class="alert alert-danger d-none">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <span id="errorMsg"></span>
+      </div>
+
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" id="username" placeholder="Username" autocomplete="off">
+        <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+      </div>
+
+      <div class="input-group mb-4">
+        <input type="password" class="form-control" id="password" placeholder="Password">
+        <span class="input-group-text" onclick="togglePassword('password', this)" style="cursor:pointer">
+          <i class="bi bi-eye-fill"></i>
+        </span>
+      </div>
+
+      <button class="btn btn-danger btn-login w-100 text-white" id="loginBtn" onclick="adminLogin()">
+        <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+      </button>
+
+      <hr class="my-3">
+      <p class="text-center mt-2 mb-0">
+        <a href="index.html" class="text-muted" style="font-size:0.8rem">
+          <i class="bi bi-arrow-left me-1"></i>Back to Role Selection
+        </a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="js/auth.js"></script>
+<script>
+  // Redirect if already authenticated
+  AUTH.redirectIfLoggedIn();
+
+  function showError(msg) {
+    document.getElementById('errorMsg').textContent = msg;
+    document.getElementById('errorAlert').classList.remove('d-none');
+  }
+
+  function hideError() {
+    document.getElementById('errorAlert').classList.add('d-none');
+  }
+
+  function setLoading(loading) {
+    var btn = document.getElementById('loginBtn');
+    if (loading) {
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Signing in...';
+    } else {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="bi bi-box-arrow-in-right me-2"></i>Sign In';
+    }
+  }
+
+  async function adminLogin() {
+    hideError();
+    var username = document.getElementById('username').value.trim();
+    var password = document.getElementById('password').value;
+
+    if (!username || !password) {
+      showError('Please enter Username and Password.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      var result = await AUTH.loginAdmin(username, password);
+      if (result.success) {
+        window.location.href = 'index2.html';
+      } else {
+        showError(result.message || 'Invalid username or password.');
+      }
+    } catch (err) {
+      showError('Cannot connect to server. Make sure the backend is running on port 5000.');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') adminLogin();
+  });
+
+  function togglePassword(inputId, icon) {
+    var input = document.getElementById(inputId);
+    var iconEl = icon.querySelector('i');
+    if (input.type === 'password') {
+      input.type = 'text';
+      iconEl.className = 'bi bi-eye-slash-fill';
+    } else {
+      input.type = 'password';
+      iconEl.className = 'bi bi-eye-fill';
+    }
+  }
+</script>
+</body>
+</html>

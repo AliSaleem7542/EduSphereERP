@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Reports | EDU-SPHERE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <link rel="preload" href="css/adminlte.css" as="style" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" media="print" onload="this.media='all'" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="css/adminlte.css" />
+  <!-- __THEME_APPLIED__ -->
+<script>
+(function(){
+  var s = JSON.parse(localStorage.getItem('sysSettings') || '{}');
+  var theme = s.sidebarTheme || 'dark';
+  document.addEventListener('DOMContentLoaded', function() {
+    var el = document.querySelector('.app-sidebar');
+    if (el) el.setAttribute('data-bs-theme', theme);
+  });
+})();
+</script>
+</head>
+  <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+    <div class="app-wrapper">
+      <!-- Navbar -->
+      <nav class="app-header navbar navbar-expand bg-body">
+        <div class="container-fluid">
+          <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" data-lte-toggle="sidebar" href="#" role="button"><i class="bi bi-list"></i></a></li>
+            <li class="nav-item d-none d-md-block"><a href="index2.html" class="nav-link">Dashboard</a></li>
+            <li class="nav-item d-none d-md-block"><a href="reports.html" class="nav-link">Reports</a></li>
+          </ul>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link" data-bs-toggle="dropdown" href="#"><i class="bi bi-bell-fill"></i><span class="navbar-badge badge text-bg-warning">15</span></a>
+              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <span class="dropdown-item dropdown-header">15 Notifications</span>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown user-menu">
+              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                <img src="assets/img/user2-160x160.jpg" class="user-image rounded-circle shadow" alt="User">
+                <span class="d-none d-md-inline">Ali Saleem</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <li class="user-header text-bg-primary"><img src="assets/img/user2-160x160.jpg" class="rounded-circle shadow" alt="User"><p>Ali Saleem - System Administrator <small>Member since Nov. 2023</small></p></li>
+                <li class="user-footer"><a href="#" class="btn btn-default btn-flat">Profile</a><a href="#" class="btn btn-default btn-flat float-end">Sign out</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <!-- Sidebar -->
+      <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+        <div class="sidebar-brand"><a href="index2.html" class="brand-link"><img src="assets/img/eduspherelogo (2).png" alt="Logo" class="brand-image opacity-75 shadow"><span class="brand-text fw-light">EDU-SPHERE</span></a></div>
+        <div class="sidebar-wrapper"><nav class="mt-2"><ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" data-accordion="false">
+          <li class="nav-item"><a href="index2.html" class="nav-link"><i class="nav-icon bi bi-speedometer2"></i><p>Admin Dashboard</p></a></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-people-fill"></i><p>Students Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="add-student.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Student</p></a></li>
+            <li class="nav-item"><a href="manage-students.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Students</p></a></li>
+            <li class="nav-item"><a href="student-records.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Records</p></a></li>
+            <li class="nav-item"><a href="student-promotions.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Promote Students</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-person-badge-fill"></i><p>Teachers Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="add-teacher.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Teacher</p></a></li>
+            <li class="nav-item"><a href="manage-teachers.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Teachers</p></a></li>
+            <li class="nav-item"><a href="assign-subjects.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Assign Subjects</p></a></li>
+            <li class="nav-item"><a href="teacher-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Schedule</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-diagram-3-fill"></i><p>Classes &amp; Sections<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="Classes &amp; Sections/add-class.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Class</p></a></li>
+            <li class="nav-item"><a href="Classes &amp; Sections/manage-classes.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Classes</p></a></li>
+            <li class="nav-item"><a href="Classes &amp; Sections/manage-sections.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Sections</p></a></li>
+            <li class="nav-item"><a href="Classes &amp; Sections/assign-class-teacher.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Assign Class Teacher</p></a></li>
+            <li class="nav-item"><a href="Classes &amp; Sections/student-allocation.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Allocation</p></a></li>
+            <li class="nav-item"><a href="Classes &amp; Sections/classroom-management.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Classroom Management</p></a></li>
+            <li class="nav-item"><a href="Classes &amp; Sections/subject-allocation.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Subject Allocation</p></a></li>
+            <li class="nav-item"><a href="Classes &amp; Sections/class-promotion.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Class Promotion</p></a></li>
+            <li class="nav-item"><a href="timetable.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Class Timetable</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-clipboard-data-fill"></i><p>Exams &amp; Results<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="create-exam.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create Exam</p></a></li>
+            <li class="nav-item"><a href="exam-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Exam Schedule</p></a></li>
+            <li class="nav-item"><a href="result-management.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Result Management</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-calendar-check-fill"></i><p>Attendance<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="student-attendance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Attendance</p></a></li>
+            <li class="nav-item"><a href="teacher-attenadance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Attendance</p></a></li>
+            <li class="nav-item"><a href="attendance-reports.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Attendance Reports</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-cash-stack"></i><p>Fee Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="collect-fee.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Collect Fee</p></a></li>
+            <li class="nav-item"><a href="fee-records.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Records</p></a></li>
+            <li class="nav-item"><a href="pending-fees.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Pending Fees</p></a></li>
+<li class="nav-item"><a href="fee-refunds.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Refunds</p></a></li>
+          </ul></li>
+        
+                <!-- Accounts -->
+        <li class="nav-item">
+          <a href="#" class="nav-link"><i class="nav-icon bi bi-journal-text"></i><p>Accounts<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item"><a href="accounts-entry.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Income / Expense Entry</p></a></li>
+            <li class="nav-item"><a href="accounts-ledger.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Ledger</p></a></li>
+            <li class="nav-item"><a href="accounts-balance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Balance Sheet</p></a></li>
+          </ul>
+        </li>
+<li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-book-fill"></i><p>Library<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="add-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Book</p></a></li>
+            <li class="nav-item"><a href="issue-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Issue Book</p></a></li>
+            <li class="nav-item"><a href="return-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Return Book</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="announcements.html" class="nav-link"><i class="nav-icon bi bi-megaphone-fill"></i><p>Announcements</p></a></li>
+          <li class="nav-item active"><a href="reports.html" class="nav-link active"><i class="nav-icon bi bi-bar-chart-fill"></i><p>Reports</p></a></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-person-gear"></i><p>User Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="create-user.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create User</p></a></li>
+            <li class="nav-item"><a href="manage-users.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Users</p></a></li>
+            <li class="nav-item"><a href="roles-permissions.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Roles &amp; Permissions</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="activity-logs.html" class="nav-link"><i class="nav-icon bi bi-clock-history"></i><p>Activity Logs</p></a></li>
+          <li class="nav-item"><a href="backup.html" class="nav-link"><i class="nav-icon bi bi-database-fill-down"></i><p>Backup &amp; Restore</p></a></li>
+          <li class="nav-item"><a href="settings.html" class="nav-link"><i class="nav-icon bi bi-gear-fill"></i><p>System Settings</p></a></li>
+        </ul></nav></div>
+      </aside>
+
+      <!-- Main -->
+      <main class="app-main">
+        <div class="app-content-header"><div class="container-fluid"><div class="row">
+          <div class="col-sm-6"><h3 class="mb-0">Reports</h3></div>
+          <div class="col-sm-6"><ol class="breadcrumb float-sm-end">
+            <li class="breadcrumb-item"><a href="index2.html">Home</a></li>
+            <li class="breadcrumb-item active">Reports</li>
+          </ol></div>
+        </div></div></div>
+        <div class="app-content"><div class="container-fluid">
+
+          <!-- Summary Stats -->
+          <div class="row mb-4">
+            <div class="col-md-2 col-sm-4 col-6 mb-3"><div class="info-box"><span class="info-box-icon text-bg-primary shadow-sm"><i class="bi bi-people-fill"></i></span><div class="info-box-content"><span class="info-box-text">Students</span><span class="info-box-number" id="rStudents">0</span></div></div></div>
+            <div class="col-md-2 col-sm-4 col-6 mb-3"><div class="info-box"><span class="info-box-icon text-bg-info shadow-sm"><i class="bi bi-person-badge-fill"></i></span><div class="info-box-content"><span class="info-box-text">Teachers</span><span class="info-box-number" id="rTeachers">0</span></div></div></div>
+            <div class="col-md-2 col-sm-4 col-6 mb-3"><div class="info-box"><span class="info-box-icon text-bg-success shadow-sm"><i class="bi bi-cash-stack"></i></span><div class="info-box-content"><span class="info-box-text">Fee Collected</span><span class="info-box-number" id="rFee">0</span></div></div></div>
+            <div class="col-md-2 col-sm-4 col-6 mb-3"><div class="info-box"><span class="info-box-icon text-bg-warning shadow-sm"><i class="bi bi-clipboard-data-fill"></i></span><div class="info-box-content"><span class="info-box-text">Exams</span><span class="info-box-number" id="rExams">0</span></div></div></div>
+            <div class="col-md-2 col-sm-4 col-6 mb-3"><div class="info-box"><span class="info-box-icon text-bg-danger shadow-sm"><i class="bi bi-book-fill"></i></span><div class="info-box-content"><span class="info-box-text">Books Issued</span><span class="info-box-number" id="rBooks">0</span></div></div></div>
+            <div class="col-md-2 col-sm-4 col-6 mb-3"><div class="info-box"><span class="info-box-icon text-bg-secondary shadow-sm"><i class="bi bi-megaphone-fill"></i></span><div class="info-box-content"><span class="info-box-text">Announcements</span><span class="info-box-number" id="rAnn">0</span></div></div></div>
+          </div>
+
+          <!-- Report Tabs -->
+          <ul class="nav nav-tabs mb-3" id="reportTabs">
+            <li class="nav-item"><a class="nav-link active" href="#" onclick="showTab('students');return false;"><i class="bi bi-people-fill"></i> Students</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" onclick="showTab('fee');return false;"><i class="bi bi-cash-stack"></i> Fee</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" onclick="showTab('exam');return false;"><i class="bi bi-clipboard-data-fill"></i> Exams</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" onclick="showTab('library');return false;"><i class="bi bi-book-fill"></i> Library</a></li>
+          </ul>
+
+          <!-- Students Report -->
+          <div id="tab-students">
+            <div class="card shadow mb-4">
+              <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h3 class="card-title mb-0"><i class="bi bi-people-fill"></i> Student Report</h3>
+                <div class="d-flex gap-2">
+                  <select class="form-select form-select-sm" id="sFilterClass" onchange="renderStudentReport()" style="width:130px">
+                    <option value="">All Classes</option>
+                  </select>
+                  <select class="form-select form-select-sm" id="sFilterGender" onchange="renderStudentReport()" style="width:110px">
+                    <option value="">All Genders</option>
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
+                  </select>
+                  <button class="btn btn-sm btn-light" onclick="exportCSV('students')"><i class="bi bi-download"></i> CSV</button>
+                  <button class="btn btn-sm btn-light" onclick="printSection('tab-students')"><i class="bi bi-printer-fill"></i> Print</button>
+                </div>
+              </div>
+              <div class="card-body p-0">
+                <div class="table-responsive">
+                  <table class="table table-striped table-hover mb-0">
+                    <thead class="table-dark"><tr><th>#</th><th>Name</th><th>Roll No</th><th>Class</th><th>Section</th><th>Gender</th><th>Category</th><th>Father's Phone</th></tr></thead>
+                    <tbody id="studentReportBody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <!-- Class-wise summary -->
+            <div class="card shadow">
+              <div class="card-header bg-secondary text-white"><h3 class="card-title mb-0"><i class="bi bi-bar-chart-fill"></i> Class-wise Enrollment</h3></div>
+              <div class="card-body p-0">
+                <div class="table-responsive">
+                  <table class="table table-bordered mb-0">
+                    <thead class="table-dark"><tr><th>Class</th><th>Total</th><th>Male</th><th>Female</th><th>Regular</th><th>Scholarship</th><th>Free</th></tr></thead>
+                    <tbody id="classWiseBody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fee Report -->
+          <div id="tab-fee" style="display:none">
+            <div class="card shadow mb-4">
+              <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                <h3 class="card-title mb-0"><i class="bi bi-cash-stack"></i> Fee Collection Report</h3>
+                <div class="d-flex gap-2">
+                  <select class="form-select form-select-sm" id="fFilterMonth" onchange="renderFeeReport()" style="width:140px">
+                    <option value="">All Months</option>
+                  </select>
+                  <button class="btn btn-sm btn-light" onclick="exportCSV('fee')"><i class="bi bi-download"></i> CSV</button>
+                  <button class="btn btn-sm btn-light" onclick="printSection('tab-fee')"><i class="bi bi-printer-fill"></i> Print</button>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="row mb-3">
+                  <div class="col-md-3"><div class="small-box bg-success text-white p-3 rounded"><div class="inner"><h4 id="fTotalCollected">Rs 0</h4><p>Total Collected</p></div></div></div>
+                  <div class="col-md-3"><div class="small-box bg-warning text-dark p-3 rounded"><div class="inner"><h4 id="fTotalRecords">0</h4><p>Total Records</p></div></div></div>
+                  <div class="col-md-3"><div class="small-box bg-info text-white p-3 rounded"><div class="inner"><h4 id="fAvgFee">Rs 0</h4><p>Average Fee</p></div></div></div>
+                  <div class="col-md-3"><div class="small-box bg-danger text-white p-3 rounded"><div class="inner"><h4 id="fMonthCount">0</h4><p>Months Covered</p></div></div></div>
+                </div>
+                <div class="table-responsive">
+                  <table class="table table-striped table-hover mb-0">
+                    <thead class="table-dark"><tr><th>#</th><th>Student</th><th>Class</th><th>Month</th><th>Amount</th><th>Date</th><th>Receipt</th></tr></thead>
+                    <tbody id="feeReportBody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Exam Report -->
+          <div id="tab-exam" style="display:none">
+            <div class="card shadow mb-4">
+              <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+                <h3 class="card-title mb-0"><i class="bi bi-clipboard-data-fill"></i> Exam Results Report</h3>
+                <div class="d-flex gap-2">
+                  <select class="form-select form-select-sm" id="eFilterExam" onchange="renderExamReport()" style="width:180px">
+                    <option value="">All Exams</option>
+                  </select>
+                  <button class="btn btn-sm btn-dark" onclick="exportCSV('exam')"><i class="bi bi-download"></i> CSV</button>
+                  <button class="btn btn-sm btn-dark" onclick="printSection('tab-exam')"><i class="bi bi-printer-fill"></i> Print</button>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="row mb-3">
+                  <div class="col-md-3"><div class="small-box bg-primary text-white p-3 rounded"><div class="inner"><h4 id="eTotal">0</h4><p>Total Results</p></div></div></div>
+                  <div class="col-md-3"><div class="small-box bg-success text-white p-3 rounded"><div class="inner"><h4 id="ePassed">0</h4><p>Passed</p></div></div></div>
+                  <div class="col-md-3"><div class="small-box bg-danger text-white p-3 rounded"><div class="inner"><h4 id="eFailed">0</h4><p>Failed</p></div></div></div>
+                  <div class="col-md-3"><div class="small-box bg-info text-white p-3 rounded"><div class="inner"><h4 id="eAvgPct">0%</h4><p>Avg Percentage</p></div></div></div>
+                </div>
+                <div class="table-responsive">
+                  <table class="table table-striped table-hover mb-0">
+                    <thead class="table-dark"><tr><th>#</th><th>Student</th><th>Exam</th><th>Marks</th><th>Total</th><th>%</th><th>Grade</th><th>Result</th></tr></thead>
+                    <tbody id="examReportBody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Library Report -->
+          <div id="tab-library" style="display:none">
+            <div class="card shadow mb-4">
+              <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+                <h3 class="card-title mb-0"><i class="bi bi-book-fill"></i> Library Report</h3>
+                <div class="d-flex gap-2">
+                  <select class="form-select form-select-sm" id="lFilterStatus" onchange="renderLibraryReport()" style="width:130px">
+                    <option value="">All Status</option>
+                    <option value="ISSUED">Issued</option>
+                    <option value="RETURNED">Returned</option>
+                  </select>
+                  <button class="btn btn-sm btn-light" onclick="exportCSV('library')"><i class="bi bi-download"></i> CSV</button>
+                  <button class="btn btn-sm btn-light" onclick="printSection('tab-library')"><i class="bi bi-printer-fill"></i> Print</button>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="row mb-3">
+                  <div class="col-md-3"><div class="small-box bg-primary text-white p-3 rounded"><div class="inner"><h4 id="lTotalBooks">0</h4><p>Total Books</p></div></div></div>
+                  <div class="col-md-3"><div class="small-box bg-warning text-dark p-3 rounded"><div class="inner"><h4 id="lIssued">0</h4><p>Currently Issued</p></div></div></div>
+                  <div class="col-md-3"><div class="small-box bg-success text-white p-3 rounded"><div class="inner"><h4 id="lReturned">0</h4><p>Returned</p></div></div></div>
+                  <div class="col-md-3"><div class="small-box bg-danger text-white p-3 rounded"><div class="inner"><h4 id="lOverdue">0</h4><p>Overdue</p></div></div></div>
+                </div>
+                <div class="table-responsive">
+                  <table class="table table-striped table-hover mb-0">
+                    <thead class="table-dark"><tr><th>#</th><th>Student</th><th>Book</th><th>Issue Date</th><th>Due Date</th><th>Return Date</th><th>Status</th><th>Fine</th></tr></thead>
+                    <tbody id="libraryReportBody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div></div>
+      </main>
+      <footer class="app-footer"><strong>Copyright &copy; 2014-2025 <a href="#" class="text-decoration-none">EDU-SPHERE</a>.</strong> All rights reserved.</footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js?v=2"></script>
+    <script src="js/header.js?v=2"></script>
+    <script src="js/adminlte.js"></script>
+    <script>
+      AUTH.requireAuth('ADMIN');
+
+      // ── cached data ───────────────────────────────────────────────
+      var _students = [], _feeRecs = [], _results = [], _libIssues = [];
+      var activeTab = 'students';
+
+      // ── Tab switching ─────────────────────────────────────────────
+      function showTab(name) {
+        ['students','fee','exam','library'].forEach(function(t){
+          document.getElementById('tab-'+t).style.display = (t===name?'':'none');
+        });
+        document.querySelectorAll('#reportTabs .nav-link').forEach(function(el,i){
+          el.classList.toggle('active', ['students','fee','exam','library'][i]===name);
+        });
+        activeTab = name;
+        if (name==='students') renderStudentReport();
+        if (name==='fee')      renderFeeReport();
+        if (name==='exam')     renderExamReport();
+        if (name==='library')  renderLibraryReport();
+      }
+
+      // ── Summary stats ─────────────────────────────────────────────
+      async function updateSummary() {
+        try {
+          var dashRes = await API.reports.dashboard();
+          if (dashRes && dashRes.success) {
+            var d = dashRes.data;
+            document.getElementById('rStudents').textContent = d.totalStudents || 0;
+            document.getElementById('rTeachers').textContent = d.totalTeachers || 0;
+            document.getElementById('rFee').textContent      = API.fmtMoney ? API.fmtMoney(d.totalFeeCollected || 0) : ('Rs ' + (d.totalFeeCollected || 0));
+            document.getElementById('rExams').textContent    = d.totalExams || 0;
+            document.getElementById('rBooks').textContent    = d.booksIssued || 0;
+            document.getElementById('rAnn').textContent      = d.totalAnnouncements || 0;
+          }
+        } catch(e) { API.toast('Failed to load dashboard stats', 'danger'); }
+      }
+
+      // ── Students Report ───────────────────────────────────────────
+      async function renderStudentReport() {
+        var cls    = document.getElementById('sFilterClass').value;
+        var gender = document.getElementById('sFilterGender').value;
+        var tbody  = document.getElementById('studentReportBody');
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-3"><i class="bi bi-hourglass-split"></i> Loading...</td></tr>';
+        try {
+          var params = {limit: 500};
+          if (cls)    params.classId = cls;
+          if (gender) params.gender  = gender;
+          var res = await API.students.list(params);
+          var data = (res && res.success) ? (res.data.data || res.data || []) : [];
+          _students = data;
+          if (!data.length) {
+            tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-3">No students found.</td></tr>';
+          } else {
+            tbody.innerHTML = data.map(function(s, i) {
+              var name = (s.firstName || '') + ' ' + (s.lastName || '');
+              var cls2 = (s.class && s.class.name) ? s.class.name : '-';
+              var sec  = (s.section && s.section.name) ? s.section.name : '-';
+              return '<tr><td>'+(i+1)+'</td><td>'+name.trim()+'</td><td>'+(s.rollNo||'-')+'</td><td>'+cls2+'</td><td>'+sec+'</td><td>'+(s.gender||'-')+'</td><td>'+(s.feeCategory||'-')+'</td><td>'+(s.fatherPhone||'-')+'</td></tr>';
+            }).join('');
+          }
+          // class-wise summary
+          var map = {};
+          data.forEach(function(s) {
+            var c = (s.class && s.class.name) ? s.class.name : 'Unknown';
+            if (!map[c]) map[c] = {total:0,male:0,female:0,regular:0,scholarship:0,free:0};
+            map[c].total++;
+            if ((s.gender||'').toUpperCase()==='MALE')   map[c].male++;
+            if ((s.gender||'').toUpperCase()==='FEMALE') map[c].female++;
+            var fc = (s.feeCategory||'').toUpperCase();
+            if (fc==='REGULAR')     map[c].regular++;
+            if (fc==='SCHOLARSHIP'||fc==='HALF_FEE') map[c].scholarship++;
+            if (fc==='FREE')        map[c].free++;
+          });
+          var cwBody = document.getElementById('classWiseBody');
+          var keys = Object.keys(map).sort();
+          if (!keys.length) { cwBody.innerHTML='<tr><td colspan="7" class="text-center text-muted py-3">No data.</td></tr>'; return; }
+          cwBody.innerHTML = keys.map(function(c) {
+            var r = map[c];
+            return '<tr><td><strong>'+c+'</strong></td><td>'+r.total+'</td><td>'+r.male+'</td><td>'+r.female+'</td><td>'+r.regular+'</td><td>'+r.scholarship+'</td><td>'+r.free+'</td></tr>';
+          }).join('');
+        } catch(e) {
+          tbody.innerHTML = '<tr><td colspan="8" class="text-center text-danger py-3">Failed to load students.</td></tr>';
+          API.toast('Failed to load student report', 'danger');
+        }
+      }
+
+      // ── Fee Report ────────────────────────────────────────────────
+      async function renderFeeReport() {
+        var month = document.getElementById('fFilterMonth').value;
+        var tbody = document.getElementById('feeReportBody');
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-3"><i class="bi bi-hourglass-split"></i> Loading...</td></tr>';
+        try {
+          // Use fees list (not reports.fees which returns grouped data by feeType)
+          var params = { limit: 500 };
+          if (month) { params.startDate = month + '-01'; params.endDate = month + '-31'; }
+          var res = await API.fees.list(params);
+          var data = (res && res.success) ? (res.data.data || res.data || []) : [];
+          _feeRecs = data;
+          var total = data.reduce(function(s,r){ return s+(parseFloat(r.amount)||0); }, 0);
+          var allMonths = new Set(data.map(function(r){ return (r.date||'').substring(0,7); }).filter(Boolean));
+          document.getElementById('fTotalCollected').textContent = API.fmtMoney(total);
+          document.getElementById('fTotalRecords').textContent   = data.length;
+          document.getElementById('fAvgFee').textContent         = data.length ? API.fmtMoney(Math.round(total/data.length)) : 'Rs. 0';
+          document.getElementById('fMonthCount').textContent     = allMonths.size;
+          if (!data.length) { tbody.innerHTML='<tr><td colspan="7" class="text-center text-muted py-3">No fee records.</td></tr>'; return; }
+          tbody.innerHTML = data.map(function(r,i){
+            var sName = r.student ? ((r.student.firstName||'')+' '+(r.student.lastName||'')).trim() : '-';
+            var cls   = r.student && r.student.class ? r.student.class.name : '-';
+            var dateStr = r.date ? r.date.substring(0,10) : '-';
+            return '<tr><td>'+(i+1)+'</td><td>'+sName+'</td><td>'+cls+'</td><td>'+(dateStr.substring(0,7)||'-')+'</td><td class="text-success fw-bold">Rs. '+(r.amount||0)+'</td><td>'+dateStr+'</td><td>'+(r.receiptNo||'-')+'</td></tr>';
+          }).join('');
+        } catch(e) {
+          tbody.innerHTML = '<tr><td colspan="7" class="text-center text-danger py-3">Failed to load fee records.</td></tr>';
+          API.toast('Failed to load fee report', 'danger');
+        }
+      }
+
+      // ── Exam Report ───────────────────────────────────────────────
+      async function renderExamReport() {
+        var examId = document.getElementById('eFilterExam').value;
+        var tbody  = document.getElementById('examReportBody');
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-3"><i class="bi bi-hourglass-split"></i> Loading...</td></tr>';
+        try {
+          var res;
+          if (examId) {
+            res = await API.results.byExam(examId);
+          } else {
+            res = await API.results.list({});
+          }
+          var data = (res && res.success) ? (res.data || []) : [];
+          _results = data;
+          var passed = data.filter(function(r){ return r.isPassed === true; }).length;
+          var failed = data.filter(function(r){ return r.isPassed === false; }).length;
+          var avgPct = data.length ? Math.round(data.reduce(function(s,r){ return s+(parseFloat(r.percentage)||0); },0)/data.length) : 0;
+          document.getElementById('eTotal').textContent   = data.length;
+          document.getElementById('ePassed').textContent  = passed;
+          document.getElementById('eFailed').textContent  = failed;
+          document.getElementById('eAvgPct').textContent  = avgPct+'%';
+          if (!data.length) { tbody.innerHTML='<tr><td colspan="8" class="text-center text-muted py-3">No results found.</td></tr>'; return; }
+          tbody.innerHTML = data.map(function(r,i){
+            var sName    = r.student ? ((r.student.firstName||'')+' '+(r.student.lastName||'')).trim() : '-';
+            var eName    = r.exam ? r.exam.title : '-';
+            var resClass = r.isPassed ? 'bg-success' : 'bg-danger';
+            var resLabel = r.isPassed ? 'Pass' : 'Fail';
+            return '<tr><td>'+(i+1)+'</td><td>'+sName+'</td><td>'+eName+'</td>' +
+              '<td>'+(r.obtainedMarks||0)+'</td>' +
+              '<td>'+(r.exam ? r.exam.totalMarks : '-')+'</td>' +
+              '<td>'+(r.percentage||0)+'%</td>' +
+              '<td><span class="badge bg-info text-dark">'+(r.grade||'-')+'</span></td>' +
+              '<td><span class="badge '+resClass+'">'+resLabel+'</span></td></tr>';
+          }).join('');
+        } catch(e) {
+          tbody.innerHTML = '<tr><td colspan="8" class="text-center text-danger py-3">Failed to load results.</td></tr>';
+          API.toast('Failed to load exam report', 'danger');
+        }
+      }      }
+
+      // ── Library Report ────────────────────────────────────────────
+      async function renderLibraryReport() {
+        // status is already uppercase from dropdown value (ISSUED / RETURNED / '')
+        var status = document.getElementById('lFilterStatus').value;
+        var tbody  = document.getElementById('libraryReportBody');
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-3"><i class="bi bi-hourglass-split"></i> Loading...</td></tr>';
+        try {
+          // reports.library() returns summary stats
+          var summaryRes = await API.reports.library();
+          var summary = (summaryRes && summaryRes.success) ? (summaryRes.data || {}) : {};
+          document.getElementById('lTotalBooks').textContent = summary.totalBooks || 0;
+          document.getElementById('lIssued').textContent    = summary.issued    || 0;
+          document.getElementById('lReturned').textContent  = summary.returned  || 0;
+          document.getElementById('lOverdue').textContent   = summary.overdue   || 0;
+
+          // Load actual issue records — pass uppercase status directly
+          var issueParams = {};
+          if (status) issueParams.status = status;   // already ISSUED / RETURNED
+          var issueRes = await API.library.issues(issueParams);
+          var all = (issueRes && issueRes.success) ? (issueRes.data || []) : [];
+          _libIssues = all;
+          var today = new Date().toISOString().split('T')[0];
+          // Client-side filter (belt-and-suspenders in case API ignores status param)
+          var data = status ? all.filter(function(i){ return (i.status||'').toUpperCase() === status; }) : all;
+          if (!data.length) { tbody.innerHTML='<tr><td colspan="8" class="text-center text-muted py-3">No records.</td></tr>'; return; }
+          tbody.innerHTML = data.map(function(i,idx){
+            var isOverdue = (i.status||'').toUpperCase()==='ISSUED' && i.dueDate && i.dueDate.substring(0,10) < today;
+            var sName  = i.student ? ((i.student.firstName||'')+' '+(i.student.lastName||'')).trim() : '-';
+            var roll   = i.student ? (i.student.rollNo||'-') : '-';
+            var bTitle = i.book ? (i.book.title||'-') : '-';
+            var issDate = i.issueDate  ? i.issueDate.substring(0,10)  : '-';
+            var dueDate = i.dueDate    ? i.dueDate.substring(0,10)    : '-';
+            var retDate = i.returnDate ? i.returnDate.substring(0,10) : '-';
+            var stBadge = (i.status||'').toUpperCase()==='ISSUED'
+              ? (isOverdue ? '<span class="badge bg-danger">Overdue</span>' : '<span class="badge bg-warning text-dark">Issued</span>')
+              : '<span class="badge bg-success">Returned</span>';
+            return '<tr class="'+(isOverdue?'table-danger':'')+'">' +
+              '<td>'+(idx+1)+'</td><td>'+sName+'<br><small class="text-muted">'+roll+'</small></td>' +
+              '<td>'+bTitle+'</td><td>'+issDate+'</td><td>'+dueDate+'</td>' +
+              '<td>'+retDate+'</td><td>'+stBadge+'</td>' +
+              '<td>'+(Number(i.fine||0)>0?'<span class="text-danger">Rs '+i.fine+'</span>':'-')+'</td></tr>';
+          }).join('');
+        } catch(e) {
+          tbody.innerHTML = '<tr><td colspan="8" class="text-center text-danger py-3">Failed to load library records.</td></tr>';
+          API.toast('Failed to load library report', 'danger');
+        }
+      }
+
+      // ── CSV Export ────────────────────────────────────────────────
+      function exportCSV(type) {
+        var rows=[], filename='report.csv';
+        if (type==='students') {
+          filename='students-report.csv';
+          rows=[['#','Name','Roll No','Class','Section','Gender','Fee Category','Contact']];
+          _students.forEach(function(s,i){
+            var name = (s.firstName||'') + ' ' + (s.lastName||'');
+            var cls2 = (s.class && s.class.name) ? s.class.name : (s.className||s.class||'');
+            var sec  = (s.section && s.section.name) ? s.section.name : (s.sectionName||s.section||'');
+            rows.push([i+1,name.trim(),s.rollNo||'',cls2,sec,s.gender||'',s.feeCategory||'',s.fatherPhone||s.contact||'']);
+          });
+        } else if (type==='fee') {
+          filename='fee-report.csv';
+          rows=[['#','Student','Class','Month','Amount','Date','Receipt']];
+          _feeRecs.forEach(function(r,i){
+            var sName = r.studentName || ((r.student && (r.student.firstName+' '+r.student.lastName)) || '');
+            var cls   = r.class || (r.student && r.student.class && r.student.class.name) || '';
+            rows.push([i+1,sName,cls,r.month||'',r.amount||0,r.date||r.paidAt||'',r.receiptNo||r.id||'']);
+          });
+        } else if (type==='exam') {
+          filename='exam-report.csv';
+          rows=[['#','Student','Exam','Marks','Total','%','Grade','Result']];
+          _results.forEach(function(r,i){
+            var sName = r.studentName || ((r.student && (r.student.firstName+' '+r.student.lastName)) || '');
+            var eName = r.examName || (r.exam && r.exam.name) || '';
+            rows.push([i+1,sName,eName,r.marks||r.obtainedMarks||0,r.total||r.totalMarks||0,(r.percentage||0)+'%',r.grade||'',r.result||r.status||'']);
+          });
+        } else if (type==='library') {
+          filename='library-report.csv';
+          rows=[['#','Student','Roll No','Book','Issue Date','Due Date','Return Date','Status','Fine']];
+          _libIssues.forEach(function(i,idx){
+            var sName = i.studentName || ((i.student && (i.student.firstName+' '+i.student.lastName)) || '');
+            var roll  = i.rollNo || (i.student && i.student.rollNo) || '';
+            var bTitle= i.bookTitle || (i.book && i.book.title) || '';
+            rows.push([idx+1,sName,roll,bTitle,i.issueDate||'',i.dueDate||'',i.returnDate||'',i.status||'',i.fine||0]);
+          });
+        }
+        var csv = rows.map(function(r){ return r.map(function(c){ return '"'+String(c).replace(/"/g,'""')+'"'; }).join(','); }).join('\n');
+        var a = document.createElement('a');
+        a.href = 'data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+        a.download = filename; a.click();
+      }
+
+      // ── Print ─────────────────────────────────────────────────────
+      function printSection(id) {
+        var content = document.getElementById(id).innerHTML;
+        var w = window.open('','_blank');
+        w.document.write('<html><head><title>Report</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"></head><body class="p-4">'+content+'</body></html>');
+        w.document.close(); w.focus(); setTimeout(function(){ w.print(); w.close(); },600);
+      }
+
+      // ── Init ──────────────────────────────────────────────────────
+      document.addEventListener('DOMContentLoaded', async function(){
+        updateSummary();
+
+        // Populate class filter from API
+        try {
+          var classes = await API.classes.list();
+          var sc = document.getElementById('sFilterClass');
+          var classList = (classes && classes.success) ? (classes.data || []) : [];
+          classList.forEach(function(c){
+            var o = document.createElement('option');
+            o.value = c.id;
+            o.textContent = c.name;
+            sc.appendChild(o);
+          });
+        } catch(e) { /* non-critical */ }
+
+        // Populate exam filter from API
+        try {
+          var exams = await API.exams.list({ limit: 100 });
+          var ec = document.getElementById('eFilterExam');
+          var examList = (exams && exams.success) ? (exams.data.data || exams.data || []) : [];
+          examList.forEach(function(e){
+            var o = document.createElement('option');
+            o.value = e.id;
+            o.textContent = e.title;
+            ec.appendChild(o);
+          });
+        } catch(e) { /* non-critical */ }
+
+        renderStudentReport();
+      });
+    </script>
+  </body>
+</html>

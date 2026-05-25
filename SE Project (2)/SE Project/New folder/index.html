@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Welcome | EDU-SPHERE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="css/adminlte.css" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Source Sans 3', sans-serif;
+    }
+    
+    .welcome-container {
+      width: 100%;
+      max-width: 1000px;
+      padding: 20px;
+    }
+    
+    .welcome-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .logo-container img {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 4px solid rgba(255,255,255,0.3);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      margin-bottom: 20px;
+    }
+    
+    .school-name {
+      color: white;
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+      margin-bottom: 8px;
+    }
+    
+    .school-tagline {
+      color: rgba(255,255,255,0.9);
+      font-size: 1.1rem;
+      font-weight: 300;
+    }
+    
+    .role-selection {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin-bottom: 30px;
+    }
+    
+    .role-card {
+      background: white;
+      border-radius: 15px;
+      padding: 35px 25px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border-top: 4px solid var(--role-color);
+    }
+    
+    .role-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    }
+    
+    .role-card.admin {
+      --role-color: #e74c3c;
+    }
+    
+    .role-card.teacher {
+      --role-color: #27ae60;
+    }
+    
+    .role-card.student {
+      --role-color: #3498db;
+    }
+    
+    .role-icon {
+      width: 70px;
+      height: 70px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: white;
+      background: var(--role-color);
+      transition: all 0.3s ease;
+    }
+    
+    .role-card:hover .role-icon {
+      transform: scale(1.1);
+    }
+    
+    .role-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+    
+    .role-description {
+      font-size: 0.9rem;
+      color: #7f8c8d;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    
+    .role-btn {
+      background: var(--role-color);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+    
+    .role-btn:hover {
+      opacity: 0.9;
+      transform: scale(1.02);
+    }
+    
+    .footer-text {
+      text-align: center;
+      color: rgba(255,255,255,0.8);
+      margin-top: 30px;
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 768px) {
+      .school-name {
+        font-size: 2rem;
+      }
+      
+      .role-selection {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="welcome-container">
+    <!-- Header Section -->
+    <div class="welcome-header">
+      <div class="logo-container">
+        <img src="assets/img/eduspherelogo (2).png" alt="EDU-SPHERE Logo">
+      </div>
+      <h1 class="school-name">EDU-SPHERE</h1>
+      <p class="school-tagline">School Management System</p>
+    </div>
+    
+    <!-- Role Selection Cards -->
+    <div class="role-selection">
+      <!-- Admin Card -->
+      <div class="role-card admin" onclick="navigateToLogin('admin')">
+        <div class="role-icon">
+          <i class="bi bi-shield-lock-fill"></i>
+        </div>
+        <h2 class="role-title">Admin</h2>
+        <p class="role-description">
+          Manage school operations, students, teachers, and system settings
+        </p>
+        <button class="role-btn">Login as Admin</button>
+      </div>
+      
+      <!-- Teacher Card -->
+      <div class="role-card teacher" onclick="navigateToLogin('teacher')">
+        <div class="role-icon">
+          <i class="bi bi-person-workspace"></i>
+        </div>
+        <h2 class="role-title">Teacher</h2>
+        <p class="role-description">
+          Access classes, mark attendance, enter results, and view schedules
+        </p>
+        <button class="role-btn">Login as Teacher</button>
+      </div>
+      
+      <!-- Student Card -->
+      <div class="role-card student" onclick="navigateToLogin('student')">
+        <div class="role-icon">
+          <i class="bi bi-mortarboard-fill"></i>
+        </div>
+        <h2 class="role-title">Student</h2>
+        <p class="role-description">
+          View results, attendance, timetable, fees, and announcements
+        </p>
+        <button class="role-btn">Login as Student</button>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer-text">
+      <p><i class="bi bi-info-circle me-2"></i>Select your role to continue to the login page</p>
+      <p style="font-size: 0.8rem; margin-top: 10px;">&copy; 2026 EDU-SPHERE. All rights reserved.</p>
+    </div>
+  </div>
+  
+  <script src="js/auth.js"></script>
+  <script>
+    function navigateToLogin(role) {
+      switch(role) {
+        case 'admin':   window.location.href = 'admin-login.html';   break;
+        case 'teacher': window.location.href = 'teacher-login.html'; break;
+        case 'student': window.location.href = 'student-login.html'; break;
+        default: console.error('Invalid role');
+      }
+    }
+
+    // Redirect if already authenticated via JWT or legacy session
+    window.addEventListener('DOMContentLoaded', function () {
+      AUTH.redirectIfLoggedIn();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+# ─── Node / Backend ──────────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ─── Environment / Secrets ───────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+backend/.env
+backend/.env.local
+
+# ─── Uploads (user-generated content) ────────────────────────────────────────
+backend/uploads/photos/*
+backend/uploads/imports/*
+!backend/uploads/photos/.gitkeep
+!backend/uploads/imports/.gitkeep
+
+# ─── Prisma generated ────────────────────────────────────────────────────────
+backend/node_modules/
+backend/prisma/migrations/dev.db
+backend/prisma/migrations/dev.db-journal
+
+# ─── OS / Editor ─────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+.vscode/settings.json
+.vscode/launch.json
+
+# ─── Python scripts (utility only, not part of deployment) ───────────────────
+*.py
+*.pyc
+__pycache__/
+
+# ─── Misc root files ─────────────────────────────────────────────────────────
+3

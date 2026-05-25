@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Student Records | EDU-SPHERE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <link rel="preload" href="css/adminlte.css" as="style" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" media="print" onload="this.media='all'" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="css/adminlte.css" />
+  <!-- __THEME_APPLIED__ -->
+<script>
+(function(){
+  var s = JSON.parse(localStorage.getItem('sysSettings') || '{}');
+  var theme = s.sidebarTheme || 'dark';
+  document.addEventListener('DOMContentLoaded', function() {
+    var el = document.querySelector('.app-sidebar');
+    if (el) el.setAttribute('data-bs-theme', theme);
+  });
+})();
+</script>
+</head>
+  <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+    <div class="app-wrapper">
+      <nav class="app-header navbar navbar-expand bg-body">
+        <div class="container-fluid">
+          <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" data-lte-toggle="sidebar" href="#" role="button"><i class="bi bi-list"></i></a></li>
+            <li class="nav-item d-none d-md-block"><a href="index2.html" class="nav-link">Dashboard</a></li>
+            <li class="nav-item d-none d-md-block"><a href="manage-students.html" class="nav-link">Students</a></li>
+          </ul>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-search"></i></a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link" data-bs-toggle="dropdown" href="#"><i class="bi bi-bell-fill"></i><span class="navbar-badge badge text-bg-warning">15</span></a>
+              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <span class="dropdown-item dropdown-header">15 Notifications</span>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown user-menu">
+              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                <img src="assets/img/user2-160x160.jpg" class="user-image rounded-circle shadow" alt="User">
+                <span class="d-none d-md-inline">Ali Saleem</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <li class="user-header text-bg-primary">
+                  <img src="assets/img/user2-160x160.jpg" class="rounded-circle shadow" alt="User">
+                  <p>Ali Saleem - System Administrator <small>Member since Nov. 2023</small></p>
+                </li>
+                <li class="user-footer">
+                  <a href="#" class="btn btn-default btn-flat">Profile</a>
+                  <a href="#" class="btn btn-default btn-flat float-end">Sign out</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+        <div class="sidebar-brand">
+          <a href="index2.html" class="brand-link">
+            <img src="assets/img/eduspherelogo (2).png" alt="Logo" class="brand-image opacity-75 shadow">
+            <span class="brand-text fw-light">EDU-SPHERE</span>
+          </a>
+        </div>
+        <div class="sidebar-wrapper">
+          <nav class="mt-2">
+            <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" data-accordion="false">
+              <li class="nav-item"><a href="index2.html" class="nav-link"><i class="nav-icon bi bi-speedometer2"></i><p>Admin Dashboard</p></a></li>
+              <li class="nav-item menu-open">
+                <a href="#" class="nav-link active"><i class="nav-icon bi bi-people-fill"></i><p>Students Management<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="add-student.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Student</p></a></li>
+                  <li class="nav-item"><a href="manage-students.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Students</p></a></li>
+                  <li class="nav-item"><a href="student-records.html" class="nav-link active"><i class="nav-icon bi bi-circle"></i><p>Student Records</p></a></li>
+                  <li class="nav-item"><a href="student-promotions.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Promote Students</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-person-badge-fill"></i><p>Teachers Management<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="add-teacher.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Teacher</p></a></li>
+                  <li class="nav-item"><a href="manage-teachers.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Teachers</p></a></li>
+                  <li class="nav-item"><a href="assign-subjects.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Assign Subjects</p></a></li>
+                  <li class="nav-item"><a href="teacher-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Schedule</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-diagram-3-fill"></i><p>Classes &amp; Sections<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="Classes &amp; Sections/add-class.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Class</p></a></li>
+                  <li class="nav-item"><a href="Classes &amp; Sections/manage-classes.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Classes</p></a></li>
+                  <li class="nav-item"><a href="Classes &amp; Sections/manage-sections.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Sections</p></a></li>
+                  <li class="nav-item"><a href="Classes &amp; Sections/assign-class-teacher.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Assign Class Teacher</p></a></li>
+                  <li class="nav-item"><a href="Classes &amp; Sections/student-allocation.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Allocation</p></a></li>
+                  <li class="nav-item"><a href="Classes &amp; Sections/classroom-management.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Classroom Management</p></a></li>
+                  <li class="nav-item"><a href="Classes &amp; Sections/subject-allocation.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Subject Allocation</p></a></li>
+                  <li class="nav-item"><a href="Classes &amp; Sections/class-promotion.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Class Promotion</p></a></li>
+                  <li class="nav-item"><a href="timetable.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Class Timetable</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-clipboard-data-fill"></i><p>Exams &amp; Results<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="create-exam.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create Exam</p></a></li>
+                  <li class="nav-item"><a href="exam-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Exam Schedule</p></a></li>
+                  <li class="nav-item"><a href="result-management.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Result Management</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-calendar-check-fill"></i><p>Attendance<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="student-attendance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Attendance</p></a></li>
+                  <li class="nav-item"><a href="teacher-attendance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Attendance</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-cash-stack"></i><p>Fee Management<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="collect-fee.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Collect Fee</p></a></li>
+                  <li class="nav-item"><a href="fee-records.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Records</p></a></li>
+                  <li class="nav-item"><a href="pending-fees.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Pending Fees</p></a></li>
+<li class="nav-item"><a href="fee-refunds.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Refunds</p></a></li>
+                </ul>
+              </li>
+                <!-- Accounts -->
+        <li class="nav-item">
+          <a href="#" class="nav-link"><i class="nav-icon bi bi-journal-text"></i><p>Accounts<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item"><a href="accounts-entry.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Income / Expense Entry</p></a></li>
+            <li class="nav-item"><a href="accounts-ledger.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Ledger</p></a></li>
+            <li class="nav-item"><a href="accounts-balance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Balance Sheet</p></a></li>
+          </ul>
+        </li>
+<li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-book-fill"></i><p>Library<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="add-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Book</p></a></li>
+                  <li class="nav-item"><a href="issue-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Issue Book</p></a></li>
+                  <li class="nav-item"><a href="return-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Return Book</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item"><a href="announcements.html" class="nav-link"><i class="nav-icon bi bi-megaphone-fill"></i><p>Announcements</p></a></li>
+              <li class="nav-item"><a href="reports.html" class="nav-link"><i class="nav-icon bi bi-bar-chart-fill"></i><p>Reports</p></a></li>
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-person-gear"></i><p>User Management<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="create-user.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create User</p></a></li>
+                  <li class="nav-item"><a href="manage-users.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Users</p></a></li>
+                  <li class="nav-item"><a href="roles-permissions.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Roles &amp; Permissions</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item"><a href="activity-logs.html" class="nav-link"><i class="nav-icon bi bi-clock-history"></i><p>Activity Logs</p></a></li>
+              <li class="nav-item"><a href="backup.html" class="nav-link"><i class="nav-icon bi bi-database-fill-down"></i><p>Backup &amp; Restore</p></a></li>
+              <li class="nav-item"><a href="settings.html" class="nav-link"><i class="nav-icon bi bi-gear-fill"></i><p>System Settings</p></a></li>
+            </ul>
+          </nav>
+        </div>
+      </aside>
+      <main class="app-main">
+        <div class="app-content-header">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-6"><h3 class="mb-0">Student Records</h3></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="index2.html">Home</a></li>
+                  <li class="breadcrumb-item">Students Management</li>
+                  <li class="breadcrumb-item active">Student Records</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="app-content">
+          <div class="container-fluid">
+            <div class="row mb-4">
+              <div class="col-md-3">
+                <div class="info-box">
+                  <span class="info-box-icon text-bg-primary shadow-sm"><i class="bi bi-people-fill"></i></span>
+                  <div class="info-box-content">
+                    <span class="info-box-text">Total Records</span>
+                    <span class="info-box-number" id="statTotal">0</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="info-box">
+                  <span class="info-box-icon text-bg-success shadow-sm"><i class="bi bi-person-check-fill"></i></span>
+                  <div class="info-box-content">
+                    <span class="info-box-text">Active</span>
+                    <span class="info-box-number" id="statActive">0</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="info-box">
+                  <span class="info-box-icon text-bg-warning shadow-sm"><i class="bi bi-mortarboard-fill"></i></span>
+                  <div class="info-box-content">
+                    <span class="info-box-text">Classes</span>
+                    <span class="info-box-number" id="statClasses">0</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="info-box">
+                  <span class="info-box-icon text-bg-info shadow-sm"><i class="bi bi-award-fill"></i></span>
+                  <div class="info-box-content">
+                    <span class="info-box-text">Scholarship</span>
+                    <span class="info-box-number" id="statScholarship">0</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card mb-4">
+              <div class="card-body">
+                <div class="row g-3 align-items-end">
+                  <div class="col-md-3">
+                    <label class="form-label"><i class="bi bi-search"></i> Search</label>
+                    <input type="text" class="form-control" id="searchInput" placeholder="Name, roll no..." oninput="renderTable()">
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label">Class</label>
+                    <select class="form-select" id="filterClass" onchange="renderTable()">
+                      <option value="">All Classes</option>
+                    </select>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label">Section</label>
+                    <select class="form-select" id="filterSection" onchange="renderTable()">
+                      <option value="">All Sections</option>
+                    </select>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label">Fee Category</label>
+                    <select class="form-select" id="filterFee" onchange="renderTable()">
+                      <option value="">All</option>
+                      <option value="REGULAR">Regular</option>
+                      <option value="SCHOLARSHIP">Scholarship</option>
+                      <option value="HALF_FEE">Half Fee</option>
+                      <option value="FREE">Free</option>
+                    </select>
+                  </div>
+                  <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-outline-secondary" onclick="clearFilters()"><i class="bi bi-x-circle"></i> Clear</button>
+                    <button class="btn btn-success" onclick="window.print()"><i class="bi bi-printer-fill"></i> Print</button>
+                    <button class="btn btn-primary" onclick="exportCSV()"><i class="bi bi-download"></i> Export</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card shadow">
+              <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h3 class="card-title mb-0"><i class="bi bi-journal-text"></i> Student Records</h3>
+                <span class="badge text-bg-light text-dark" id="showingCount">0 records</span>
+              </div>
+              <div class="card-body p-0">
+                <div class="table-responsive">
+                  <table class="table table-striped table-hover mb-0">
+                    <thead class="table-dark">
+                      <tr>
+                        <th>#</th><th>Photo</th><th>Roll No</th><th>Name</th>
+                        <th>Class</th><th>Section</th><th>Gender</th>
+                        <th>Blood Group</th><th>Admission Date</th><th>Fee Category</th>
+                        <th>Status</th><th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="recordsTableBody"></tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="card-footer d-flex justify-content-between align-items-center">
+                <small class="text-muted" id="pageInfo">Page 1 of 1</small>
+                <nav><ul class="pagination pagination-sm mb-0" id="pagination"></ul></nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <div class="modal fade" id="viewModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+              <h5 class="modal-title"><i class="bi bi-person-badge-fill"></i> Student Record</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="viewModalBody"></div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="app-footer">
+        <strong>Copyright &copy; 2014-2025 <a href="#" class="text-decoration-none">EDU-SPHERE</a>.</strong> All rights reserved.
+      </footer>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="js/adminlte.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/header.js"></script>
+    <script>
+      AUTH.requireAuth('ADMIN');
+
+      var currentPage = 1;
+      var totalPages  = 1;
+      var searchTimer = null;
+      var allStudentsCache = [];
+
+      function feeBadge(cat) {
+        var map = { REGULAR:'bg-primary', SCHOLARSHIP:'bg-success', HALF_FEE:'bg-warning text-dark', FREE:'bg-info text-dark' };
+        return '<span class="badge ' + (map[cat] || 'bg-secondary') + '">' + (cat || 'N/A') + '</span>';
+      }
+
+      async function loadStats() {
+        try {
+          var res = await API.students.list({ limit: 1000 });
+          if (res && res.success) {
+            var all = res.data.data || [];
+            allStudentsCache = all;
+            document.getElementById('statTotal').textContent  = all.length;
+            document.getElementById('statActive').textContent = all.filter(function(s){ return s.status === 'ACTIVE'; }).length;
+            var classSet = {};
+            all.forEach(function(s){ if (s.classId) classSet[s.classId] = 1; });
+            document.getElementById('statClasses').textContent    = Object.keys(classSet).length;
+            document.getElementById('statScholarship').textContent = all.filter(function(s){ return s.feeCategory === 'SCHOLARSHIP'; }).length;
+          }
+        } catch(e) {}
+      }
+
+      async function renderTable() {
+        var search = document.getElementById('searchInput').value.trim();
+        var cls    = document.getElementById('filterClass').value;
+        var fee    = document.getElementById('filterFee').value;
+
+        var params = { page: currentPage, limit: 10 };
+        if (search) params.search = search;
+        if (cls)    params.classId = cls;
+        if (fee)    params.feeCategory = fee.toUpperCase().replace(' ', '_');
+
+        var tbody = document.getElementById('recordsTableBody');
+        tbody.innerHTML = '<tr><td colspan="12" class="text-center py-4"><span class="spinner-border spinner-border-sm me-2"></span>Loading...</td></tr>';
+
+        try {
+          var res = await API.students.list(params);
+          if (!res || !res.success) {
+            tbody.innerHTML = '<tr><td colspan="12" class="text-center text-danger py-4">Failed to load records.</td></tr>';
+            return;
+          }
+          var list = res.data.data || [];
+          var pg   = res.data.pagination || {};
+          totalPages = pg.totalPages || 1;
+          document.getElementById('showingCount').textContent = (pg.total || 0) + ' records';
+          document.getElementById('pageInfo').textContent = 'Page ' + currentPage + ' of ' + totalPages;
+
+          if (!list.length) {
+            tbody.innerHTML = '<tr><td colspan="12" class="text-center text-muted py-4">No records found.</td></tr>';
+          } else {
+            var start = (currentPage - 1) * 10;
+            tbody.innerHTML = list.map(function(s, i) {
+              var photo = s.photo ? 'http://localhost:5000' + s.photo : 'assets/img/avatar.png';
+              var name  = (s.firstName || '') + ' ' + (s.lastName || '');
+              var cls   = s.class   ? s.class.name   : '—';
+              var sec   = s.section ? s.section.name : '—';
+              var gBadge = s.gender === 'MALE' ? 'bg-info text-dark' : 'bg-danger';
+              return '<tr>' +
+                '<td>' + (start + i + 1) + '</td>' +
+                '<td><img src="' + photo + '" class="rounded-circle" width="36" height="36" style="object-fit:cover" onerror="this.src=\'assets/img/avatar.png\'"></td>' +
+                '<td><code>' + (s.rollNo || '—') + '</code></td>' +
+                '<td><strong>' + name.trim() + '</strong></td>' +
+                '<td><span class="badge bg-secondary">' + cls + '</span></td>' +
+                '<td>' + sec + '</td>' +
+                '<td><span class="badge ' + gBadge + '">' + (s.gender || '—') + '</span></td>' +
+                '<td>' + (s.bloodGroup || '—') + '</td>' +
+                '<td>' + (s.admissionDate ? s.admissionDate.substring(0,10) : '—') + '</td>' +
+                '<td>' + feeBadge(s.feeCategory) + '</td>' +
+                '<td><span class="badge ' + (s.status === 'ACTIVE' ? 'bg-success' : 'bg-secondary') + '">' + (s.status || 'ACTIVE') + '</span></td>' +
+                '<td><button class="btn btn-sm btn-outline-primary" onclick="viewRecord(' + s.id + ')" title="View"><i class="bi bi-eye-fill"></i></button></td>' +
+                '</tr>';
+            }).join('');
+          }
+          renderPagination();
+        } catch(e) {
+          tbody.innerHTML = '<tr><td colspan="12" class="text-center text-danger py-4">Error: ' + e.message + '</td></tr>';
+        }
+      }
+
+      function renderPagination() {
+        var ul = document.getElementById('pagination');
+        ul.innerHTML = '';
+        if (totalPages <= 1) return;
+        var prev = document.createElement('li');
+        prev.className = 'page-item' + (currentPage === 1 ? ' disabled' : '');
+        prev.innerHTML = '<a class="page-link" href="#" onclick="changePage(' + (currentPage-1) + ');return false;">«</a>';
+        ul.appendChild(prev);
+        for (var i = 1; i <= totalPages; i++) {
+          var li = document.createElement('li');
+          li.className = 'page-item' + (i === currentPage ? ' active' : '');
+          li.innerHTML = '<a class="page-link" href="#" onclick="changePage(' + i + ');return false;">' + i + '</a>';
+          ul.appendChild(li);
+        }
+        var next = document.createElement('li');
+        next.className = 'page-item' + (currentPage === totalPages ? ' disabled' : '');
+        next.innerHTML = '<a class="page-link" href="#" onclick="changePage(' + (currentPage+1) + ');return false;">»</a>';
+        ul.appendChild(next);
+      }
+
+      function changePage(p) {
+        if (p < 1 || p > totalPages) return;
+        currentPage = p;
+        renderTable();
+      }
+
+      function clearFilters() {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('filterClass').value = '';
+        document.getElementById('filterSection').value = '';
+        document.getElementById('filterFee').value = '';
+        currentPage = 1;
+        renderTable();
+      }
+
+      async function viewRecord(id) {
+        var res = await API.students.get(id);
+        if (!res || !res.success) { API.toast('Failed to load record', 'danger'); return; }
+        var s = res.data;
+        var photo = s.photo ? 'http://localhost:5000' + s.photo : 'assets/img/avatar.png';
+        var name  = (s.firstName || '') + ' ' + (s.middleName ? s.middleName + ' ' : '') + (s.lastName || '');
+        document.getElementById('viewModalBody').innerHTML =
+          '<div class="row">' +
+          '<div class="col-md-3 text-center mb-3">' +
+            '<img src="' + photo + '" class="rounded-circle img-fluid shadow" style="width:100px;height:100px;object-fit:cover" onerror="this.src=\'assets/img/avatar.png\'">' +
+            '<h5 class="mt-2 mb-0">' + name.trim() + '</h5>' +
+            '<small class="text-muted">' + (s.rollNo || '') + '</small>' +
+          '</div>' +
+          '<div class="col-md-9">' +
+          '<table class="table table-sm table-bordered">' +
+            '<tr><th>Class</th><td>' + (s.class ? s.class.name : '—') + '</td><th>Section</th><td>' + (s.section ? s.section.name : '—') + '</td></tr>' +
+            '<tr><th>Gender</th><td>' + (s.gender||'—') + '</td><th>Blood Group</th><td>' + (s.bloodGroup||'—') + '</td></tr>' +
+            '<tr><th>Date of Birth</th><td>' + (s.dob ? s.dob.substring(0,10) : '—') + '</td><th>Admission Date</th><td>' + (s.admissionDate ? s.admissionDate.substring(0,10) : '—') + '</td></tr>' +
+            '<tr><th>Admission Type</th><td>' + (s.admissionType||'—') + '</td><th>Fee Category</th><td>' + feeBadge(s.feeCategory) + '</td></tr>' +
+            '<tr><th>Father\'s Name</th><td>' + (s.fatherName||'—') + '</td><th>Father\'s Phone</th><td>' + (s.fatherPhone||'—') + '</td></tr>' +
+            '<tr><th>CNIC / B-Form</th><td>' + (s.cnic||'—') + '</td><th>Status</th><td><span class="badge ' + (s.status==='ACTIVE'?'bg-success':'bg-secondary') + '">' + (s.status||'ACTIVE') + '</span></td></tr>' +
+            '<tr><th>Address</th><td colspan="3">' + (s.address||'—') + '</td></tr>' +
+          '</table></div></div>';
+        new bootstrap.Modal(document.getElementById('viewModal')).show();
+      }
+
+      async function exportCSV() {
+        try {
+          var res = await API.students.list({ limit: 1000 });
+          if (!res || !res.success) { API.toast('Failed to export', 'danger'); return; }
+          var all = res.data.data || [];
+          var rows = [['Roll No','Name','Class','Section','Gender','Blood Group','DOB','Admission Date','Fee Category','Father','Phone','Address','Status']];
+          all.forEach(function(s) {
+            rows.push([
+              s.rollNo,
+              (s.firstName||'') + ' ' + (s.lastName||''),
+              s.class ? s.class.name : '',
+              s.section ? s.section.name : '',
+              s.gender, s.bloodGroup,
+              s.dob ? s.dob.substring(0,10) : '',
+              s.admissionDate ? s.admissionDate.substring(0,10) : '',
+              s.feeCategory, s.fatherName, s.fatherPhone, s.address, s.status
+            ]);
+          });
+          var csv = rows.map(function(r){ return r.map(function(v){ return '"'+(v||'').replace(/"/g,'""')+'"'; }).join(','); }).join('\n');
+          var a = document.createElement('a');
+          a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+          a.download = 'student-records.csv';
+          a.click();
+        } catch(e) { API.toast('Export error: ' + e.message, 'danger'); }
+      }
+
+      async function loadFilterDropdowns() {
+        try {
+          var res = await API.classes.list();
+          if (res && res.success) {
+            var fc = document.getElementById('filterClass');
+            fc.innerHTML = '<option value="">All Classes</option>';
+            res.data.forEach(function(c) {
+              fc.innerHTML += '<option value="' + c.id + '">' + c.name + '</option>';
+            });
+          }
+        } catch(e) {}
+      }
+
+      document.getElementById('searchInput').addEventListener('input', function() {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(function() { currentPage = 1; renderTable(); }, 400);
+      });
+
+      document.addEventListener('DOMContentLoaded', function() {
+        loadFilterDropdowns();
+        loadStats();
+        renderTable();
+        var sw = document.querySelector('.sidebar-wrapper');
+        if (sw && typeof OverlayScrollbarsGlobal !== 'undefined' && OverlayScrollbarsGlobal.OverlayScrollbars) {
+          OverlayScrollbarsGlobal.OverlayScrollbars(sw, { scrollbars: { theme: 'os-theme-light', autoHide: 'leave', clickScroll: true } });
+        }
+      });
+    </script>
+  </body>
+</html>

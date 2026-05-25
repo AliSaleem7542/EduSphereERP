@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Balance Sheet | EDU-SPHERE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <link rel="preload" href="css/adminlte.css" as="style" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="css/adminlte.css" />
+  <style>
+    @media print {
+      .app-sidebar, .app-header, .app-footer,
+      .filter-card, .no-print { display: none !important; }
+      .app-wrapper, .app-main, .app-content,
+      .app-content-header, .container-fluid { 
+        margin: 0 !important; padding: 0 !important; 
+        width: 100% !important; left: 0 !important;
+      }
+      .print-header { display: block !important; }
+      .card { box-shadow: none !important; }
+    }
+    .print-header { display: none; }
+  </style>
+  <script>
+  (function(){
+    var s = JSON.parse(localStorage.getItem('sysSettings') || '{}');
+    var theme = s.sidebarTheme || 'dark';
+    document.addEventListener('DOMContentLoaded', function() {
+      var el = document.querySelector('.app-sidebar');
+      if (el) el.setAttribute('data-bs-theme', theme);
+    });
+  })();
+  </script>
+</head>
+<body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+<div class="app-wrapper">
+
+<nav class="app-header navbar navbar-expand bg-body">
+  <div class="container-fluid">
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" data-lte-toggle="sidebar" href="#" role="button"><i class="bi bi-list"></i></a></li>
+      <li class="nav-item d-none d-md-block"><a href="index2.html" class="nav-link">Dashboard</a></li>
+      <li class="nav-item d-none d-md-block"><a href="accounts-entry.html" class="nav-link">New Entry</a></li>
+      <li class="nav-item d-none d-md-block"><a href="accounts-ledger.html" class="nav-link">Ledger</a></li>
+    </ul>
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item dropdown user-menu">
+        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+          <img src="assets/img/user2-160x160.jpg" class="user-image rounded-circle shadow" alt="User">
+          <span class="d-none d-md-inline">Ali Saleem</span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+          <li class="user-header text-bg-primary"><img src="assets/img/user2-160x160.jpg" class="rounded-circle shadow" alt="User"><p>Ali Saleem - System Administrator</p></li>
+          <li class="user-footer"><a href="#" class="btn btn-default btn-flat">Profile</a><a href="#" class="btn btn-default btn-flat float-end">Sign out</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+  <div class="sidebar-brand">
+    <a href="index2.html" class="brand-link">
+      <img src="assets/img/eduspherelogo (2).png" alt="Logo" class="brand-image opacity-75 shadow">
+      <span class="brand-text fw-light">EDU-SPHERE</span>
+    </a>
+  </div>
+  <div class="sidebar-wrapper">
+    <nav class="mt-2">
+      <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" data-accordion="false">
+        <li class="nav-item"><a href="index2.html" class="nav-link"><i class="nav-icon bi bi-speedometer2"></i><p>Admin Dashboard</p></a></li>
+        <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-people-fill"></i><p>Students Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+          <li class="nav-item"><a href="add-student.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Student</p></a></li>
+          <li class="nav-item"><a href="manage-students.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Students</p></a></li>
+          <li class="nav-item"><a href="student-records.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Records</p></a></li>
+          <li class="nav-item"><a href="student-promotions.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Promote Students</p></a></li>
+        </ul></li>
+        <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-person-badge-fill"></i><p>Teachers Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+          <li class="nav-item"><a href="add-teacher.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Teacher</p></a></li>
+          <li class="nav-item"><a href="manage-teachers.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Teachers</p></a></li>
+          <li class="nav-item"><a href="assign-subjects.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Assign Subjects</p></a></li>
+          <li class="nav-item"><a href="teacher-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Schedule</p></a></li>
+        </ul></li>
+        <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-diagram-3-fill"></i><p>Classes &amp; Sections<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+          <li class="nav-item"><a href="Classes & Sections/add-class.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Class</p></a></li>
+          <li class="nav-item"><a href="Classes & Sections/manage-classes.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Classes</p></a></li>
+          <li class="nav-item"><a href="Classes & Sections/manage-sections.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Sections</p></a></li>
+          <li class="nav-item"><a href="timetable.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Class Timetable</p></a></li>
+        </ul></li>
+        <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-clipboard-data-fill"></i><p>Exams &amp; Results<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+          <li class="nav-item"><a href="create-exam.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create Exam</p></a></li>
+          <li class="nav-item"><a href="exam-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Exam Schedule</p></a></li>
+          <li class="nav-item"><a href="result-management.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Result Management</p></a></li>
+        </ul></li>
+        <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-calendar-check-fill"></i><p>Attendance<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+          <li class="nav-item"><a href="student-attendance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Attendance</p></a></li>
+          <li class="nav-item"><a href="teacher-attendance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Attendance</p></a></li>
+        </ul></li>
+        <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-cash-stack"></i><p>Fee Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+          <li class="nav-item"><a href="collect-fee.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Collect Fee</p></a></li>
+          <li class="nav-item"><a href="fee-records.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Records</p></a></li>
+          <li class="nav-item"><a href="pending-fees.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Pending Fees</p></a></li>
+          <li class="nav-item"><a href="fee-refunds.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Refunds</p></a></li>
+        </ul></li>
+        <li class="nav-item menu-open">
+          <a href="#" class="nav-link active"><i class="nav-icon bi bi-journal-text"></i><p>Accounts<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item"><a href="accounts-entry.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Income / Expense Entry</p></a></li>
+            <li class="nav-item"><a href="accounts-ledger.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Ledger</p></a></li>
+            <li class="nav-item"><a href="accounts-balance.html" class="nav-link active"><i class="nav-icon bi bi-circle"></i><p>Balance Sheet</p></a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-book-fill"></i><p>Library<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+          <li class="nav-item"><a href="add-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Book</p></a></li>
+          <li class="nav-item"><a href="issue-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Issue Book</p></a></li>
+          <li class="nav-item"><a href="return-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Return Book</p></a></li>
+        </ul></li>
+        <li class="nav-item"><a href="announcements.html" class="nav-link"><i class="nav-icon bi bi-megaphone-fill"></i><p>Announcements</p></a></li>
+        <li class="nav-item"><a href="reports.html" class="nav-link"><i class="nav-icon bi bi-bar-chart-fill"></i><p>Reports</p></a></li>
+        <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-person-gear"></i><p>User Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+          <li class="nav-item"><a href="create-user.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create User</p></a></li>
+          <li class="nav-item"><a href="manage-users.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Users</p></a></li>
+          <li class="nav-item"><a href="roles-permissions.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Roles &amp; Permissions</p></a></li>
+        </ul></li>
+        <li class="nav-item"><a href="activity-logs.html" class="nav-link"><i class="nav-icon bi bi-clock-history"></i><p>Activity Logs</p></a></li>
+        <li class="nav-item"><a href="backup.html" class="nav-link"><i class="nav-icon bi bi-database-fill-down"></i><p>Backup &amp; Restore</p></a></li>
+        <li class="nav-item"><a href="settings.html" class="nav-link"><i class="nav-icon bi bi-gear-fill"></i><p>System Settings</p></a></li>
+      </ul>
+    </nav>
+  </div>
+</aside>
+
+<main class="app-main">
+  <div class="app-content-header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-6"><h3 class="mb-0">Balance Sheet</h3></div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-end">
+            <li class="breadcrumb-item"><a href="index2.html">Home</a></li>
+            <li class="breadcrumb-item">Accounts</li>
+            <li class="breadcrumb-item active">Balance Sheet</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="app-content">
+    <div class="container-fluid">
+
+      <!-- Print Header -->
+      <div class="print-header">
+        <h3>EDU-SPHERE</h3>
+        <h5>Balance Sheet</h5>
+        <p id="printPeriod"></p>
+      </div>
+
+      <!-- Filter by period -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="row g-3 align-items-end">
+            <div class="col-md-3">
+              <label class="form-label">From Date</label>
+              <input type="date" class="form-control" id="filterFrom" onchange="renderBalance()">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">To Date</label>
+              <input type="date" class="form-control" id="filterTo" onchange="renderBalance()">
+            </div>
+            <div class="col-md-2">
+              <button class="btn btn-outline-secondary" onclick="clearFilter()"><i class="bi bi-x-circle me-1"></i>Clear</button>
+            </div>
+            <div class="col-md-4 text-end">
+              <button class="btn btn-outline-primary" onclick="printBalance()"><i class="bi bi-printer me-1"></i>Print</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Income Side -->
+        <div class="col-md-6">
+          <div class="card shadow mb-4">
+            <div class="card-header bg-success text-white">
+              <h5 class="card-title mb-0"><i class="bi bi-arrow-down-circle-fill me-2"></i>Income</h5>
+            </div>
+            <div class="card-body p-0">
+              <table class="table table-sm mb-0">
+                <thead class="table-light"><tr><th>Category</th><th class="text-end">Amount (Rs.)</th></tr></thead>
+                <tbody id="incomeBody"></tbody>
+                <tfoot><tr class="table-success fw-bold"><td>Total Income</td><td class="text-end" id="totalIncome">0</td></tr></tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Expense Side -->
+        <div class="col-md-6">
+          <div class="card shadow mb-4">
+            <div class="card-header bg-danger text-white">
+              <h5 class="card-title mb-0"><i class="bi bi-arrow-up-circle-fill me-2"></i>Expenses</h5>
+            </div>
+            <div class="card-body p-0">
+              <table class="table table-sm mb-0">
+                <thead class="table-light"><tr><th>Category</th><th class="text-end">Amount (Rs.)</th></tr></thead>
+                <tbody id="expenseBody"></tbody>
+                <tfoot><tr class="table-danger fw-bold"><td>Total Expenses</td><td class="text-end" id="totalExpense">0</td></tr></tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Net Balance -->
+      <div class="card shadow">
+        <div class="card-body text-center py-4" id="netBalanceCard">
+          <h4 class="text-muted mb-1">Net Balance</h4>
+          <h1 class="fw-bold" id="netBalance">Rs. 0</h1>
+          <p class="text-muted mb-0" id="balanceNote"></p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer class="app-footer">
+  <strong>Copyright &copy; 2025 <a href="#" class="text-decoration-none">EDU-SPHERE</a>.</strong> All rights reserved.
+</footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="js/adminlte.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/api.js"></script>
+    <script src="js/header.js"></script>
+<script>
+  AUTH.requireAuth('ADMIN');
+
+  var _entries = [];
+
+  async function loadEntries() {
+    try {
+      // Try balance-sheet API first for summary, then entries for breakdown
+      var res = await API.accounts.entries({ limit: 1000 });
+      _entries = (res && res.success) ? (res.data.data || res.data || []) : [];
+    } catch(e) {
+      _entries = [];
+    }
+    renderBalance();
+  }
+
+  function renderBalance() {
+    var from = document.getElementById('filterFrom').value;
+    var to   = document.getElementById('filterTo').value;
+    var pp = document.getElementById('printPeriod');
+    if (pp) pp.textContent = (from||to) ? ('Period: ' + (from||'—') + ' to ' + (to||'—')) : 'All Transactions';
+
+    var entries = _entries.filter(function(e){
+      var d = (e.date||e.createdAt||'').substring(0,10);
+      return (!from || d>=from) && (!to || d<=to);
+    });
+
+    var incMap = {}, expMap = {};
+    entries.forEach(function(e){
+      var t = (e.type||'').toUpperCase();
+      if (t==='INCOME')  incMap[e.category||'Other']  = (incMap[e.category||'Other']  || 0) + Number(e.amount||0);
+      else               expMap[e.category||'Other']  = (expMap[e.category||'Other']  || 0) + Number(e.amount||0);
+    });
+
+    var totalInc = 0, totalExp = 0;
+
+    var incBody = document.getElementById('incomeBody');
+    var incKeys = Object.keys(incMap);
+    if (!incKeys.length) {
+      incBody.innerHTML = '<tr><td colspan="2" class="text-center text-muted py-3">No income entries.</td></tr>';
+    } else {
+      incBody.innerHTML = incKeys.map(function(k){
+        totalInc += incMap[k];
+        return '<tr><td>'+k+'</td><td class="text-end">'+Number(incMap[k]).toLocaleString()+'</td></tr>';
+      }).join('');
+    }
+
+    var expBody = document.getElementById('expenseBody');
+    var expKeys = Object.keys(expMap);
+    if (!expKeys.length) {
+      expBody.innerHTML = '<tr><td colspan="2" class="text-center text-muted py-3">No expense entries.</td></tr>';
+    } else {
+      expBody.innerHTML = expKeys.map(function(k){
+        totalExp += expMap[k];
+        return '<tr><td>'+k+'</td><td class="text-end">'+Number(expMap[k]).toLocaleString()+'</td></tr>';
+      }).join('');
+    }
+
+    document.getElementById('totalIncome').textContent  = Number(totalInc).toLocaleString();
+    document.getElementById('totalExpense').textContent = Number(totalExp).toLocaleString();
+
+    var net = totalInc - totalExp;
+    var netEl = document.getElementById('netBalance');
+    netEl.textContent = 'Rs. ' + Number(Math.abs(net)).toLocaleString();
+    netEl.className   = 'fw-bold ' + (net >= 0 ? 'text-success' : 'text-danger');
+    document.getElementById('balanceNote').textContent = net >= 0 ? 'Surplus' : 'Deficit';
+    document.getElementById('netBalanceCard').className = 'card-body text-center py-4 ' + (net >= 0 ? 'bg-success bg-opacity-10' : 'bg-danger bg-opacity-10');
+  }
+
+  function clearFilter() {
+    document.getElementById('filterFrom').value = '';
+    document.getElementById('filterTo').value   = '';
+    renderBalance();
+  }
+
+  function printBalance() {
+    var from = document.getElementById('filterFrom').value;
+    var to   = document.getElementById('filterTo').value;
+    var period = (from || to) ? ('Period: ' + (from||'—') + ' to ' + (to||'—')) : 'All Transactions';
+    var incHtml = document.getElementById('incomeBody').innerHTML;
+    var expHtml = document.getElementById('expenseBody').innerHTML;
+    var totalInc = document.getElementById('totalIncome').textContent;
+    var totalExp = document.getElementById('totalExpense').textContent;
+    var netBal   = document.getElementById('netBalance').textContent;
+    var netNote  = document.getElementById('balanceNote').textContent;
+    var netColor = document.getElementById('netBalance').className.indexOf('text-danger') > -1 ? '#dc3545' : '#198754';
+    var win = window.open('', '_blank', 'width=800,height=600');
+    win.document.write('<!DOCTYPE html><html><head><title>Balance Sheet - EDU-SPHERE</title><style>body{font-family:Arial,sans-serif;margin:30px;color:#333}h2,h4{text-align:center;margin:4px 0}p.period{text-align:center;color:#666;margin-bottom:20px}.row{display:flex;gap:20px}.col{flex:1}table{width:100%;border-collapse:collapse;margin-bottom:10px}th,td{border:1px solid #dee2e6;padding:7px 10px;font-size:13px}thead th{background:#f8f9fa;font-weight:bold}.inc-header{background:#198754;color:white;padding:8px 10px;font-weight:bold}.exp-header{background:#dc3545;color:white;padding:8px 10px;font-weight:bold}tfoot td{font-weight:bold;background:#f8f9fa}.net{text-align:center;margin-top:20px;padding:20px;border:2px solid #dee2e6;border-radius:8px}.net h3{margin:0 0 8px 0;color:#666}.net h1{margin:0;color:'+netColor+';font-size:2rem}.net p{margin:4px 0 0 0;color:#666}</style></head><body><h2>EDU-SPHERE</h2><h4>Balance Sheet</h4><p class="period">'+period+'</p><div class="row"><div class="col"><div class="inc-header">&#9660; Income</div><table><thead><tr><th>Category</th><th style="text-align:right">Amount (Rs.)</th></tr></thead><tbody>'+incHtml+'</tbody><tfoot><tr><td>Total Income</td><td style="text-align:right">'+totalInc+'</td></tr></tfoot></table></div><div class="col"><div class="exp-header">&#9650; Expenses</div><table><thead><tr><th>Category</th><th style="text-align:right">Amount (Rs.)</th></tr></thead><tbody>'+expHtml+'</tbody><tfoot><tr><td>Total Expenses</td><td style="text-align:right">'+totalExp+'</td></tr></tfoot></table></div></div><div class="net"><h3>Net Balance</h3><h1>'+netBal+'</h1><p>'+netNote+'</p></div></body></html>');
+    win.document.close(); win.focus(); setTimeout(function(){ win.print(); }, 400);
+  }
+
+  document.addEventListener('DOMContentLoaded', loadEntries);
+</script>
+</body>
+</html>

@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Collect Fee | EDU-SPHERE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <link rel="preload" href="css/adminlte.css" as="style" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" media="print" onload="this.media='all'" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="css/adminlte.css" />
+  <!-- __THEME_APPLIED__ -->
+<script>
+(function(){
+  var s = JSON.parse(localStorage.getItem('sysSettings') || '{}');
+  var theme = s.sidebarTheme || 'dark';
+  document.addEventListener('DOMContentLoaded', function() {
+    var el = document.querySelector('.app-sidebar');
+    if (el) el.setAttribute('data-bs-theme', theme);
+  });
+})();
+</script>
+</head>
+  <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+    <div class="app-wrapper">
+      <nav class="app-header navbar navbar-expand bg-body">
+        <div class="container-fluid">
+          <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" data-lte-toggle="sidebar" href="#" role="button"><i class="bi bi-list"></i></a></li>
+            <li class="nav-item d-none d-md-block"><a href="index2.html" class="nav-link">Dashboard</a></li>
+            <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Fee Management</a></li>
+          </ul>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-search"></i></a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link" data-bs-toggle="dropdown" href="#"><i class="bi bi-bell-fill"></i><span class="navbar-badge badge text-bg-warning">15</span></a>
+              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <span class="dropdown-item dropdown-header">15 Notifications</span>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown user-menu">
+              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                <img src="assets/img/user2-160x160.jpg" class="user-image rounded-circle shadow" alt="User">
+                <span class="d-none d-md-inline">Ali Saleem</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <li class="user-header text-bg-primary">
+                  <img src="assets/img/user2-160x160.jpg" class="rounded-circle shadow" alt="User">
+                  <p>Ali Saleem - System Administrator <small>Member since Nov. 2023</small></p>
+                </li>
+                <li class="user-footer">
+                  <a href="#" class="btn btn-default btn-flat">Profile</a>
+                  <a href="#" class="btn btn-default btn-flat float-end">Sign out</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+        <div class="sidebar-brand">
+          <a href="index2.html" class="brand-link">
+            <img src="assets/img/eduspherelogo (2).png" alt="Logo" class="brand-image opacity-75 shadow">
+            <span class="brand-text fw-light">EDU-SPHERE</span>
+          </a>
+        </div>
+        <div class="sidebar-wrapper">
+          <nav class="mt-2">
+            <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" data-accordion="false">
+              <li class="nav-item"><a href="index2.html" class="nav-link"><i class="nav-icon bi bi-speedometer2"></i><p>Admin Dashboard</p></a></li>
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-people-fill"></i><p>Students Management<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="add-student.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Student</p></a></li>
+                  <li class="nav-item"><a href="manage-students.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Students</p></a></li>
+                  <li class="nav-item"><a href="student-records.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Records</p></a></li>
+                  <li class="nav-item"><a href="student-promotions.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Promote Students</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-person-badge-fill"></i><p>Teachers Management<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="add-teacher.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Teacher</p></a></li>
+                  <li class="nav-item"><a href="manage-teachers.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Teachers</p></a></li>
+                  <li class="nav-item"><a href="assign-subjects.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Assign Subjects</p></a></li>
+                  <li class="nav-item"><a href="teacher-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Schedule</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-diagram-3-fill"></i><p>Classes &amp; Sections<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="Classes &amp; Sections/add-class.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Class</p></a></li>
+                  <li class="nav-item"><a href="Classes &amp; Sections/manage-classes.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Classes</p></a></li>
+                  <li class="nav-item"><a href="Classes &amp; Sections/manage-sections.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Sections</p></a></li>
+                  <li class="nav-item"><a href="Classes &amp; Sections/assign-class-teacher.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Assign Class Teacher</p></a></li>
+                  <li class="nav-item"><a href="Classes &amp; Sections/student-allocation.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Allocation</p></a></li>
+                  <li class="nav-item"><a href="Classes &amp; Sections/classroom-management.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Classroom Management</p></a></li>
+                  <li class="nav-item"><a href="Classes &amp; Sections/subject-allocation.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Subject Allocation</p></a></li>
+                  <li class="nav-item"><a href="Classes &amp; Sections/class-promotion.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Class Promotion</p></a></li>
+                  <li class="nav-item"><a href="timetable.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Class Timetable</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-clipboard-data-fill"></i><p>Exams &amp; Results<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="create-exam.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create Exam</p></a></li>
+                  <li class="nav-item"><a href="exam-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Exam Schedule</p></a></li>
+                  <li class="nav-item"><a href="result-management.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Result Management</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-calendar-check-fill"></i><p>Attendance<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="student-attendance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Attendance</p></a></li>
+                  <li class="nav-item"><a href="teacher-attendance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Attendance</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item menu-open">
+                <a href="#" class="nav-link active"><i class="nav-icon bi bi-cash-stack"></i><p>Fee Management<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="collect-fee.html" class="nav-link active"><i class="nav-icon bi bi-circle"></i><p>Collect Fee</p></a></li>
+                  <li class="nav-item"><a href="fee-records.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Records</p></a></li>
+                  <li class="nav-item"><a href="pending-fees.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Pending Fees</p></a></li>
+<li class="nav-item"><a href="fee-refunds.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Refunds</p></a></li>
+                </ul>
+              </li>
+                <!-- Accounts -->
+        <li class="nav-item">
+          <a href="#" class="nav-link"><i class="nav-icon bi bi-journal-text"></i><p>Accounts<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item"><a href="accounts-entry.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Income / Expense Entry</p></a></li>
+            <li class="nav-item"><a href="accounts-ledger.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Ledger</p></a></li>
+            <li class="nav-item"><a href="accounts-balance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Balance Sheet</p></a></li>
+          </ul>
+        </li>
+<li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-book-fill"></i><p>Library<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="add-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Book</p></a></li>
+                  <li class="nav-item"><a href="issue-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Issue Book</p></a></li>
+                  <li class="nav-item"><a href="return-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Return Book</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item"><a href="announcements.html" class="nav-link"><i class="nav-icon bi bi-megaphone-fill"></i><p>Announcements</p></a></li>
+              <li class="nav-item"><a href="reports.html" class="nav-link"><i class="nav-icon bi bi-bar-chart-fill"></i><p>Reports</p></a></li>
+              <li class="nav-item">
+                <a href="#" class="nav-link"><i class="nav-icon bi bi-person-gear"></i><p>User Management<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item"><a href="create-user.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create User</p></a></li>
+                  <li class="nav-item"><a href="manage-users.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Users</p></a></li>
+                  <li class="nav-item"><a href="roles-permissions.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Roles &amp; Permissions</p></a></li>
+                </ul>
+              </li>
+              <li class="nav-item"><a href="activity-logs.html" class="nav-link"><i class="nav-icon bi bi-clock-history"></i><p>Activity Logs</p></a></li>
+              <li class="nav-item"><a href="backup.html" class="nav-link"><i class="nav-icon bi bi-database-fill-down"></i><p>Backup &amp; Restore</p></a></li>
+              <li class="nav-item"><a href="settings.html" class="nav-link"><i class="nav-icon bi bi-gear-fill"></i><p>System Settings</p></a></li>
+            </ul>
+          </nav>
+        </div>
+      </aside>
+      <main class="app-main">
+        <div class="app-content-header">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-6"><h3 class="mb-0">Collect Fee</h3></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="index2.html">Home</a></li>
+                  <li class="breadcrumb-item">Fee Management</li>
+                  <li class="breadcrumb-item active">Collect Fee</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="app-content">
+          <div class="container-fluid">
+            <!-- Stats -->
+            <div class="row mb-4">
+              <div class="col-md-3">
+                <div class="info-box">
+                  <span class="info-box-icon text-bg-success shadow-sm"><i class="bi bi-cash-coin"></i></span>
+                  <div class="info-box-content">
+                    <span class="info-box-text">Collected Today</span>
+                    <span class="info-box-number" id="statToday">Rs. 0</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="info-box">
+                  <span class="info-box-icon text-bg-primary shadow-sm"><i class="bi bi-receipt"></i></span>
+                  <div class="info-box-content">
+                    <span class="info-box-text">Total Receipts</span>
+                    <span class="info-box-number" id="statReceipts">0</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="info-box">
+                  <span class="info-box-icon text-bg-warning shadow-sm"><i class="bi bi-exclamation-triangle-fill"></i></span>
+                  <div class="info-box-content">
+                    <span class="info-box-text">Pending Fees</span>
+                    <span class="info-box-number" id="statPending">0</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="info-box">
+                  <span class="info-box-icon text-bg-info shadow-sm"><i class="bi bi-bank"></i></span>
+                  <div class="info-box-content">
+                    <span class="info-box-text">Total Collected</span>
+                    <span class="info-box-number" id="statTotal">Rs. 0</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Fee Collection Form -->
+              <div class="col-md-5">
+                <div class="card shadow">
+                  <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0"><i class="bi bi-plus-circle"></i> Collect Fee</h3>
+                  </div>
+                  <div class="card-body">
+                    <div class="mb-3">
+                      <label class="form-label">Search Student</label>
+                      <input type="text" class="form-control" id="studentSearch" placeholder="Type name or roll no..." oninput="searchStudent()">
+                      <div id="studentDropdown" class="list-group mt-1" style="display:none;max-height:180px;overflow-y:auto;position:absolute;z-index:999;width:calc(100% - 2rem)"></div>
+                    </div>
+                    <div id="studentInfo" class="alert alert-info d-none mb-3">
+                      <div class="d-flex align-items-center gap-3">
+                        <img id="sPhoto" src="assets/img/avatar.png" class="rounded-circle" width="48" height="48" style="object-fit:cover">
+                        <div>
+                          <strong id="sName">-</strong><br>
+                          <small>Roll: <span id="sRoll">-</span> | Class: <span id="sClass">-</span> | Section: <span id="sSection">-</span></small><br>
+                          <small>Fee Category: <span id="sFeeCategory" class="badge bg-primary">-</span></small>
+                        </div>
+                      </div>
+                    </div>
+                    <input type="hidden" id="selectedStudentId">
+                    <div class="mb-3">
+                      <label class="form-label">Fee Type <span class="text-danger">*</span></label>
+                      <select class="form-select" id="feeType" onchange="autoFillAmount()">
+                        <option value="">-- Select Fee Type --</option>
+                        <option>Monthly Fee</option>
+                        <option>Admission Fee</option>
+                        <option>Exam Fee</option>
+                        <option>Library Fee</option>
+                        <option>Transport Fee</option>
+                        <option>Other</option>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">Month / Period</label>
+                      <input type="month" class="form-control" id="feePeriod">
+                    </div>
+                    <div class="row">
+                      <div class="col-6 mb-3">
+                        <label class="form-label">Installment</label>
+                        <select class="form-select" id="feeInstallment">
+                          <option value="">-- Select --</option>
+                          <option>Annual</option>
+                          <option>1st Installment</option>
+                          <option>2nd Installment</option>
+                          <option>3rd Installment</option>
+                          <option>4th Installment</option>
+                        </select>
+                      </div>
+                      <div class="col-6 mb-3">
+                        <label class="form-label">Receipt # (Manual)</label>
+                        <input type="text" class="form-control" id="manualReceiptNo" placeholder="e.g. r#1962">
+                      </div>
+                    </div>
+                    <div class="mb-3" id="transportFeeSection" style="display:none">
+                      <label class="form-label">Transport Fee (Rs)</label>
+                      <input type="number" class="form-control" id="feeTransport" placeholder="0" min="0" value="0">
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">Amount (Rs.) <span class="text-danger">*</span></label>
+                      <input type="number" class="form-control" id="feeAmount" placeholder="0" min="0">
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">Payment Method</label>
+                      <select class="form-select" id="paymentMethod">
+                        <option>Cash</option>
+                        <option>Bank Transfer</option>
+                        <option>Cheque</option>
+                        <option>Online</option>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">Remarks</label>
+                      <input type="text" class="form-control" id="feeRemarks" placeholder="Optional...">
+                    </div>
+                    <button class="btn btn-success w-100" onclick="collectFee()"><i class="bi bi-check-circle-fill"></i> Collect &amp; Generate Receipt</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Recent Receipts -->
+              <div class="col-md-7">
+                <div class="card shadow">
+                  <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                    <h3 class="card-title mb-0"><i class="bi bi-receipt"></i> Recent Receipts</h3>
+                    <button class="btn btn-sm btn-light" onclick="clearReceipts()"><i class="bi bi-trash"></i> Clear All</button>
+                  </div>
+                  <div class="card-body p-0">
+                    <div class="table-responsive">
+                      <table class="table table-sm table-striped mb-0" style="font-size:0.82rem">
+                        <thead class="table-dark">
+                          <tr>
+                            <th>Roll No</th><th>Student</th><th>Section</th>
+                            <th>Package</th><th>Annual</th><th>1st</th><th>2nd</th><th>3rd</th><th>4th</th>
+                            <th>Paid</th><th>Remaining</th>
+                          </tr>
+                        </thead>
+                        <tbody id="receiptsBody"></tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Receipt Modal -->
+      <div class="modal fade" id="receiptModal" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+              <h5 class="modal-title"><i class="bi bi-receipt"></i> Fee Receipt</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="receiptBody"></div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button class="btn btn-primary" onclick="window.print()"><i class="bi bi-printer-fill"></i> Print</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="app-footer">
+        <strong>Copyright &copy; 2014-2025 <a href="#" class="text-decoration-none">EDU-SPHERE</a>.</strong> All rights reserved.
+      </footer>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="js/adminlte.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/header.js"></script>
+    <script>
+      AUTH.requireAuth('ADMIN');
+      var selectedStudent = null;
+      var searchTimer = null;
+      var allStudentsCache = [];
+
+      async function loadStats() {
+        var res = await API.fees.summary();
+        if (!res || !res.success) return;
+        var d = res.data;
+        document.getElementById('statToday').textContent    = API.fmtMoney(d.collectedToday);
+        document.getElementById('statReceipts').textContent = d.receiptsToday || 0;
+        document.getElementById('statTotal').textContent    = API.fmtMoney(d.totalCollected);
+        var pRes = await API.fees.pending();
+        if (pRes && pRes.success) document.getElementById('statPending').textContent = pRes.data.length;
+      }
+
+      async function searchStudent() {
+        var q = document.getElementById('studentSearch').value.trim();
+        var dd = document.getElementById('studentDropdown');
+        if (!q) { dd.style.display = 'none'; return; }
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(async function() {
+          var res = await API.students.list({ search: q, limit: 8 });
+          if (!res || !res.success) return;
+          var list = res.data.data || [];
+          if (!list.length) { dd.style.display = 'none'; return; }
+          dd.innerHTML = list.map(function(s) {
+            return '<a href="#" class="list-group-item list-group-item-action py-1" onclick="selectStudent(' + JSON.stringify(s).replace(/"/g,'&quot;') + ');return false;">' +
+              '<strong>' + s.firstName + ' ' + (s.lastName||'') + '</strong> <small class="text-muted">(' + s.rollNo + ') ' + (s.class ? s.class.name : '') + '</small></a>';
+          }).join('');
+          dd.style.display = 'block';
+        }, 300);
+      }
+
+      function selectStudent(s) {
+        selectedStudent = s;
+        document.getElementById('selectedStudentId').value = s.id;
+        document.getElementById('studentSearch').value = s.firstName + ' ' + (s.lastName||'');
+        document.getElementById('studentDropdown').style.display = 'none';
+        document.getElementById('sName').textContent    = s.firstName + ' ' + (s.lastName||'');
+        document.getElementById('sRoll').textContent    = s.rollNo || '-';
+        document.getElementById('sClass').textContent   = s.class ? s.class.name : '-';
+        document.getElementById('sSection').textContent = s.section ? s.section.name : '-';
+        document.getElementById('sFeeCategory').textContent = s.feeCategory || '-';
+        document.getElementById('studentInfo').classList.remove('d-none');
+        var hasTransport = s.transport && s.transport !== 'NONE' && Number(s.transportFee) > 0;
+        document.getElementById('transportFeeSection').style.display = hasTransport ? '' : 'none';
+        if (hasTransport) document.getElementById('feeTransport').value = s.transportFee || 0;
+      }
+
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('#studentSearch') && !e.target.closest('#studentDropdown'))
+          document.getElementById('studentDropdown').style.display = 'none';
+      });
+
+      function autoFillAmount() {
+        var feeType = document.getElementById('feeType').value;
+        if (selectedStudent && feeType === 'Monthly Fee' && selectedStudent.tuitionFee)
+          document.getElementById('feeAmount').value = selectedStudent.tuitionFee;
+      }
+
+      var FEE_TYPE_MAP = {
+        'Monthly Fee':'MONTHLY','Admission Fee':'ADMISSION','Exam Fee':'EXAM',
+        'Library Fee':'LIBRARY','Transport Fee':'TRANSPORT','Other':'OTHER'
+      };
+      var PAY_METHOD_MAP = {
+        'Cash':'CASH','Bank Transfer':'BANK_TRANSFER','Cheque':'CHEQUE','Online':'ONLINE'
+      };
+
+      async function collectFee() {
+        if (!selectedStudent) { API.toast('Please select a student first.', 'danger'); return; }
+        var feeType = document.getElementById('feeType').value;
+        var amount  = parseFloat(document.getElementById('feeAmount').value);
+        if (!feeType) { API.toast('Please select fee type.', 'danger'); return; }
+        if (!amount || amount <= 0) { API.toast('Please enter a valid amount.', 'danger'); return; }
+
+        var body = {
+          studentId:      selectedStudent.id,
+          feeType:        FEE_TYPE_MAP[feeType] || 'OTHER',
+          period:         document.getElementById('feePeriod').value || null,
+          installment:    document.getElementById('feeInstallment').value || null,
+          amount:         amount,
+          transportAmount: parseFloat(document.getElementById('feeTransport').value) || null,
+          paymentMethod:  PAY_METHOD_MAP[document.getElementById('paymentMethod').value] || 'CASH',
+          remarks:        document.getElementById('feeRemarks').value || null,
+          date:           new Date().toISOString().split('T')[0],
+        };
+
+        var res = await API.fees.collect(body);
+        if (res && res.success) {
+          API.toast('Fee collected! Receipt: ' + res.data.receiptNo);
+          showReceipt(res.data);
+          resetFeeForm();
+          loadStats();
+          renderReceipts();
+        } else {
+          API.toast((res && res.message) || 'Failed to collect fee', 'danger');
+        }
+      }
+
+      function showReceipt(rec) {
+        var s = selectedStudent || {};
+        document.getElementById('receiptBody').innerHTML =
+          '<div class="text-center mb-3"><h4>EDU-SPHERE</h4><p class="text-muted mb-0">Fee Receipt</p></div>' +
+          '<table class="table table-sm table-bordered">' +
+          '<tr><th>Receipt No</th><td>' + rec.receiptNo + '</td></tr>' +
+          '<tr><th>Student Name</th><td>' + (s.firstName||'') + ' ' + (s.lastName||'') + '</td></tr>' +
+          '<tr><th>Roll No</th><td>' + (s.rollNo||'-') + '</td></tr>' +
+          '<tr><th>Class</th><td>' + (s.class ? s.class.name : '-') + '</td></tr>' +
+          '<tr><th>Fee Type</th><td>' + rec.feeType + '</td></tr>' +
+          (rec.installment ? '<tr><th>Installment</th><td>' + rec.installment + '</td></tr>' : '') +
+          '<tr><th>Period</th><td>' + (rec.period||'-') + '</td></tr>' +
+          '<tr><th>Amount</th><td><strong>' + API.fmtMoney(rec.amount) + '</strong></td></tr>' +
+          '<tr><th>Payment Method</th><td>' + rec.paymentMethod + '</td></tr>' +
+          '<tr><th>Date</th><td>' + (rec.date ? rec.date.split('T')[0] : '-') + '</td></tr>' +
+          '<tr><th>Remarks</th><td>' + (rec.remarks||'-') + '</td></tr>' +
+          '</table><p class="text-center text-muted"><small>Thank you for your payment.</small></p>';
+        new bootstrap.Modal(document.getElementById('receiptModal')).show();
+      }
+
+      async function renderReceipts() {
+        var tbody = document.getElementById('receiptsBody');
+        var res = await API.fees.list({ limit: 30 });
+        if (!res || !res.success) { tbody.innerHTML = '<tr><td colspan="11" class="text-center text-muted py-3">No receipts yet.</td></tr>'; return; }
+        var records = res.data.data || [];
+        if (!records.length) { tbody.innerHTML = '<tr><td colspan="11" class="text-center text-muted py-3">No receipts yet.</td></tr>'; return; }
+
+        var payMap = {};
+        records.forEach(function(r) {
+          var sid = String(r.studentId);
+          if (!payMap[sid]) payMap[sid] = { rollNo: r.student ? r.student.rollNo : '-', name: r.student ? r.student.firstName + ' ' + (r.student.lastName||'') : '-', section: r.student && r.student.section ? r.student.section.name : '-', pkg: Number(r.student ? r.student.packageTotal||0 : 0), annual:null, inst1:null, inst2:null, inst3:null, inst4:null, totalPaid:0 };
+          var amt = Number(r.amount) + Number(r.transportAmount||0);
+          payMap[sid].totalPaid += amt;
+          var inst = (r.installment||'').toLowerCase();
+          if (inst.includes('annual')) payMap[sid].annual = amt;
+          else if (inst.includes('1st')) payMap[sid].inst1 = amt;
+          else if (inst.includes('2nd')) payMap[sid].inst2 = amt;
+          else if (inst.includes('3rd')) payMap[sid].inst3 = amt;
+          else if (inst.includes('4th')) payMap[sid].inst4 = amt;
+        });
+
+        function fmt(v) { return v !== null ? 'Rs.'+Number(v).toLocaleString() : '<span class="text-muted">-</span>'; }
+        tbody.innerHTML = Object.values(payMap).map(function(r) {
+          var rem = r.pkg - r.totalPaid;
+          return '<tr><td><code>'+r.rollNo+'</code></td><td>'+r.name+'</td><td><span class="badge bg-secondary">'+r.section+'</span></td>' +
+            '<td>'+(r.pkg?'Rs.'+r.pkg.toLocaleString():'-')+'</td>' +
+            '<td>'+fmt(r.annual)+'</td><td>'+fmt(r.inst1)+'</td><td>'+fmt(r.inst2)+'</td><td>'+fmt(r.inst3)+'</td><td>'+fmt(r.inst4)+'</td>' +
+            '<td><strong>Rs.'+r.totalPaid.toLocaleString()+'</strong></td>' +
+            '<td class="'+(rem>0?'text-danger':'text-success')+' fw-bold">'+(r.pkg?'Rs.'+Math.abs(rem).toLocaleString():'-')+'</td></tr>';
+        }).join('');
+      }
+
+      async function clearReceipts() {
+        if (!confirm('This will void all fee records. Are you sure?')) return;
+        API.toast('Use individual void actions instead.', 'warning');
+      }
+
+      function resetFeeForm() {
+        selectedStudent = null;
+        document.getElementById('studentSearch').value = '';
+        document.getElementById('studentInfo').classList.add('d-none');
+        document.getElementById('feeType').value = '';
+        document.getElementById('feePeriod').value = '';
+        document.getElementById('feeInstallment').value = '';
+        document.getElementById('manualReceiptNo').value = '';
+        document.getElementById('feeTransport').value = '0';
+        document.getElementById('feeAmount').value = '';
+        document.getElementById('feeRemarks').value = '';
+        document.getElementById('transportFeeSection').style.display = 'none';
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        loadStats();
+        renderReceipts();
+        var now = new Date();
+        document.getElementById('feePeriod').value = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+      });
+    </script>
+  </body>
+</html>

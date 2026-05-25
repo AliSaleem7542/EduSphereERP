@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>System Settings | EDU-SPHERE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <link rel="preload" href="css/adminlte.css" as="style" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" media="print" onload="this.media='all'" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="css/adminlte.css" />
+  <!-- __THEME_APPLIED__ -->
+<script>
+(function(){
+  var s = JSON.parse(localStorage.getItem('sysSettings') || '{}');
+  var theme = s.sidebarTheme || 'dark';
+  document.addEventListener('DOMContentLoaded', function() {
+    var el = document.querySelector('.app-sidebar');
+    if (el) el.setAttribute('data-bs-theme', theme);
+  });
+})();
+</script>
+</head>
+  <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+    <div class="app-wrapper">
+      <nav class="app-header navbar navbar-expand bg-body">
+        <div class="container-fluid">
+          <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" data-lte-toggle="sidebar" href="#" role="button"><i class="bi bi-list"></i></a></li>
+            <li class="nav-item d-none d-md-block"><a href="index2.html" class="nav-link">Dashboard</a></li>
+            <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">System Settings</a></li>
+          </ul>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link" data-bs-toggle="dropdown" href="#"><i class="bi bi-bell-fill"></i><span class="navbar-badge badge text-bg-warning">15</span></a>
+              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <span class="dropdown-item dropdown-header">15 Notifications</span>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown user-menu">
+              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                <img src="assets/img/user2-160x160.jpg" class="user-image rounded-circle shadow" alt="User">
+                <span class="d-none d-md-inline">Ali Saleem</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                <li class="user-header text-bg-primary"><img src="assets/img/user2-160x160.jpg" class="rounded-circle shadow" alt="User"><p>Ali Saleem - System Administrator <small>Member since Nov. 2023</small></p></li>
+                <li class="user-footer"><a href="#" class="btn btn-default btn-flat">Profile</a><a href="#" class="btn btn-default btn-flat float-end">Sign out</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+        <div class="sidebar-brand"><a href="index2.html" class="brand-link"><img src="assets/img/eduspherelogo (2).png" alt="Logo" class="brand-image opacity-75 shadow"><span class="brand-text fw-light">EDU-SPHERE</span></a></div>
+        <div class="sidebar-wrapper"><nav class="mt-2"><ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" data-accordion="false">
+          <li class="nav-item"><a href="index2.html" class="nav-link"><i class="nav-icon bi bi-speedometer2"></i><p>Admin Dashboard</p></a></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-people-fill"></i><p>Students Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="add-student.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Student</p></a></li>
+            <li class="nav-item"><a href="manage-students.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Students</p></a></li>
+            <li class="nav-item"><a href="student-records.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Records</p></a></li>
+            <li class="nav-item"><a href="student-promotions.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Promote Students</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-person-badge-fill"></i><p>Teachers Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="add-teacher.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Teacher</p></a></li>
+            <li class="nav-item"><a href="manage-teachers.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Teachers</p></a></li>
+            <li class="nav-item"><a href="assign-subjects.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Assign Subjects</p></a></li>
+            <li class="nav-item"><a href="teacher-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Schedule</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-diagram-3-fill"></i><p>Classes &amp; Sections<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="Classes &amp; Sections/add-class.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Class</p></a></li>
+            <li class="nav-item"><a href="Classes &amp; Sections/manage-classes.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Classes</p></a></li>
+            <li class="nav-item"><a href="Classes &amp; Sections/manage-sections.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Sections</p></a></li>
+            <li class="nav-item"><a href="Classes &amp; Sections/assign-class-teacher.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Assign Class Teacher</p></a></li>
+            <li class="nav-item"><a href="Classes &amp; Sections/student-allocation.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Allocation</p></a></li>
+            <li class="nav-item"><a href="Classes &amp; Sections/classroom-management.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Classroom Management</p></a></li>
+            <li class="nav-item"><a href="Classes &amp; Sections/subject-allocation.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Subject Allocation</p></a></li>
+            <li class="nav-item"><a href="Classes &amp; Sections/class-promotion.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Class Promotion</p></a></li>
+            <li class="nav-item"><a href="timetable.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Class Timetable</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-clipboard-data-fill"></i><p>Exams &amp; Results<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="create-exam.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create Exam</p></a></li>
+            <li class="nav-item"><a href="exam-schedule.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Exam Schedule</p></a></li>
+            <li class="nav-item"><a href="result-management.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Result Management</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-calendar-check-fill"></i><p>Attendance<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="student-attendance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Student Attendance</p></a></li>
+            <li class="nav-item"><a href="teacher-attenadance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Attendance</p></a></li>
+            <li class="nav-item"><a href="attendance-reports.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Attendance Reports</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-cash-stack"></i><p>Fee Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="collect-fee.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Collect Fee</p></a></li>
+            <li class="nav-item"><a href="fee-records.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Records</p></a></li>
+            <li class="nav-item"><a href="pending-fees.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Pending Fees</p></a></li>
+<li class="nav-item"><a href="fee-refunds.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Fee Refunds</p></a></li>
+          </ul></li>
+        
+                <!-- Accounts -->
+        <li class="nav-item">
+          <a href="#" class="nav-link"><i class="nav-icon bi bi-journal-text"></i><p>Accounts<i class="nav-arrow bi bi-chevron-right"></i></p></a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item"><a href="accounts-entry.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Income / Expense Entry</p></a></li>
+            <li class="nav-item"><a href="accounts-ledger.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Ledger</p></a></li>
+            <li class="nav-item"><a href="accounts-balance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Balance Sheet</p></a></li>
+          </ul>
+        </li>
+<li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-book-fill"></i><p>Library<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="add-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Book</p></a></li>
+            <li class="nav-item"><a href="issue-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Issue Book</p></a></li>
+            <li class="nav-item"><a href="return-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Return Book</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="announcements.html" class="nav-link"><i class="nav-icon bi bi-megaphone-fill"></i><p>Announcements</p></a></li>
+          <li class="nav-item"><a href="reports.html" class="nav-link"><i class="nav-icon bi bi-bar-chart-fill"></i><p>Reports</p></a></li>
+          <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-person-gear"></i><p>User Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
+            <li class="nav-item"><a href="create-user.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Create User</p></a></li>
+            <li class="nav-item"><a href="manage-users.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Manage Users</p></a></li>
+            <li class="nav-item"><a href="roles-permissions.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Roles &amp; Permissions</p></a></li>
+          </ul></li>
+          <li class="nav-item"><a href="activity-logs.html" class="nav-link"><i class="nav-icon bi bi-clock-history"></i><p>Activity Logs</p></a></li>
+          <li class="nav-item"><a href="backup.html" class="nav-link"><i class="nav-icon bi bi-database-fill-down"></i><p>Backup &amp; Restore</p></a></li>
+          <li class="nav-item active"><a href="settings.html" class="nav-link active"><i class="nav-icon bi bi-gear-fill"></i><p>System Settings</p></a></li>
+        </ul></nav></div>
+      </aside>
+
+
+      <main class="app-main">
+        <div class="app-content-header"><div class="container-fluid"><div class="row">
+          <div class="col-sm-6"><h3 class="mb-0">System Settings</h3></div>
+          <div class="col-sm-6"><ol class="breadcrumb float-sm-end">
+            <li class="breadcrumb-item"><a href="index2.html">Home</a></li>
+            <li class="breadcrumb-item active">System Settings</li>
+          </ol></div>
+        </div></div></div>
+        <div class="app-content"><div class="container-fluid">
+
+          <div class="row">
+            <!-- Settings Nav -->
+            <div class="col-md-3 mb-4">
+              <div class="card shadow">
+                <div class="card-header bg-dark text-white"><h3 class="card-title mb-0"><i class="bi bi-gear-fill"></i> Settings</h3></div>
+                <div class="list-group list-group-flush" id="settingsNav">
+                  <a href="#" class="list-group-item list-group-item-action active" onclick="showSection('school');return false;"><i class="bi bi-building me-2"></i>School Information</a>
+                  <a href="#" class="list-group-item list-group-item-action" onclick="showSection('academic');return false;"><i class="bi bi-calendar3 me-2"></i>Academic Settings</a>
+                  <a href="#" class="list-group-item list-group-item-action" onclick="showSection('fee');return false;"><i class="bi bi-cash-stack me-2"></i>Fee Settings</a>
+                  <a href="#" class="list-group-item list-group-item-action" onclick="showSection('library');return false;"><i class="bi bi-book-fill me-2"></i>Library Settings</a>
+                  <a href="#" class="list-group-item list-group-item-action" onclick="showSection('exam');return false;"><i class="bi bi-clipboard-data-fill me-2"></i>Exam Settings</a>
+                  <a href="#" class="list-group-item list-group-item-action" onclick="showSection('notification');return false;"><i class="bi bi-bell-fill me-2"></i>Notifications</a>
+                  <a href="#" class="list-group-item list-group-item-action" onclick="showSection('appearance');return false;"><i class="bi bi-palette-fill me-2"></i>Appearance</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Settings Panels -->
+            <div class="col-md-9">
+
+              <!-- School Information -->
+              <div id="sec-school" class="settings-section">
+                <div class="card shadow mb-4">
+                  <div class="card-header bg-primary text-white"><h3 class="card-title mb-0"><i class="bi bi-building"></i> School Information</h3></div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-6 mb-3"><label class="form-label">School Name</label><input type="text" class="form-control" id="schoolName" placeholder="e.g. EDU-SPHERE School"></div>
+                      <div class="col-md-6 mb-3"><label class="form-label">Principal Name</label><input type="text" class="form-control" id="principalName" placeholder="Principal's full name"></div>
+                      <div class="col-md-6 mb-3"><label class="form-label">Phone</label><input type="text" class="form-control" id="schoolPhone" placeholder="School contact number"></div>
+                      <div class="col-md-6 mb-3"><label class="form-label">Email</label><input type="email" class="form-control" id="schoolEmail" placeholder="school@example.com"></div>
+                      <div class="col-md-6 mb-3"><label class="form-label">Website</label><input type="text" class="form-control" id="schoolWebsite" placeholder="www.school.edu.pk"></div>
+                      <div class="col-md-6 mb-3"><label class="form-label">Established Year</label><input type="number" class="form-control" id="schoolYear" placeholder="e.g. 2005"></div>
+                      <div class="col-12 mb-3"><label class="form-label">Address</label><textarea class="form-control" id="schoolAddress" rows="2" placeholder="Full school address"></textarea></div>
+                      <div class="col-12 mb-3"><label class="form-label">School Motto</label><input type="text" class="form-control" id="schoolMotto" placeholder="e.g. Knowledge is Power"></div>
+                    </div>
+                    <button class="btn btn-success" onclick="saveSetting('school')"><i class="bi bi-check-circle"></i> Save Changes</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Academic Settings -->
+              <div id="sec-academic" class="settings-section" style="display:none">
+                <div class="card shadow mb-4">
+                  <div class="card-header bg-info text-white"><h3 class="card-title mb-0"><i class="bi bi-calendar3"></i> Academic Settings</h3></div>
+                  <div class="card-
+body">
+                    <div class="row">
+                      <div class="col-md-6 mb-3"><label class="form-label">Current Academic Year</label><input type="text" class="form-control" id="academicYear" placeholder="e.g. 2025-2026"></div>
+                      <div class="col-md-6 mb-3"><label class="form-label">Session Start Month</label>
+                        <select class="form-select" id="sessionStart">
+                          <option>January</option><option>February</option><option>March</option><option>April</option>
+                          <option>May</option><option>June</option><option>July</option><option>August</option>
+                          <option selected>September</option><option>October</option><option>November</option><option>December</option>
+                        </select>
+                      </div>
+                      <div class="col-md-6 mb-3"><label class="form-label">Working Days Per Week</label>
+                        <select class="form-select" id="workingDays">
+                          <option value="5">5 Days (Mon–Fri)</option>
+                          <option value="6" selected>6 Days (Mon–Sat)</option>
+                        </select>
+                      </div>
+                      <div class="col-md-6 mb-3"><label class="form-label">School Timings</label><input type="text" class="form-control" id="schoolTimings" placeholder="e.g. 8:00 AM – 2:00 PM"></div>
+                      <div class="col-md-6 mb-3"><label class="form-label">Passing Marks (%)</label><input type="number" class="form-control" id="passingMarks" value="40" min="1" max="100"></div>
+                      <div class="col-md-6 mb-3"><label class="form-label">Grading System</label>
+                        <select class="form-select" id="gradingSystem">
+                          <option value="percentage">Percentage Based</option>
+                          <option value="gpa">GPA Based</option>
+                          <option value="letter">Letter Grade</option>
+                        </select>
+                      </div>
+                    </div>
+                    <button class="btn btn-success" onclick="saveSetting('academic')"><i class="bi bi-check-circle"></i> Save Changes</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Fee Settings -->
+              <div id="sec-fee" class="settings-section" style="display:none">
+                <div class="card shadow mb-4">
+                  <div class="card-header bg-success text-white"><h3 class="card-title mb-0"><i class="bi bi-cash-stack"></i> Fee Settings</h3></div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-6 mb-3"><label class="form-label">Regular Fee (Rs)</label><input type="number" class="form-control" id="feeRegular" value="3000" min="0"></div>
+                      <div class="col-md-6 mb-3"><label class="form-label">Scholarship / Half Fee (Rs)</label><input type="number" class="form-control" id="feeScholarship" value="1500" min="0"></div>
+                      <div class="col-md-6 mb-3"><label class="form-label">Free Category Fee (Rs)</label><input type="number" class="form-control" id="feeFree" value="0" min="0"></div>
+                      <div class="col-md-6 mb-3"><label class="form-label">Late Fee Fine (Rs/day)</label><input type="number" class="form-control" id="feeLateFine" value="10" min="0"></div>
+                      <div class="col-md-6 mb-3"><label class="form-label">Fee Due Date (Day of Month)</label><input type="number" class="form-control" id="feeDueDay" value="15" min="1" max="28"></div>
+                      <div class="col-md-6 mb-3"><label class="form-label">Fee Receipt Prefix</label><input type="text" class="form-control" id="feeReceiptPrefix" placeholder="e.g. RCP-"></div>
+                    </div>
+                    <button class="btn btn-success" onclick="saveSetting('fee')"><i class="bi bi-check-circle"></i> Save Changes</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Library Settings -->
+              <div id="sec-library" class="settings-section" style="display:none">
+                <div class="card shadow mb-4">
+                  <div class="card-header bg-danger text-white"><h3 class="card-title mb-0"><i class="bi bi-book-fill"></i> Library Settings</h3></div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-6 mb-3"><label class="form-label">Max Books Per Student</label><input type="number" class="form-control" id="libMaxBooks" value="3" min="1"></div>
+                      <div class="col-md-6 mb-3"><label class="form-label">Issue Period (Days)</label><input type="number" class="form-control" id="libIssueDays" value="14" min="1"></div>
+                      <div class="col-md-6 mb-3"><label class="form-label">Fine Per Overdue Day (Rs)</label><input type="number" class="form-control" id="libFinePerDay" value="5" min="0"></div>
+                      <div class="col-md-6 mb-3"><label class="form-label">Max Fine Cap (Rs)</label><input type="number" class="form-control" id="libMaxFine" value="500" min="0"></div>
+                      <div class="col-md-6 mb-3"><label class="form-label">Renewal Allowed</label>
+                        <select class="form-select" id="libRenewal">
+                          <option value="yes">Yes</option>
+                          <option value="no">No</option>
+                        </select>
+                      </div>
+                      <div class="col-md-6 mb-3"><label class="form-label">Max Renewals</label><input type="number" class="form-control" id="libMaxRenewals" value="1" min="0"></div>
+                    </div>
+                    <button class="btn btn-success" onclick="saveSetting('library')"><i class="bi bi-check-circle"></i> Save Changes</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Exam Settings -->
+              <div id="sec-exam" class="settings-section" style="display:none">
+                <div class="card shadow mb-4">
+                  <div class="card-header bg-warning text-dark"><h3 class="card-title mb-0"><i class="bi bi-clipboard-data-fill"></i> Exam Settings</h3></div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-6 mb-3"><label class="form-label">Passing Percentage (%)</label><input type="number" class="form-control" id="examPass" value="40" min="1" max="100"></div>
+                      <div class="col-md-6 mb-3"><label class="form-label">Total Marks (Default)</label><input type="number" class="form-control" id="examTotalMarks" value="100" min="1"></div>
+                      <div class="col-md-6 mb-3"><label class="form-label">Result Display</label>
+                        <select class="form-select" id="examResultDisplay">
+                          <option value="percentage">Percentage</option>
+                          <option value="grade">Grade Only</option>
+                          <option value="both" selected>Both</option>
+                        </select>
+                      </div>
+                      <div class="col-md-6 mb-3"><label class="form-label">Allow Result Edit After Save</label>
+                        <select class="form-select" id="examEditResult">
+                          <option value="yes" selected>Yes</option>
+                          <option value="no">No</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="mb-3"><label class="form-label fw-bold">Grade Boundaries</label></div>
+                    <div class="row">
+                      <div class="col-md-3 mb-2"><label class="form-label">A+ (min %)</label><input type="number" class="form-control" id="gradeAPlus" value="90"></div>
+                      <div class="col-md-3 mb-2"><label class="form-label">A (min %)</label><input type="number" class="form-control" id="gradeA" value="80"></div>
+                      <div class="col-md-3 mb-2"><label class="form-label">B (min %)</label><input type="number" class="form-control" id="gradeB" value="70"></div>
+                      <div class="col-md-3 mb-2"><label class="form-label">C (min %)</label><input type="number" class="form-control" id="gradeC" value="60"></div>
+                      <div class="col-md-3 mb-2"><label class="form-label">D (min %)</label><input type="number" class="form-control" id="gradeD" value="50"></div>
+                      <div class="col-md-3 mb-2"><label class="form-label">F (below %)</label><input type="number" class="form-control" id="gradeF" value="50" disabled></div>
+                    </div>
+                    <button class="btn btn-success mt-3" onclick="saveSetting('exam')"><i class="bi bi-check-circle"></i> Save Changes</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Notifications -->
+              <div id="sec-notification" class="settings-section" style="display:none">
+                <div class="card shadow mb-4">
+                  <div class="card-header bg-secondary text-white"><h3 class="card-title mb-0"><i class="bi bi-bell-fill"></i> Notification Settings</h3></div>
+                  <div class="card-body">
+                    <div class="mb-3 d-flex justify-content-between align-items-center border-bottom pb-2">
+                      <div><strong>Fee Due Reminder</strong><br><small class="text-muted">Notify parents before fee due date</small></div>
+                      <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="notifFee" checked></div>
+                    </div>
+                    <div class="mb-3 d-flex justify-content-between align-items-center border-bottom pb-2">
+                      <div><strong>Exam Schedule Alert</strong><br><small class="text-muted">Notify students about upcoming exams</small></div>
+                      <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="notifExam" checked></div>
+                    </div>
+                    <div class="mb-3 d-flex justify-content-between align-items-center border-bottom pb-2">
+                      <div><strong>Attendance Alert</strong><br><small class="text-muted">Alert when attendance falls below threshold</small></div>
+                      <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="notifAttendance" checked></div>
+                    </div>
+                    <div class="mb-3 d-flex justify-content-between align-items-center border-bottom pb-2">
+                      <div><strong>Library Overdue Alert</strong><br><small class="text-muted">Notify when book return is overdue</small></div>
+                      <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="notifLibrary" checked></div>
+                    </div>
+                    <div class="mb-3 d-flex justify-content-between align-items-center">
+                      <div><strong>New Announcement</strong><br><small class="text-muted">Notify all users on new announcement</small></div>
+                      <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="notifAnn" checked></div>
+                    </div>
+                    <div class="mb-3"><label class="form-label">Attendance Alert Threshold (%)</label><input type="number" class="form-control" id="attendanceThreshold" value="75" min="1" max="100" style="max-width:200px"></div>
+                    <button class="btn btn-success" onclick="saveSetting('notification')"><i class="bi bi-check-circle"></i> Save Changes</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Appearance -->
+              <div id="sec-appearance" class="settings-section" style="display:none">
+                <div class="card shadow mb-4">
+                  <div class="card-header bg-dark text-white"><h3 class="card-title mb-0"><i class="bi bi-palette-fill"></i> Appearance</h3></div>
+                  <div class="card-body">
+                    <div class="mb-3"><label class="form-label">Sidebar Theme</label>
+                      <select class="form-select" id="sidebarTheme" style="max-width:250px" onchange="previewTheme()">
+                        <option value="dark" selected>Dark</option>
+                        <option value="light">Light</option>
+                      </select>
+                    </div>
+                    <div class="mb-3"><label class="form-label">Date Format</label>
+                      <select class="form-select" id="dateFormat" style="max-width:250px">
+                        <option value="YYYY-MM-DD" selected>YYYY-MM-DD</option>
+                        <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                        <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                      </select>
+                    </div>
+                    <div class="mb-3"><label class="form-label">Items Per Page (Tables)</label>
+                      <select class="form-select" id="itemsPerPage" style="max-width:250px">
+                        <option value="10" selected>10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                      </select>
+                    </div>
+                    <div class="mb-3 d-flex justify-content-between align-items-center" style="max-width:400px">
+                      <div><strong>Show Footer</strong><br><small class="text-muted">Display footer on all pages</small></div>
+                      <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="showFooter" checked></div>
+                    </div>
+                    <button class="btn btn-success" onclick="saveSetting('appearance')"><i class="bi bi-check-circle"></i> Save Changes</button>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- /col-md-9 -->
+          </div><!-- /row -->
+
+          <!-- Danger Zone -->
+          <div class="card shadow border-danger mt-2">
+            <div class="card-header bg-danger text-white"><h3 class="card-title mb-0"><i class="bi bi-exclamation-triangle-fill"></i> Danger Zone</h3></div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-4 mb-3">
+                  <h6>Clear All Students</h6>
+                  <p class="text-muted small">Permanently delete all student records from localStorage.</p>
+                  <button class="btn btn-outline-danger btn-sm" onclick="clearData('students','student records')"><i class="bi bi-trash-fill"></i> Clear Students</button>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <h6>Clear Fee Records</h6>
+                  <p class="text-muted small">Permanently delete all fee collection records.</p>
+                  <button class="btn btn-outline-danger btn-sm" onclick="clearData('feeRecords','fee records')"><i class="bi bi-trash-fill"></i> Clear Fee Records</button>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <h6>Reset All Data</h6>
+                  <p class="text-muted small">Wipe ALL localStorage data for this application. Cannot be undone.</p>
+                  <button class="btn btn-danger btn-sm" onclick="resetAll()"><i class="bi bi-nuclear"></i> Reset Everything</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div></div>
+      </main>
+      <footer class="app-footer"><strong>Copyright &copy; 2014-2025 <a href="#" class="text-decoration-none">EDU-SPHERE</a>.</strong> All rights reserved.</footer>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="js/adminlte.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/header.js"></script>
+    <script>
+      AUTH.requireAuth('ADMIN');
+      var SECTIONS = ['school','academic','fee','library','exam','notification','appearance'];
+
+      function showSection(name) {
+        SECTIONS.forEach(function(s){
+          document.getElementById('sec-'+s).style.display = s===name ? '' : 'none';
+        });
+        document.querySelectorAll('#settingsNav .list-group-item').forEach(function(el,i){
+          el.classList.toggle('active', SECTIONS[i]===name);
+        });
+      }
+
+      function getSettings() { return JSON.parse(localStorage.getItem('sysSettings') || '{}'); }
+      function saveSettings(obj) { localStorage.setItem('sysSettings', JSON.stringify(obj)); }
+
+      function loadAll() {
+        var s = getSettings();
+        // school
+        ['schoolName','principalName','schoolPhone','schoolEmail','schoolWebsite','schoolYear','schoolAddress','schoolMotto'].forEach(function(id){
+          if (s[id] !== undefined) document.getElementById(id).value = s[id];
+        });
+        // academic
+        ['academicYear','sessionStart','workingDays','schoolTimings','passingMarks','gradingSystem'].forEach(function(id){
+          if (s[id] !== undefined) document.getElementById(id).value = s[id];
+        });
+        // fee
+        ['feeRegular','feeScholarship','feeFree','feeLateFine','feeDueDay','feeReceiptPrefix'].forEach(function(id){
+          if (s[id] !== undefined) document.getElementById(id).value = s[id];
+        });
+        // library
+        ['libMaxBooks','libIssueDays','libFinePerDay','libMaxFine','libRenewal','libMaxRenewals'].forEach(function(id){
+          if (s[id] !== undefined) document.getElementById(id).value = s[id];
+        });
+        // exam
+        ['examPass','examTotalMarks','examResultDisplay','examEditResult','gradeAPlus','gradeA','gradeB','gradeC','gradeD'].forEach(function(id){
+          if (s[id] !== undefined) document.getElementById(id).value = s[id];
+        });
+        // notifications (checkboxes)
+        ['notifFee','notifExam','notifAttendance','notifLibrary','notifAnn'].forEach(function(id){
+          if (s[id] !== undefined) document.getElementById(id).checked = s[id];
+        });
+        if (s['attendanceThreshold'] !== undefined) document.getElementById('attendanceThreshold').value = s['attendanceThreshold'];
+        // appearance
+        ['sidebarTheme','dateFormat','itemsPerPage'].forEach(function(id){
+          if (s[id] !== undefined) document.getElementById(id).value = s[id];
+        });
+        if (s['showFooter'] !== undefined) document.getElementById('showFooter').checked = s['showFooter'];
+      }
+
+      function previewTheme() {
+        var theme = document.getElementById('sidebarTheme').value;
+        var sidebar = document.querySelector('.app-sidebar');
+        if (theme === 'light') {
+          sidebar.setAttribute('data-bs-theme', 'light');
+        } else {
+          sidebar.setAttribute('data-bs-theme', 'dark');
+        }
+      }
+
+      function saveSetting(section) {
+        var s = getSettings();
+        var ids = {
+          school:       ['schoolName','principalName','schoolPhone','schoolEmail','schoolWebsite','schoolYear','schoolAddress','schoolMotto'],
+          academic:     ['academicYear','sessionStart','workingDays','schoolTimings','passingMarks','gradingSystem'],
+          fee:          ['feeRegular','feeScholarship','feeFree','feeLateFine','feeDueDay','feeReceiptPrefix'],
+          library:      ['libMaxBooks','libIssueDays','libFinePerDay','libMaxFine','libRenewal','libMaxRenewals'],
+          exam:         ['examPass','examTotalMarks','examResultDisplay','examEditResult','gradeAPlus','gradeA','gradeB','gradeC','gradeD'],
+          notification: ['attendanceThreshold'],
+          appearance:   ['sidebarTheme','dateFormat','itemsPerPage']
+        };
+        var checkboxIds = {
+          notification: ['notifFee','notifExam','notifAttendance','notifLibrary','notifAnn'],
+          appearance:   ['showFooter']
+        };
+        (ids[section]||[]).forEach(function(id){ s[id] = document.getElementById(id).value; });
+        (checkboxIds[section]||[]).forEach(function(id){ s[id] = document.getElementById(id).checked; });
+        saveSettings(s);
+        if (section === 'appearance') {
+          applyAppearance();
+        }
+        showToast('Settings saved successfully.');
+      }
+
+      function applyAppearance() {
+        var s = getSettings();
+        var sidebar = document.querySelector('.app-sidebar');
+        var footer = document.querySelector('.app-footer');
+        if (s.sidebarTheme === 'light') {
+          sidebar.setAttribute('data-bs-theme', 'light');
+        } else {
+          sidebar.setAttribute('data-bs-theme', 'dark');
+        }
+        if (footer && s.showFooter !== undefined) {
+          footer.style.display = s.showFooter ? '' : 'none';
+        }
+      }
+
+      function showToast(msg) {
+        var t = document.createElement('div');
+        t.className = 'position-fixed bottom-0 end-0 p-3';
+        t.style.zIndex = 9999;
+        t.innerHTML = '<div class="toast show align-items-center text-bg-success border-0"><div class="d-flex"><div class="toast-body"><i class="bi bi-check-circle-fill me-2"></i>'+msg+'</div><button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="this.closest(\'.position-fixed\').remove()"></button></div></div>';
+        document.body.appendChild(t);
+        setTimeout(function(){ if (t.parentNode) t.remove(); }, 3000);
+      }
+
+      function clearData(key, label) {
+        if (!confirm('Are you sure you want to delete all '+label+'? This cannot be undone.')) return;
+        localStorage.removeItem(key);
+        showToast('All '+label+' cleared.');
+      }
+
+      function resetAll() {
+        if (!confirm('WARNING: This will delete ALL application data. Are you absolutely sure?')) return;
+        if (!confirm('Last chance — this cannot be undone. Continue?')) return;
+        localStorage.clear();
+        showToast('All data has been reset.');
+        setTimeout(function(){ window.location.href='index2.html'; }, 1500);
+      }
+
+      document.addEventListener('DOMContentLoaded', function(){
+        loadAll();
+        applyAppearance();
+      });
+    </script>
+  </body>
+</html>
