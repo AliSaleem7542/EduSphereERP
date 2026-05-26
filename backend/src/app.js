@@ -41,10 +41,15 @@ app.use(
     origin: (origin, callback) => {
       // Allow requests with no origin (file://, Postman, curl, same-origin)
       if (!origin) return callback(null, true);
+      // Exact match from env list
       if (allowedOrigins.includes(origin)) return callback(null, true);
-      // Allow any localhost origin regardless of port
+      // Allow any localhost origin regardless of port (development)
       if (/^http:\/\/localhost(:\d+)?$/.test(origin)) return callback(null, true);
       if (/^http:\/\/127\.0\.0\.1(:\d+)?$/.test(origin)) return callback(null, true);
+      // Allow any Vercel preview/production deployment
+      if (/^https:\/\/.*\.vercel\.app$/.test(origin)) return callback(null, true);
+      // Allow GitHub Pages
+      if (/^https:\/\/.*\.github\.io$/.test(origin)) return callback(null, true);
       callback(new Error(`CORS: origin ${origin} not allowed`));
     },
     credentials: true,

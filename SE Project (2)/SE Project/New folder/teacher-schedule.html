@@ -420,7 +420,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
 <script src="./js/adminlte.js"></script>
-<script src="./js/auth.js"></script>
+<script src="./js/config.js"></script>
+    <script src="./js/auth.js"></script>
 <script src="./js/api.js"></script>
     <script src="./js/header.js"></script>
 <script>
@@ -462,16 +463,16 @@
       var res = await API.timetable.list({ limit: 500 });
       var slots = (res && res.success) ? (res.data || []) : [];
       slots.forEach(function(slot) {
-        var teacherName = slot.teacher ? (slot.teacher.name || ((slot.teacher.firstName||'') + ' ' + (slot.teacher.lastName||'')).trim()) : '—';
+        var teacherName = slot.teacher ? (slot.teacher.name || ((slot.teacher.firstName||'') + ' ' + (slot.teacher.lastName||'')).trim()) : 'ï¿½';
         _schedules.push({
           teacher: teacherName,
-          subject: slot.subject ? slot.subject.name : '—',
+          subject: slot.subject ? slot.subject.name : 'ï¿½',
           className: (slot.class ? slot.class.name : '') + (slot.section ? ' ' + slot.section.name : ''),
-          day: slot.day || '—',
-          period: 'Period ' + (slot.periodNo || '—'),
-          startTime: slot.startTime || '—',
-          endTime: slot.endTime || '—',
-          room: slot.room || '—',
+          day: slot.day || 'ï¿½',
+          period: 'Period ' + (slot.periodNo || 'ï¿½'),
+          startTime: slot.startTime || 'ï¿½',
+          endTime: slot.endTime || 'ï¿½',
+          room: slot.room || 'ï¿½',
           _id: slot.id
         });
       });
@@ -513,8 +514,8 @@
             '<div class="fw-bold text-primary">' + entry.subject + '</div>' +
             '<div class="text-muted" style="font-size:11px">' + entry.className + '</div>' +
             '<div style="font-size:11px"><i class="bi bi-person-fill"></i> ' + entry.teacher + '</div>' +
-            '<div style="font-size:11px"><i class="bi bi-clock"></i> ' + entry.startTime + '–' + entry.endTime + '</div>' +
-            (entry.room !== '—' ? '<div style="font-size:11px"><i class="bi bi-geo-alt"></i> ' + entry.room + '</div>' : '') +
+            '<div style="font-size:11px"><i class="bi bi-clock"></i> ' + entry.startTime + 'ï¿½' + entry.endTime + '</div>' +
+            (entry.room !== 'ï¿½' ? '<div style="font-size:11px"><i class="bi bi-geo-alt"></i> ' + entry.room + '</div>' : '') +
             '</div></td>';
         } else {
           row += '<td><div class="schedule-cell empty"><i class="bi bi-dash text-muted"></i></div></td>';
@@ -543,14 +544,14 @@
             '<td>' + s.className + '</td>' +
             '<td><span class="badge text-bg-secondary">' + s.day + '</span></td>' +
             '<td>' + s.period + '</td>' +
-            '<td><i class="bi bi-clock me-1"></i>' + s.startTime + ' – ' + s.endTime + '</td>' +
+            '<td><i class="bi bi-clock me-1"></i>' + s.startTime + ' ï¿½ ' + s.endTime + '</td>' +
             '<td>' + s.room + '</td>' +
             '<td><span class="text-muted small">Via timetable</span></td></tr>';
         }).join('');
     var pg = document.getElementById('pagination');
     if (pg) {
       pg.innerHTML = '';
-      document.getElementById('paginationInfo').textContent = total > 0 ? 'Showing ' + (start+1) + '–' + Math.min(start+rowsPerPage, total) + ' of ' + total : '';
+      document.getElementById('paginationInfo').textContent = total > 0 ? 'Showing ' + (start+1) + 'ï¿½' + Math.min(start+rowsPerPage, total) + ' of ' + total : '';
       for (var i = 1; i <= pages; i++) {
         var li = document.createElement('li');
         li.className = 'page-item' + (i === _currentPage ? ' active' : '');

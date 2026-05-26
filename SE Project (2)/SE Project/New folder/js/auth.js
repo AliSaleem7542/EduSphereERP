@@ -5,7 +5,25 @@
 
 var AUTH = (function () {
 
-  var API_BASE = 'http://localhost:5000/api/v1';
+  // ─── API Base URL ─────────────────────────────────────────────────────────
+  // Auto-detects environment:
+  //   Production  → window.EDUSPHERE_API_URL (set in config.js) or Render URL
+  //   Development → localhost:5000
+  var API_BASE = (function () {
+    // 1. Explicit override via global config (set in config.js for production)
+    if (typeof window !== 'undefined' && window.EDUSPHERE_API_URL) {
+      return window.EDUSPHERE_API_URL.replace(/\/$/, '') + '/api/v1';
+    }
+    // 2. Running on Vercel/production domain → use Render backend
+    if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' &&
+        window.location.hostname !== '127.0.0.1' &&
+        !window.location.hostname.startsWith('192.168.')) {
+      // Replace with your actual Render URL after deployment
+      return 'https://edusphere-api.onrender.com/api/v1';
+    }
+    // 3. Local development
+    return 'http://localhost:5000/api/v1';
+  })();
 
   // ─── Storage Keys ────────────────────────────────────────────────────────────
   var KEYS = {

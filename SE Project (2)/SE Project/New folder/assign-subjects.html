@@ -341,7 +341,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
 <script src="./js/adminlte.js"></script>
-<script src="./js/auth.js"></script>
+<script src="./js/config.js"></script>
+    <script src="./js/auth.js"></script>
 <script src="./js/api.js"></script>
     <script src="./js/header.js"></script>
 <script>
@@ -379,10 +380,10 @@
           _assignments.push({
             teacher: _teachers[i].name || ((_teachers[i].firstName||'') + ' ' + (_teachers[i].lastName||'')).trim(),
             teacherId: _teachers[i].id,
-            subject: s.subject ? s.subject.name : (s.subjectName || '—'),
-            className: s.class ? s.class.name : (s.className || '—'),
-            section: s.section ? s.section.name : (s.sectionName || '—'),
-            period: '—', days: '—', _id: s.id
+            subject: s.subject ? s.subject.name : (s.subjectName || 'ï¿½'),
+            className: s.class ? s.class.name : (s.className || 'ï¿½'),
+            section: s.section ? s.section.name : (s.sectionName || 'ï¿½'),
+            period: 'ï¿½', days: 'ï¿½', _id: s.id
           });
         });
       } catch(e) {}
@@ -426,7 +427,7 @@
         }).join('');
     var pg = document.getElementById('pagination');
     pg.innerHTML = '';
-    document.getElementById('paginationInfo').textContent = total > 0 ? 'Showing ' + (start+1) + '–' + Math.min(start+rowsPerPage, total) + ' of ' + total : '';
+    document.getElementById('paginationInfo').textContent = total > 0 ? 'Showing ' + (start+1) + 'ï¿½' + Math.min(start+rowsPerPage, total) + ' of ' + total : '';
     for (var i = 1; i <= pages; i++) {
       var li = document.createElement('li');
       li.className = 'page-item' + (i === _currentPage ? ' active' : '');
