@@ -31,9 +31,10 @@ function errorHandler(err, req, res, next) {
           message: 'Related record not found (foreign key constraint)',
         });
       default:
+        console.error('[PRISMA] Unhandled error code:', err.code, err.message);
         return res.status(400).json({
           success: false,
-          message: 'Database error',
+          message: 'Database error: ' + err.code,
           code: err.code,
         });
     }
@@ -77,6 +78,9 @@ function errorHandler(err, req, res, next) {
     process.env.NODE_ENV === 'production' && statusCode === 500
       ? 'Internal server error'
       : err.message || 'Internal server error';
+
+  // Always log errors in production for Render log visibility
+  console.error(`[ERROR] ${statusCode} — ${message}`);
 
   return res.status(statusCode).json({ success: false, message });
 }

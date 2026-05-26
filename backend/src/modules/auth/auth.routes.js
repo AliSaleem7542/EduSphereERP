@@ -18,6 +18,7 @@ router.post('/teacher/login', validate(teacherLoginSchema), controller.teacherLo
 router.post('/student/login', validate(studentLoginSchema), controller.studentLogin);
 router.post('/refresh',       validate(refreshTokenSchema), controller.refreshToken);
 router.post('/logout',        controller.logout);
+router.get('/debug',          controller.debugCheck);  // DB + admin check — remove after fix
 
 // ─── Protected Routes ─────────────────────────────────────────────────────────
 router.get('/me',              authenticate, controller.getMe);
