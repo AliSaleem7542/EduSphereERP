@@ -5,16 +5,24 @@ services:
     region: oregon
     plan: free
     rootDir: backend
-    buildCommand: npm install && npx prisma generate && npx prisma migrate deploy
+    # Build: generate Prisma client, then push schema (safer than migrate deploy for Neon)
+    buildCommand: npm install && npx prisma generate && npx prisma db push --accept-data-loss
     startCommand: npm start
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV
         value: production
+      # ── Neon PostgreSQL ──────────────────────────────────────────────────────
+      # DATABASE_URL: pooled connection string from Neon dashboard
+      # Format: postgresql://user:pass@ep-xxx.region.aws.neon.tech/dbname?sslmode=require&pgbouncer=true
       - key: DATABASE_URL
-        sync: false          # Set in Render dashboard from Neon
+        sync: false
+      # DIRECT_URL: direct (non-pooled) connection string from Neon dashboard
+      # Format: postgresql://user:pass@ep-xxx.region.aws.neon.tech/dbname?sslmode=require
+      # If you only have one URL, set both DATABASE_URL and DIRECT_URL to the same value
       - key: DIRECT_URL
-        sync: false          # Set in Render dashboard from Neon
+        sync: false
+      # ── JWT ──────────────────────────────────────────────────────────────────
       - key: JWT_ACCESS_SECRET
         generateValue: true
       - key: JWT_REFRESH_SECRET
@@ -23,10 +31,11 @@ services:
         value: 15m
       - key: JWT_REFRESH_EXPIRES_IN
         value: 7d
+      # ── App ──────────────────────────────────────────────────────────────────
       - key: BCRYPT_SALT_ROUNDS
         value: "12"
       - key: ALLOWED_ORIGINS
-        sync: false          # Set to your Vercel URL after deployment
+        sync: false
       - key: UPLOAD_DIR
         value: uploads
       - key: MAX_FILE_SIZE_MB

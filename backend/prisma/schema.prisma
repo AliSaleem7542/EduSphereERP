@@ -5,6 +5,10 @@ generator client {
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
+  // DIRECT_URL is used by Prisma for migrations (bypasses connection pooler).
+  // On Neon: set this to the direct (non-pooled) connection string.
+  // On Render without Neon pooler: can be same as DATABASE_URL.
+  // If not set, Prisma falls back to DATABASE_URL automatically.
   directUrl = env("DIRECT_URL")
 }
 

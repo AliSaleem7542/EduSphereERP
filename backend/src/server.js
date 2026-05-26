@@ -1,6 +1,6 @@
 require('dotenv').config();
 const app = require('./app');
-const { prisma, disconnectDB } = require('./config/database');
+const { connectWithRetry, disconnectDB } = require('./config/database');
 
 const PORT = process.env.PORT || 5000;
 const ENV  = process.env.NODE_ENV || 'development';
@@ -11,16 +11,17 @@ if (ENV === 'production') {
     console.error('❌ FATAL: DATABASE_URL is not set. Exiting.');
     process.exit(1);
   }
-  if (!process.env.JWT_ACCESS_SECRET || process.env.JWT_ACCESS_SECRET.includes('change_in_production')) {
-    console.error('❌ FATAL: JWT_ACCESS_SECRET must be set to a strong secret in production. Exiting.');
+  if (!process.env.JWT_ACCESS_SECRET ||
+      process.env.JWT_ACCESS_SECRET.includes('change_in_production')) {
+    console.error('❌ FATAL: JWT_ACCESS_SECRET must be a strong secret in production.');
     process.exit(1);
   }
-  if (!process.env.JWT_REFRESH_SECRET || process.env.JWT_REFRESH_SECRET.includes('change_in_production')) {
-    console.error('❌ FATAL: JWT_REFRESH_SECRET must be set to a strong secret in production. Exiting.');
+  if (!process.env.JWT_REFRESH_SECRET ||
+      process.env.JWT_REFRESH_SECRET.includes('change_in_production')) {
+    console.error('❌ FATAL: JWT_REFRESH_SECRET must be a strong secret in production.');
     process.exit(1);
   }
 } else {
-  // Development warnings only
   if (!process.env.JWT_ACCESS_SECRET) {
     console.warn('⚠️  WARNING: JWT_ACCESS_SECRET not set — using insecure fallback');
   }
@@ -29,8 +30,8 @@ if (ENV === 'production') {
 // ─── Start server ─────────────────────────────────────────────────────────────
 async function startServer() {
   try {
-    await prisma.$connect();
-    console.log('✅ Database connected successfully');
+    // Use retry logic for Neon cold starts on Render free tier
+    await connectWithRetry(5, 3000);
 
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`🚀 EDU-SPHERE API running on port ${PORT}`);
@@ -40,7 +41,7 @@ async function startServer() {
       }
     });
   } catch (error) {
-    console.error('❌ Failed to start server:', error.message);
+    console.error('❌ Failed to start server after retries:', error.message);
     await disconnectDB();
     process.exit(1);
   }
@@ -56,7 +57,6 @@ async function shutdown(signal) {
 process.on('SIGINT',  () => shutdown('SIGINT'));
 process.on('SIGTERM', () => shutdown('SIGTERM'));
 
-// Handle uncaught errors in production
 process.on('unhandledRejection', (reason) => {
   console.error('❌ Unhandled Rejection:', reason);
   if (ENV === 'production') process.exit(1);
