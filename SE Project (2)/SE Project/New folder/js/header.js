@@ -32,8 +32,8 @@
   function resolvePhoto(path) {
     if (!path) return null;
     if (path.startsWith('http')) return path;
-    // Use the configured API URL (set by config.js)
-    var base = (window.EDUSPHERE_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+    // Use the configured API URL (set by config.js before this file loads)
+    var base = (window.EDUSPHERE_API_URL || 'https://edusphereerp-scbr.onrender.com').replace(/\/$/, '');
     return base + path;
   }
 
