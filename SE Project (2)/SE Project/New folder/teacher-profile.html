@@ -103,9 +103,9 @@
     var t = res.data;
 
     if (t.photo) {
-      document.getElementById('navPhoto').src = 'http://localhost:5000' + t.photo;
-      document.getElementById('navPhoto2').src = 'http://localhost:5000' + t.photo;
-      document.getElementById('profilePhoto').src = 'http://localhost:5000' + t.photo;
+      document.getElementById('navPhoto').src = (window.EDUSPHERE_API_URL||'https://edusphereerp-scbr.onrender.com') + t.photo;
+      document.getElementById('navPhoto2').src = (window.EDUSPHERE_API_URL||'https://edusphereerp-scbr.onrender.com') + t.photo;
+      document.getElementById('profilePhoto').src = (window.EDUSPHERE_API_URL||'https://edusphereerp-scbr.onrender.com') + t.photo;
     }
     document.getElementById('profileName').textContent = t.name || '—';
     document.getElementById('profileDept').textContent = t.department || '—';

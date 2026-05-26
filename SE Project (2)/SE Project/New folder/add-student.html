@@ -813,7 +813,7 @@
             return;
           }
           tbody.innerHTML = list.map(function(s) {
-            var photo = s.photo ? 'http://localhost:5000' + s.photo : 'assets/img/avatar.png';
+            var photo = s.photo ? (window.EDUSPHERE_API_URL||'https://edusphereerp-scbr.onrender.com') + s.photo : 'assets/img/avatar.png';
             return '<tr>' +
               '<td><img src="' + photo + '" class="rounded-circle" width="36" height="36" style="object-fit:cover" onerror="this.src=\'assets/img/avatar.png\'"></td>' +
               '<td><span class="badge text-bg-secondary">' + s.rollNo + '</span></td>' +

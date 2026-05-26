@@ -32,7 +32,9 @@
   function resolvePhoto(path) {
     if (!path) return null;
     if (path.startsWith('http')) return path;
-    return 'http://localhost:5000' + path;
+    // Use the configured API URL (set by config.js)
+    var base = (window.EDUSPHERE_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+    return base + path;
   }
 
   /** Format a relative time string */

@@ -112,7 +112,7 @@
     var sRes = await API.students.get(studentId);
     if (sRes && sRes.success) {
       var s = sRes.data;
-      var photo = s.photo ? 'http://localhost:5000' + s.photo : 'assets/img/avatar.png';
+      var photo = s.photo ? (window.EDUSPHERE_API_URL||'https://edusphereerp-scbr.onrender.com') + s.photo : 'assets/img/avatar.png';
       document.getElementById('navPhoto').src     = photo;
       document.getElementById('navPhoto2').src    = photo;
       document.getElementById('welcomePhoto').src = photo;

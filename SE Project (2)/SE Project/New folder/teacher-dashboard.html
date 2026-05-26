@@ -104,7 +104,7 @@
     var tRes = await API.teachers.get(teacherId);
     if (tRes && tRes.success) {
       var t = tRes.data;
-      var photo = t.photo ? 'http://localhost:5000' + t.photo : 'assets/img/avatar.png';
+      var photo = t.photo ? (window.EDUSPHERE_API_URL||'https://edusphereerp-scbr.onrender.com') + t.photo : 'assets/img/avatar.png';
       document.getElementById('navPhoto').src     = photo;
       document.getElementById('navPhoto2').src    = photo;
       document.getElementById('welcomePhoto').src = photo;

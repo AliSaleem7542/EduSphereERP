@@ -479,7 +479,7 @@
           } else {
             var start = (currentPage - 1) * 10;
             tbody.innerHTML = list.map(function(s, i) {
-              var photo = s.photo ? 'http://localhost:5000' + s.photo : 'assets/img/avatar.png';
+              var photo = s.photo ? (window.EDUSPHERE_API_URL||'https://edusphereerp-scbr.onrender.com') + s.photo : 'assets/img/avatar.png';
               var name  = s.firstName + ' ' + (s.lastName || '');
               var cls   = s.class ? s.class.name : '—';
               var sec   = s.section ? s.section.name : '—';
@@ -549,7 +549,7 @@
         var res = await API.students.get(id);
         if (!res || !res.success) { API.toast('Failed to load student', 'danger'); return; }
         var s = res.data;
-        var photo = s.photo ? 'http://localhost:5000' + s.photo : 'assets/img/avatar.png';
+        var photo = s.photo ? (window.EDUSPHERE_API_URL||'https://edusphereerp-scbr.onrender.com') + s.photo : 'assets/img/avatar.png';
         document.getElementById('viewModalBody').innerHTML =
           '<div class="row">' +
           '<div class="col-md-3 text-center">' +

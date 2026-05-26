@@ -1,29 +1,24 @@
 /**
  * EDU-SPHERE — Frontend Configuration
  *
- * PRODUCTION SETUP:
- *   After deploying backend to Render, set EDUSPHERE_API_URL to your Render URL.
- *   Example: window.EDUSPHERE_API_URL = 'https://edusphere-api.onrender.com';
- *
+ * Single source of truth for the backend API URL.
  * This file is loaded BEFORE auth.js on every page.
- * To switch environments, only change this file.
+ *
+ * To switch environments, only change PRODUCTION_API_URL below.
  */
 
 (function () {
-  // ── Detect environment ──────────────────────────────────────────────────────
+  var PRODUCTION_API_URL = 'https://edusphereerp-scbr.onrender.com';
+  var DEVELOPMENT_API_URL = 'http://localhost:5000';
+
   var hostname = window.location.hostname;
-  var isLocal  = hostname === 'localhost' || hostname === '127.0.0.1' ||
-                 hostname.startsWith('192.168.');
+  var isLocal  = hostname === 'localhost' ||
+                 hostname === '127.0.0.1' ||
+                 hostname.startsWith('192.168.') ||
+                 hostname.startsWith('10.');
 
-  if (isLocal) {
-    // Development — use local backend
-    window.EDUSPHERE_API_URL = 'http://localhost:5000';
-  } else {
-    // Production — Render backend URL
-    // ⚠️  UPDATE THIS after deploying to Render:
-    window.EDUSPHERE_API_URL = 'https://edusphere-api.onrender.com';
-  }
+  window.EDUSPHERE_API_URL = isLocal ? DEVELOPMENT_API_URL : PRODUCTION_API_URL;
 
-  // Expose for debugging
+  console.log('[EDU-SPHERE] Environment:', isLocal ? 'development' : 'production');
   console.log('[EDU-SPHERE] API URL:', window.EDUSPHERE_API_URL);
 })();

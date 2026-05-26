@@ -1035,7 +1035,7 @@ User Management
               container.innerHTML = '<p class="text-muted p-3">No students added yet.</p>';
             } else {
               container.innerHTML = list.map(function (s) {
-                var photo = s.photo ? 'http://localhost:5000' + s.photo : 'assets/img/avatar.png';
+                var photo = s.photo ? (window.EDUSPHERE_API_URL||'https://edusphereerp-scbr.onrender.com') + s.photo : 'assets/img/avatar.png';
                 return '<div class="col-4 p-2 text-center">' +
                   '<img src="' + photo + '" style="width:50px;height:50px;object-fit:cover;border-radius:50%;" alt="" onerror="this.src=\'assets/img/avatar.png\'">' +
                   '<br><small class="fw-bold">' + s.firstName + ' ' + (s.lastName || '') + '</small>' +

@@ -6,20 +6,22 @@
 var AUTH = (function () {
 
   // ─── API Base URL ─────────────────────────────────────────────────────────
-  // Auto-detects environment:
-  //   Production  → window.EDUSPHERE_API_URL (set in config.js) or Render URL
-  //   Development → localhost:5000
+  // Priority:
+  //   1. window.EDUSPHERE_API_URL set by config.js (always loaded first)
+  //   2. Auto-detect: non-localhost → production Render URL
+  //   3. Fallback: localhost:5000 for development
   var API_BASE = (function () {
-    // 1. Explicit override via global config (set in config.js for production)
+    // 1. config.js sets this before auth.js loads
     if (typeof window !== 'undefined' && window.EDUSPHERE_API_URL) {
       return window.EDUSPHERE_API_URL.replace(/\/$/, '') + '/api/v1';
     }
-    // 2. Running on Vercel/production domain → use Render backend
-    if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' &&
+    // 2. Running on Vercel / any non-local domain
+    if (typeof window !== 'undefined' &&
+        window.location.hostname !== 'localhost' &&
         window.location.hostname !== '127.0.0.1' &&
-        !window.location.hostname.startsWith('192.168.')) {
-      // Replace with your actual Render URL after deployment
-      return 'https://edusphere-api.onrender.com/api/v1';
+        !window.location.hostname.startsWith('192.168.') &&
+        !window.location.hostname.startsWith('10.')) {
+      return 'https://edusphereerp-scbr.onrender.com/api/v1';
     }
     // 3. Local development
     return 'http://localhost:5000/api/v1';
