@@ -6,25 +6,17 @@
 var AUTH = (function () {
 
   // ─── API Base URL ─────────────────────────────────────────────────────────
-  // Priority:
-  //   1. window.EDUSPHERE_API_URL set by config.js (always loaded first)
-  //   2. Auto-detect: non-localhost → production Render URL
-  //   3. Fallback: localhost:5000 for development
+  // config.js sets window.EDUSPHERE_API_URL before this file loads.
+  // That is always the authoritative source.
+  var PRODUCTION_URL = 'https://edusphereerp-scbr.onrender.com';
+
   var API_BASE = (function () {
-    // 1. config.js sets this before auth.js loads
+    // Use whatever config.js set (production or dev override)
     if (typeof window !== 'undefined' && window.EDUSPHERE_API_URL) {
       return window.EDUSPHERE_API_URL.replace(/\/$/, '') + '/api/v1';
     }
-    // 2. Running on Vercel / any non-local domain
-    if (typeof window !== 'undefined' &&
-        window.location.hostname !== 'localhost' &&
-        window.location.hostname !== '127.0.0.1' &&
-        !window.location.hostname.startsWith('192.168.') &&
-        !window.location.hostname.startsWith('10.')) {
-      return 'https://edusphereerp-scbr.onrender.com/api/v1';
-    }
-    // 3. Local development
-    return 'http://localhost:5000/api/v1';
+    // Hard fallback — always production if config.js didn't load
+    return PRODUCTION_URL + '/api/v1';
   })();
 
   // ─── Storage Keys ────────────────────────────────────────────────────────────
