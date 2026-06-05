@@ -199,7 +199,10 @@ async function importStudents(year, classMap, sectionMap, admin) {
           rollNo,
           firstName,
           lastName,
-          gender: 'FEMALE', // default — data doesn't have gender
+          gender: (function() {
+            var g = String(s.gender || '').toUpperCase();
+            return g === 'FEMALE' ? 'FEMALE' : g === 'OTHER' ? 'OTHER' : 'MALE';
+          })(), // default — data doesn't have gender
           admissionDate: s.admissionDate ? new Date(s.admissionDate) : new Date('2025-04-01'),
           admissionType,
           classId: cls.id,

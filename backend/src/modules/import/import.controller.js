@@ -172,7 +172,7 @@ async function importSchoolData(req, res, next) {
             rollNo,
             firstName,
             lastName,
-            gender: s.gender === 'Male' ? 'MALE' : s.gender === 'Female' ? 'FEMALE' : 'FEMALE',
+            gender: s.gender === 'Male' ? 'MALE' : s.gender === 'Female' ? 'FEMALE' : s.gender === 'MALE' ? 'MALE' : s.gender === 'FEMALE' ? 'FEMALE' : 'MALE',
             admissionDate: s.admissionDate ? new Date(s.admissionDate) : new Date('2025-04-01'),
             admissionType,
             classId: classMap[s.class].id,

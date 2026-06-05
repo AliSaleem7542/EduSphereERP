@@ -146,7 +146,10 @@ async function main() {
           rollNo,
           firstName,
           lastName,
-          gender: 'FEMALE',
+          gender: (function() {
+            var g = String(s.gender || '').toUpperCase();
+            return g === 'FEMALE' ? 'FEMALE' : g === 'OTHER' ? 'OTHER' : 'MALE';
+          })(),
           admissionDate: s.admissionDate ? new Date(s.admissionDate) : new Date('2025-04-01'),
           admissionType: admTypeMap[s.admissionType] || 'NEW',
           classId: cls.id,

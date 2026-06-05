@@ -364,12 +364,15 @@ async function bulkImport(req, res, next) {
         const transportFee = parseFloat(row['Transport Fee'] || row['TransportFee'] || 0) || 0;
         const packageTotal = annualCharges + tuitionFee + transportFee;
 
+        const genderRaw = String(row['Gender'] || row['gender'] || '').trim().toUpperCase();
+        const genderVal = genderRaw === 'FEMALE' ? 'FEMALE' : genderRaw === 'OTHER' ? 'OTHER' : 'MALE';
+
         await prisma.student.create({
           data: {
             rollNo,
             firstName,
             lastName,
-            gender: 'FEMALE',
+            gender: genderVal,
             admissionDate: new Date('2025-04-01'),
             admissionType: 'NEW',
             classId: cls.id,
