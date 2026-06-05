@@ -198,7 +198,29 @@ async function update(req, res, next) {
 async function remove(req, res, next) {
   try {
     const id = parseInt(req.params.id);
-    await prisma.student.update({ where: { id }, data: { status: 'INACTIVE' } });
+
+    // Hard delete — remove student and all related records
+    await prisma.$transaction(async (tx) => {
+      // Delete dependent records first (foreign key order)
+      await tx.studentAttendance.deleteMany({ where: { studentId: id } });
+      await tx.examResult.deleteMany({ where: { studentId: id } });
+      await tx.bookIssue.deleteMany({ where: { studentId: id } });
+      await tx.feeRefund.deleteMany({ where: { studentId: id } });
+      await tx.feeRecord.deleteMany({ where: { studentId: id } });
+      await tx.studentPromotion.deleteMany({ where: { studentId: id } });
+
+      // Get userId before deleting student
+      const student = await tx.student.findUnique({ where: { id }, select: { userId: true } });
+
+      // Delete student
+      await tx.student.delete({ where: { id } });
+
+      // Delete linked user account if exists
+      if (student && student.userId) {
+        await tx.refreshToken.deleteMany({ where: { userId: student.userId } });
+        await tx.user.delete({ where: { id: student.userId } }).catch(() => {});
+      }
+    });
 
     await logActivity({
       userId: req.user.id,
@@ -208,8 +230,9 @@ async function remove(req, res, next) {
       ipAddress: req.ip,
     });
 
-    return sendSuccess(res, null, 'Student deactivated successfully');
+    return sendSuccess(res, null, 'Student deleted successfully');
   } catch (err) {
+    console.error('[STUDENT DELETE] Error:', err.message);
     next(err);
   }
 }

@@ -446,7 +446,7 @@
             document.getElementById('statMale').textContent   = all.filter(function(s){ return s.gender === 'MALE'; }).length;
             document.getElementById('statFemale').textContent = all.filter(function(s){ return s.gender === 'FEMALE'; }).length;
           }
-        } catch(e) {}
+        } catch(e) { console.warn('loadStats error:', e); }
       }
 
       async function renderTable() {
@@ -491,7 +491,7 @@
                 '<td><strong>' + name + '</strong></td>' +
                 '<td><span class="badge text-bg-primary">' + cls + '</span></td>' +
                 '<td><span class="badge text-bg-info">' + sec + '</span></td>' +
-                '<td>' + (s.gender || '—') + '</td>' +
+                '<td>' + (s.gender === 'MALE' ? '<span class="badge text-bg-primary"><i class="bi bi-gender-male me-1"></i>Male</span>' : s.gender === 'FEMALE' ? '<span class="badge text-bg-danger"><i class="bi bi-gender-female me-1"></i>Female</span>' : '<span class="badge text-bg-secondary">—</span>') + '</td>' +
                 '<td>' + (s.dob ? API.fmtDate(s.dob) : '—') + '</td>' +
                 '<td>' + (s.fatherName || '—') + '</td>' +
                 '<td>' + (s.fatherPhone || '—') + '</td>' +
@@ -580,10 +580,18 @@
 
       var editStudentData = null;
       async function editStudent(id) {
+        // Show loading state on edit button
+        API.toast('Loading student data...', 'info');
+
         var res = await API.students.get(id);
         if (!res || !res.success) { API.toast('Failed to load student', 'danger'); return; }
         var s = res.data;
         editStudentData = s;
+
+        // Populate class dropdown first (needed before setting values)
+        await loadFilterDropdowns();
+
+        // Populate all form fields
         document.getElementById('editId').value          = s.id;
         document.getElementById('editFirstName').value   = s.firstName || '';
         document.getElementById('editLastName').value    = s.lastName  || '';
@@ -594,33 +602,37 @@
         document.getElementById('editFatherName').value  = s.fatherName  || '';
         document.getElementById('editFatherPhone').value = s.fatherPhone || '';
         document.getElementById('editAddress').value     = s.address     || '';
-        // Populate class dropdown then set value, then load sections
-        await loadFilterDropdowns();
-        if (s.classId) {
-          var ec = document.getElementById('editClass');
-          if (ec) {
-            ec.value = s.classId;
-            await updateEditSectionOptions();
-            var es = document.getElementById('editSection');
-            if (es && s.sectionId) es.value = s.sectionId;
+
+        // Set class value
+        var ec = document.getElementById('editClass');
+        if (ec && s.classId) {
+          ec.value = s.classId;
+          // Load sections for this class
+          await updateEditSectionOptions();
+          // Set section value after sections are loaded
+          var es = document.getElementById('editSection');
+          if (es && s.sectionId) {
+            es.value = s.sectionId;
           }
         }
-        new bootstrap.Modal(document.getElementById('editModal')).show();
+
+        // Open the modal
+        var modal = new bootstrap.Modal(document.getElementById('editModal'));
+        modal.show();
       }
 
       async function saveEdit() {
         var id = parseInt(document.getElementById('editId').value);
         if (!id) { API.toast('No student selected', 'danger'); return; }
 
-        // Map display values to Prisma enum values
         var GENDER_MAP = { 'Male': 'MALE', 'Female': 'FEMALE', 'Other': 'OTHER', 'MALE': 'MALE', 'FEMALE': 'FEMALE', 'OTHER': 'OTHER' };
-        var FEE_MAP = { 'Regular': 'REGULAR', 'Scholarship': 'SCHOLARSHIP', 'Half Fee': 'HALF_FEE', 'Free': 'FREE',
-                        'REGULAR': 'REGULAR', 'SCHOLARSHIP': 'SCHOLARSHIP', 'HALF_FEE': 'HALF_FEE', 'FREE': 'FREE' };
+        var FEE_MAP    = { 'Regular': 'REGULAR', 'Scholarship': 'SCHOLARSHIP', 'Half Fee': 'HALF_FEE', 'Free': 'FREE',
+                           'REGULAR': 'REGULAR', 'SCHOLARSHIP': 'SCHOLARSHIP', 'HALF_FEE': 'HALF_FEE', 'FREE': 'FREE' };
 
-        var genderRaw  = document.getElementById('editGender').value;
-        var feeCatRaw  = document.getElementById('editFee').value;
-        var genderVal  = GENDER_MAP[genderRaw]  || genderRaw  || 'MALE';
-        var feeCatVal  = FEE_MAP[feeCatRaw]     || feeCatRaw  || 'REGULAR';
+        var genderRaw = document.getElementById('editGender').value;
+        var feeCatRaw = document.getElementById('editFee').value;
+        var genderVal = GENDER_MAP[genderRaw] || genderRaw || 'MALE';
+        var feeCatVal = FEE_MAP[feeCatRaw]    || feeCatRaw || 'REGULAR';
 
         var fd = new FormData();
         fd.append('firstName',   (document.getElementById('editFirstName').value  || '').trim());
@@ -631,6 +643,7 @@
         fd.append('fatherName',  (document.getElementById('editFatherName').value  || '').trim());
         fd.append('fatherPhone', (document.getElementById('editFatherPhone').value || '').trim());
         fd.append('address',     (document.getElementById('editAddress').value    || '').trim());
+
         if (document.getElementById('editDob').value) {
           fd.append('dob', document.getElementById('editDob').value);
         }
@@ -642,7 +655,7 @@
         // Debug log
         var payload = {};
         fd.forEach(function(v, k) { payload[k] = v; });
-        console.log('[EDIT STUDENT] Sending payload:', payload);
+        console.log('[EDIT STUDENT] id:', id, 'payload:', payload);
 
         API.spinner(true, 'saveEditBtn');
         try {
@@ -650,13 +663,15 @@
           console.log('[EDIT STUDENT] Response:', res);
           if (res && res.success) {
             API.toast('Student updated successfully', 'success');
-            bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
+            var modalEl = document.getElementById('editModal');
+            var inst = bootstrap.Modal.getInstance(modalEl);
+            if (inst) inst.hide();
             renderTable();
             loadStats();
           } else {
             API.toast((res && res.message) || 'Update failed', 'danger');
           }
-        } catch(err) {
+        } catch (err) {
           console.error('[EDIT STUDENT] Error:', err);
           API.toast('Error: ' + err.message, 'danger');
         } finally {
@@ -665,14 +680,14 @@
       }
 
       async function deleteStudent(id) {
-        if (!confirm('Deactivate this student?')) return;
+        if (!confirm('Permanently DELETE this student?\n\nThis will remove all their records (attendance, fees, results) from the database.\n\nThis CANNOT be undone.')) return;
         var res = await API.students.remove(id);
         if (res && res.success) {
-          API.toast('Student deactivated');
+          API.toast('Student deleted permanently', 'success');
           renderTable();
           loadStats();
         } else {
-          API.toast('Delete failed', 'danger');
+          API.toast((res && res.message) || 'Delete failed', 'danger');
         }
       }
 
