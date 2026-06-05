@@ -66,6 +66,9 @@ async function create(req, res, next) {
     const body = req.body;
     if (req.file) body.photo = `/uploads/photos/${req.file.filename}`;
 
+    // Debug log — visible in Render logs
+    console.log('[STUDENT CREATE] Received fields:', Object.keys(body));
+
     // Coerce required integer/date fields from multipart form strings
     if (body.classId)       body.classId       = parseInt(body.classId);
     if (body.sectionId)     body.sectionId     = parseInt(body.sectionId);
@@ -79,28 +82,47 @@ async function create(req, res, next) {
     // Auto-resolve academicYearId
     if (!body.academicYearId) {
       const currentYear = await prisma.academicYear.findFirst({ where: { isCurrent: true } });
-      if (!currentYear) return sendError(res, 'No current academic year found', 400);
+      if (!currentYear) return sendError(res, 'No current academic year found. Please seed the database.', 400);
       body.academicYearId = currentYear.id;
     } else {
       body.academicYearId = parseInt(body.academicYearId);
     }
 
     // Default required enum fields
-    if (!body.gender) body.gender = 'MALE';
+    if (!body.gender)        body.gender        = 'MALE';
     if (!body.admissionType) body.admissionType = 'NEW';
-    if (!body.feeCategory) body.feeCategory = 'REGULAR';
-    if (!body.transport) body.transport = 'NONE';
-    if (!body.status) body.status = 'ACTIVE';
+    if (!body.feeCategory)   body.feeCategory   = 'REGULAR';
+    if (!body.transport)     body.transport     = 'NONE';
+    if (!body.status)        body.status        = 'ACTIVE';
 
     // Default admissionDate to today if not provided
     if (!body.admissionDate) body.admissionDate = new Date();
 
-    // Remove undefined/empty string fields that would fail Prisma validation
-    Object.keys(body).forEach(function(k) {
-      if (body[k] === '' || body[k] === undefined) delete body[k];
+    // ── WHITELIST: only pass fields that exist in the Prisma Student model ──
+    // This prevents "Invalid data provided to database" from unknown fields
+    // like guardianEmail, notes, etc. sent by the frontend form.
+    const ALLOWED_STUDENT_FIELDS = new Set([
+      'rollNo','firstName','middleName','lastName','dob','gender','bloodGroup',
+      'cnic','religion','address','photo','admissionDate','admissionType',
+      'classId','sectionId','academicYearId','prevSchool','prevGrade',
+      'feeCategory','transport','transportFee','annualCharges','tuitionFee','packageTotal',
+      'fatherName','fatherCnic','fatherPhone','fatherOccupation',
+      'motherName','motherPhone','guardianName','guardianPhone','emergencyContact',
+      'status','userId',
+    ]);
+
+    const data = {};
+    Object.keys(body).forEach((k) => {
+      if (ALLOWED_STUDENT_FIELDS.has(k) && body[k] !== '' && body[k] !== undefined && body[k] !== null) {
+        data[k] = body[k];
+      } else if (!ALLOWED_STUDENT_FIELDS.has(k)) {
+        console.log('[STUDENT CREATE] Stripped unknown field:', k);
+      }
     });
 
-    const student = await prisma.student.create({ data: body });
+    console.log('[STUDENT CREATE] Final data keys:', Object.keys(data));
+
+    const student = await prisma.student.create({ data });
 
     await logActivity({
       userId: req.user.id,
@@ -112,6 +134,7 @@ async function create(req, res, next) {
 
     return sendSuccess(res, student, 'Student created successfully', 201);
   } catch (err) {
+    console.error('[STUDENT CREATE] Error:', err.message);
     next(err);
   }
 }
@@ -119,24 +142,41 @@ async function create(req, res, next) {
 async function update(req, res, next) {
   try {
     const id = parseInt(req.params.id);
-    const data = req.body;
-    if (req.file) data.photo = `/uploads/photos/${req.file.filename}`;
+    const body = req.body;
+    if (req.file) body.photo = `/uploads/photos/${req.file.filename}`;
+
+    console.log('[STUDENT UPDATE] id:', id, '| fields:', Object.keys(body));
 
     // Coerce integer/date fields
-    if (data.classId)       data.classId       = parseInt(data.classId);
-    if (data.sectionId)     data.sectionId     = parseInt(data.sectionId);
-    if (data.academicYearId) data.academicYearId = parseInt(data.academicYearId);
-    if (data.dob)           data.dob           = new Date(data.dob);
-    if (data.admissionDate) data.admissionDate = new Date(data.admissionDate);
-    if (data.annualCharges) data.annualCharges = parseFloat(data.annualCharges);
-    if (data.tuitionFee)    data.tuitionFee    = parseFloat(data.tuitionFee);
-    if (data.transportFee)  data.transportFee  = parseFloat(data.transportFee);
-    if (data.packageTotal)  data.packageTotal  = parseFloat(data.packageTotal);
+    if (body.classId)        body.classId        = parseInt(body.classId);
+    if (body.sectionId)      body.sectionId      = parseInt(body.sectionId);
+    if (body.academicYearId) body.academicYearId = parseInt(body.academicYearId);
+    if (body.dob)            body.dob            = new Date(body.dob);
+    if (body.admissionDate)  body.admissionDate  = new Date(body.admissionDate);
+    if (body.annualCharges)  body.annualCharges  = parseFloat(body.annualCharges);
+    if (body.tuitionFee)     body.tuitionFee     = parseFloat(body.tuitionFee);
+    if (body.transportFee)   body.transportFee   = parseFloat(body.transportFee);
+    if (body.packageTotal)   body.packageTotal   = parseFloat(body.packageTotal);
 
-    // Remove empty strings
-    Object.keys(data).forEach(function(k) {
-      if (data[k] === '') delete data[k];
+    // ── WHITELIST: only pass known Student model fields ──
+    const ALLOWED_STUDENT_FIELDS = new Set([
+      'rollNo','firstName','middleName','lastName','dob','gender','bloodGroup',
+      'cnic','religion','address','photo','admissionDate','admissionType',
+      'classId','sectionId','academicYearId','prevSchool','prevGrade',
+      'feeCategory','transport','transportFee','annualCharges','tuitionFee','packageTotal',
+      'fatherName','fatherCnic','fatherPhone','fatherOccupation',
+      'motherName','motherPhone','guardianName','guardianPhone','emergencyContact',
+      'status',
+    ]);
+
+    const data = {};
+    Object.keys(body).forEach((k) => {
+      if (ALLOWED_STUDENT_FIELDS.has(k) && body[k] !== '' && body[k] !== undefined && body[k] !== null) {
+        data[k] = body[k];
+      }
     });
+
+    console.log('[STUDENT UPDATE] Final data keys:', Object.keys(data));
 
     const student = await prisma.student.update({ where: { id }, data });
 
@@ -150,6 +190,7 @@ async function update(req, res, next) {
 
     return sendSuccess(res, student, 'Student updated successfully');
   } catch (err) {
+    console.error('[STUDENT UPDATE] Error:', err.message);
     next(err);
   }
 }

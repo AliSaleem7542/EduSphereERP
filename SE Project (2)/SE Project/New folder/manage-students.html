@@ -395,7 +395,7 @@
             </div>
             <div class="modal-footer">
               <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-              <button class="btn btn-primary" onclick="saveEdit()"><i class="bi bi-check-circle"></i> Save Changes</button>
+              <button class="btn btn-primary" id="saveEditBtn" onclick="saveEdit()"><i class="bi bi-check-circle"></i> Save Changes</button>
             </div>
           </div>
         </div>
@@ -610,6 +610,7 @@
 
       async function saveEdit() {
         var id = parseInt(document.getElementById('editId').value);
+        if (!id) { API.toast('No student selected', 'danger'); return; }
 
         // Map display values to Prisma enum values
         var GENDER_MAP = { 'Male': 'MALE', 'Female': 'FEMALE', 'Other': 'OTHER', 'MALE': 'MALE', 'FEMALE': 'FEMALE', 'OTHER': 'OTHER' };
@@ -618,33 +619,48 @@
 
         var genderRaw  = document.getElementById('editGender').value;
         var feeCatRaw  = document.getElementById('editFee').value;
+        var genderVal  = GENDER_MAP[genderRaw]  || genderRaw  || 'MALE';
+        var feeCatVal  = FEE_MAP[feeCatRaw]     || feeCatRaw  || 'REGULAR';
 
         var fd = new FormData();
-        fd.append('firstName',   document.getElementById('editFirstName').value.trim());
-        fd.append('lastName',    document.getElementById('editLastName').value.trim());
-        fd.append('rollNo',      document.getElementById('editRollNo').value.trim());
-        fd.append('gender',      GENDER_MAP[genderRaw] || 'MALE');
-        fd.append('feeCategory', FEE_MAP[feeCatRaw] || 'REGULAR');
-        fd.append('fatherName',  document.getElementById('editFatherName').value.trim());
-        fd.append('fatherPhone', document.getElementById('editFatherPhone').value.trim());
-        fd.append('address',     document.getElementById('editAddress').value.trim());
-        if (document.getElementById('editDob').value) fd.append('dob', document.getElementById('editDob').value);
-        // Include class/section if changed
+        fd.append('firstName',   (document.getElementById('editFirstName').value  || '').trim());
+        fd.append('lastName',    (document.getElementById('editLastName').value   || '').trim());
+        fd.append('rollNo',      (document.getElementById('editRollNo').value     || '').trim());
+        fd.append('gender',      genderVal);
+        fd.append('feeCategory', feeCatVal);
+        fd.append('fatherName',  (document.getElementById('editFatherName').value  || '').trim());
+        fd.append('fatherPhone', (document.getElementById('editFatherPhone').value || '').trim());
+        fd.append('address',     (document.getElementById('editAddress').value    || '').trim());
+        if (document.getElementById('editDob').value) {
+          fd.append('dob', document.getElementById('editDob').value);
+        }
         var ecEl = document.getElementById('editClass');
         var esEl = document.getElementById('editSection');
-        if (ecEl && ecEl.value) fd.append('classId', ecEl.value);
+        if (ecEl && ecEl.value) fd.append('classId',   ecEl.value);
         if (esEl && esEl.value) fd.append('sectionId', esEl.value);
 
+        // Debug log
+        var payload = {};
+        fd.forEach(function(v, k) { payload[k] = v; });
+        console.log('[EDIT STUDENT] Sending payload:', payload);
+
         API.spinner(true, 'saveEditBtn');
-        var res = await API.students.update(id, fd);
-        API.spinner(false, 'saveEditBtn');
-        if (res && res.success) {
-          API.toast('Student updated successfully');
-          bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
-          renderTable();
-          loadStats();
-        } else {
-          API.toast((res && res.message) || 'Update failed', 'danger');
+        try {
+          var res = await API.students.update(id, fd);
+          console.log('[EDIT STUDENT] Response:', res);
+          if (res && res.success) {
+            API.toast('Student updated successfully', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
+            renderTable();
+            loadStats();
+          } else {
+            API.toast((res && res.message) || 'Update failed', 'danger');
+          }
+        } catch(err) {
+          console.error('[EDIT STUDENT] Error:', err);
+          API.toast('Error: ' + err.message, 'danger');
+        } finally {
+          API.spinner(false, 'saveEditBtn');
         }
       }
 

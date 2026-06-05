@@ -742,13 +742,19 @@
         fd.append('classId',       document.getElementById('studentClass').value);
 
         // Optional string fields — only append if non-empty
+        // NOTE: only fields that exist in the Prisma Student model
         var optStr = ['middleName','cnic','religion','address','fatherName','fatherPhone',
                       'prevSchool','prevGrade','fatherCnic','fatherOccupation',
-                      'motherName','motherPhone','emergencyContact'];
+                      'motherName','motherPhone','guardianName','guardianPhone','emergencyContact'];
         optStr.forEach(function(id) {
           var el = document.getElementById(id);
           if (el && el.value.trim()) fd.append(id, el.value.trim());
         });
+
+        // Debug log
+        var payload = {};
+        fd.forEach(function(v, k) { payload[k] = v; });
+        console.log('[ADD STUDENT] Sending payload:', payload);
 
         // Section — only if selected
         var secEl = document.getElementById('studentSection');
