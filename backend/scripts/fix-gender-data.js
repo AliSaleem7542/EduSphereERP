@@ -1,9 +1,11 @@
 /**
  * Fix corrupted gender data in Neon production DB.
- * All students imported with hardcoded FEMALE → reset to MALE
- * (since the source data didn't have gender info, MALE is the neutral default).
+ * The original import hardcoded FEMALE for all students.
+ * The source data (Superior College Samundri) is a girls college — FEMALE is correct.
+ * This script verifies the distribution and optionally resets all to FEMALE.
  *
  * Run: node scripts/fix-gender-data.js
+ * Run with reset: node scripts/fix-gender-data.js --reset-to-female
  */
 require('dotenv').config();
 const { PrismaClient } = require('@prisma/client');
@@ -20,33 +22,41 @@ function ensureSSL(url) {
 const dbUrl = ensureSSL(process.env.DIRECT_URL || process.env.DATABASE_URL);
 process.env.DATABASE_URL = dbUrl;
 
-const prisma = new PrismaClient({
-  datasources: { db: { url: dbUrl } },
-});
+const prisma = new PrismaClient({ datasources: { db: { url: dbUrl } } });
+const resetToFemale = process.argv.includes('--reset-to-female');
+const resetToMale   = process.argv.includes('--reset-to-male');
 
 async function main() {
-  console.log('🔧 Fixing gender data in production...\n');
-
+  console.log('\n🔧 Gender Data Fix Script\n');
   await prisma.$connect();
-  console.log('✅ Connected');
+  console.log('✅ Connected to database');
 
-  // Count current gender distribution
-  const total   = await prisma.student.count();
-  const male    = await prisma.student.count({ where: { gender: 'MALE' } });
-  const female  = await prisma.student.count({ where: { gender: 'FEMALE' } });
-  const other   = await prisma.student.count({ where: { gender: 'OTHER' } });
+  const total  = await prisma.student.count();
+  const male   = await prisma.student.count({ where: { gender: 'MALE' } });
+  const female = await prisma.student.count({ where: { gender: 'FEMALE' } });
+  const other  = await prisma.student.count({ where: { gender: 'OTHER' } });
 
-  console.log(`Current: ${total} students — MALE: ${male}, FEMALE: ${female}, OTHER: ${other}`);
+  console.log(`\nCurrent distribution (${total} students):`);
+  console.log(`  MALE   : ${male}`);
+  console.log(`  FEMALE : ${female}`);
+  console.log(`  OTHER  : ${other}`);
 
-  // If gender data came from import with no source info, all students defaulted to FEMALE
-  // We know this school data has mostly female students (Superior College) 
-  // so we'll keep FEMALE as-is since the actual source had no gender column.
-  // Just report the distribution.
-  
-  console.log('\nGender distribution looks correct for Superior College Samundri data.');
-  console.log('Students added via the form will now save gender correctly.');
-  console.log('\nIf you want to change specific students, use the Edit Student button.');
-  console.log('\n✅ Done — no bulk changes made (existing data preserved).');
+  if (resetToFemale) {
+    console.log('\n⚠️  Resetting ALL students to FEMALE (Superior College is a girls college)...');
+    const result = await prisma.student.updateMany({ data: { gender: 'FEMALE' } });
+    console.log(`✅ Updated ${result.count} students to FEMALE`);
+  } else if (resetToMale) {
+    console.log('\n⚠️  Resetting ALL students to MALE...');
+    const result = await prisma.student.updateMany({ data: { gender: 'MALE' } });
+    console.log(`✅ Updated ${result.count} students to MALE`);
+  } else {
+    console.log('\nNo changes made. Use --reset-to-female or --reset-to-male to bulk update.');
+  }
+
+  const newMale   = await prisma.student.count({ where: { gender: 'MALE' } });
+  const newFemale = await prisma.student.count({ where: { gender: 'FEMALE' } });
+  console.log(`\nFinal: MALE=${newMale}, FEMALE=${newFemale}`);
+  console.log('\n✅ Done\n');
 }
 
 main()

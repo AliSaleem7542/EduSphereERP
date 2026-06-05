@@ -792,7 +792,13 @@
         try {
           var res = await API.students.create(fd);
           if (res && res.success) {
+            API.toast('Student added successfully!', 'success');
             document.getElementById('successAlert').classList.remove('d-none');
+            // Reset all form fields
+            document.querySelectorAll('#step1 input, #step1 select, #step1 textarea').forEach(function(el) { el.value = ''; });
+            document.querySelectorAll('#step2 input, #step2 select, #step2 textarea').forEach(function(el) { el.value = ''; });
+            document.querySelectorAll('#step3 input, #step3 select, #step3 textarea').forEach(function(el) { el.value = ''; });
+            document.getElementById('photoPreview').src = 'assets/img/avatar.png';
             goStep(1);
             renderRecent();
             loadStats();
