@@ -350,6 +350,7 @@
             }
           }
           renderClassrooms();
+          renderAssignmentTable();
           updateStats();
         } catch(e) { API.toast('Failed to load data.', 'danger'); }
       }
@@ -376,23 +377,78 @@
         if (!classId || !sectionId || !classroom) {
           API.toast('Please select class, section and classroom.', 'warning'); return;
         }
-        // Store assignment locally for display (no backend endpoint for classroom assignment)
         var cls = _classes.find(function(c){ return String(c.id) === String(classId); });
         var sec = _sections.find(function(s){ return String(s.id) === String(sectionId); });
-        API.toast('Classroom "' + classroom + '" assigned to ' + (cls ? cls.name : '') + ' - ' + (sec ? sec.name : '') + '.', 'success');
+        if (!cls || !sec) { API.toast('Invalid selection.', 'danger'); return; }
+
+        // Save to localStorage
+        var assignments = JSON.parse(localStorage.getItem('classroomAssignments') || '[]');
+        // Remove existing assignment for this section
+        assignments = assignments.filter(function(a){ return a.sectionId !== sectionId; });
+        assignments.push({
+          classId:   classId,
+          className: cls.name,
+          sectionId: sectionId,
+          sectionName: sec.name,
+          classroom:  classroom,
+          date:       new Date().toISOString().split('T')[0],
+          status:     'Active'
+        });
+        localStorage.setItem('classroomAssignments', JSON.stringify(assignments));
+
+        API.toast('Classroom "' + classroom + '" assigned to ' + cls.name + ' - ' + sec.name + '.', 'success');
         document.getElementById('classroomClass').value   = '';
         document.getElementById('classroomSection').value = '';
         document.getElementById('classroom').value        = '';
         document.getElementById('classroomSection').innerHTML = '<option value="">Choose section...</option>';
+        renderAssignmentTable();
+        updateStats();
+      }
+
+      function renderAssignmentTable() {
+        var tbody = document.getElementById('assignTable');
+        var assignments = JSON.parse(localStorage.getItem('classroomAssignments') || '[]');
+        if (!assignments.length) {
+          tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-3">No assignments yet.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = assignments.map(function(a, i) {
+          var stuCount = _sections.filter(function(s){ return String(s.id) === String(a.sectionId); }).length > 0
+            ? (_students ? _students.filter(function(st){ return String(st.sectionId) === String(a.sectionId); }).length : 0)
+            : 0;
+          return '<tr>' +
+            '<td><span class="badge text-bg-primary">' + a.className + '</span></td>' +
+            '<td>' + a.sectionName + '</td>' +
+            '<td><i class="bi bi-building me-1"></i>' + a.classroom + '</td>' +
+            '<td>—</td>' +
+            '<td>—</td>' +
+            '<td>' + a.date + '</td>' +
+            '<td><span class="badge text-bg-success">' + a.status + '</span></td>' +
+            '<td><button class="btn btn-sm btn-outline-danger" onclick="removeAssignment(' + i + ')"><i class="bi bi-trash"></i></button></td>' +
+            '</tr>';
+        }).join('');
+      }
+
+      function removeAssignment(idx) {
+        if (!confirm('Remove this classroom assignment?')) return;
+        var assignments = JSON.parse(localStorage.getItem('classroomAssignments') || '[]');
+        assignments.splice(idx, 1);
+        localStorage.setItem('classroomAssignments', JSON.stringify(assignments));
+        renderAssignmentTable();
+        updateStats();
+        API.toast('Assignment removed.', 'success');
       }
 
       function updateStats() {
-        var statEl = document.getElementById('statRooms');
-        if (statEl) statEl.textContent = _classes.length;
-        var statSec = document.getElementById('statSections');
-        if (statSec) statSec.textContent = _sections.length;
-        var statCls = document.getElementById('statClasses');
-        if (statCls) statCls.textContent = _classes.length;
+        var assignments = JSON.parse(localStorage.getItem('classroomAssignments') || '[]');
+        var statRooms = document.getElementById('statRooms');
+        var statAssigned = document.getElementById('statAssigned');
+        var statUnassigned = document.getElementById('statUnassigned');
+        var statSections = document.getElementById('statSections');
+        if (statRooms)     statRooms.textContent     = assignments.length;
+        if (statAssigned)  statAssigned.textContent  = assignments.length;
+        if (statUnassigned) statUnassigned.textContent = Math.max(0, _sections.length - assignments.length);
+        if (statSections)  statSections.textContent  = _sections.length;
       }
 
       function renderClassrooms() {
