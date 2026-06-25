@@ -408,16 +408,17 @@
     <script>
       AUTH.requireAuth('ADMIN');
 
-      document.getElementById('attendanceDate').value = new Date().toISOString().split('T')[0];
-      document.getElementById('fromDate').value = new Date().toISOString().split('T')[0];
-      document.getElementById('toDate').value = new Date().toISOString().split('T')[0];
-
       var loadedStudents = [];
 
       // Load class dropdowns from API
       async function loadClassDropdowns() {
         try {
           var res = await API.classes.list();
+          if (!res || !res.success) {
+            // Render server may be waking up — retry once after 3 seconds
+            await new Promise(function(r){ setTimeout(r, 3000); });
+            res = await API.classes.list();
+          }
           if (!res || !res.success) return;
           var classes = res.data || [];
           ['classSelect', 'viewClass'].forEach(function(selId) {
@@ -626,8 +627,16 @@
         API.toast('Bulk import via CSV is not yet supported.', 'info');
       }
 
-      document.addEventListener('DOMContentLoaded', function() {
-        loadClassDropdowns();
+      document.addEventListener('DOMContentLoaded', async function() {
+        document.getElementById('attendanceDate').value = new Date().toISOString().split('T')[0];
+        document.getElementById('fromDate').value = new Date().toISOString().split('T')[0];
+        document.getElementById('toDate').value = new Date().toISOString().split('T')[0];
+        // Show loading hint while server wakes up
+        ['classSelect','viewClass'].forEach(function(id){
+          var s = document.getElementById(id);
+          if (s) s.innerHTML = '<option value="">Loading...</option>';
+        });
+        await loadClassDropdowns();
         updateStats();
       });
     </script>

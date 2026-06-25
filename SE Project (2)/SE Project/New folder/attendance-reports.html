@@ -397,6 +397,10 @@
       async function loadClassDropdown() {
         try {
           var res = await API.classes.list();
+          if (!res || !res.success) {
+            await new Promise(function(r){ setTimeout(r, 3000); });
+            res = await API.classes.list();
+          }
           if (res && res.success) {
             var sel = document.getElementById('classFilter');
             sel.innerHTML = '<option value="">All Classes</option>';
@@ -404,7 +408,7 @@
               sel.innerHTML += '<option value="' + c.id + '">' + c.name + '</option>';
             });
           }
-        } catch(e) {}
+        } catch(e) { console.error('loadClassDropdown error:', e); }
       }
 
       function initializeCharts() {
