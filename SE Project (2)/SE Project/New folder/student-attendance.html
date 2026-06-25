@@ -91,7 +91,7 @@
             </ul></li>
             <li class="nav-item menu-open"><a href="#" class="nav-link active"><i class="nav-icon bi bi-calendar-check-fill"></i><p>Attendance<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
               <li class="nav-item"><a href="student-attendance.html" class="nav-link active"><i class="nav-icon bi bi-circle"></i><p>Student Attendance</p></a></li>
-              <li class="nav-item"><a href="teacher-attenadance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Attendance</p></a></li>
+              <li class="nav-item"><a href="teacher-attendance.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Teacher Attendance</p></a></li>
               <li class="nav-item"><a href="attendance-reports.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Attendance Reports</p></a></li>
             </ul></li>
             <li class="nav-item"><a href="#" class="nav-link"><i class="nav-icon bi bi-cash-stack"></i><p>Fee Management<i class="nav-arrow bi bi-chevron-right"></i></p></a><ul class="nav nav-treeview">
@@ -334,7 +334,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="attendanceReportBody">
-                                                <tr><td colspan="9" class="text-center text-muted py-3">Select date range and click "View Report".</td></tr>
+                                                <tr><td colspan="8" class="text-center text-muted py-3">Select date range and click "View Report".</td></tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -583,10 +583,10 @@
             tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-3">No attendance records found for the selected period.</td></tr>';
             return;
           }
-          tbody.innerHTML = data.map(function(s, i) {
+          tbody.innerHTML = data.map(function(s) {
             var pct = s.total ? Math.round((s.present / s.total) * 100) : 0;
             var badge = pct >= 75 ? 'bg-success' : pct >= 50 ? 'bg-warning text-dark' : 'bg-danger';
-            return '<tr><td>' + (i+1) + '</td>' +
+            return '<tr>' +
               '<td>' + (s.studentName || s.name || '—') + '</td>' +
               '<td>' + (s.rollNo || '—') + '</td>' +
               '<td>' + (s.className || '—') + '</td>' +
@@ -601,8 +601,30 @@
         }
       }
 
+      function downloadTemplate() {
+        var csv = '"studentId","date","status","remarks"\n"1","2025-01-15","PRESENT",""\n"2","2025-01-15","ABSENT","Sick"';
+        var a = document.createElement('a');
+        a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+        a.download = 'attendance-template.csv';
+        a.click();
+      }
+
       function exportAttendance() {
-        API.toast('Use the Attendance Reports page for detailed exports.', 'info');
+        var rows = document.querySelectorAll('#attendanceReportBody tr');
+        if (!rows.length || rows[0].querySelector('td[colspan]')) {
+          API.toast('Load attendance data first.', 'warning'); return;
+        }
+        var headers = Array.from(document.querySelectorAll('#attendanceReportBody').item(0).closest('table').querySelectorAll('thead th')).map(function(h){ return '"'+h.textContent.trim()+'"'; });
+        var csv = [headers.join(',')];
+        rows.forEach(function(row) {
+          var cells = Array.from(row.querySelectorAll('td')).map(function(c){ return '"'+c.textContent.trim()+'"'; });
+          csv.push(cells.join(','));
+        });
+        var a = document.createElement('a');
+        a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv.join('\n'));
+        a.download = 'attendance-report.csv';
+        a.click();
+      }
       }
 
       function uploadAttendance() {

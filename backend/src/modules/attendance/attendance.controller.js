@@ -7,6 +7,7 @@ async function getStudentAttendance(req, res, next) {
     const where = {};
     if (date)      where.date    = new Date(date);
     if (classId)   where.classId = parseInt(classId);
+    if (sectionId) where.student = { sectionId: parseInt(sectionId) };
     const records = await prisma.studentAttendance.findMany({
       where,
       include: { student: { include: { section: true } } },
@@ -69,13 +70,45 @@ async function getAttendanceReport(req, res, next) {
       if (endDate)   where.date.lte = new Date(endDate);
     }
 
-    const records = await prisma.studentAttendance.groupBy({
-      by: ['studentId', 'status'],
+    // Fetch all records with student info in one query
+    const records = await prisma.studentAttendance.findMany({
       where,
-      _count: { status: true },
+      include: { student: { include: { class: true } } },
+      orderBy: { date: 'desc' },
     });
 
-    return sendSuccess(res, records);
+    // Aggregate per student
+    const studentMap = {};
+    records.forEach((r) => {
+      const id = r.studentId;
+      if (!studentMap[id]) {
+        studentMap[id] = {
+          studentId: id,
+          studentName: r.student
+            ? (r.student.firstName + ' ' + (r.student.lastName || '')).trim()
+            : '—',
+          rollNo:    r.student ? r.student.rollNo    : '—',
+          className: r.student && r.student.class ? r.student.class.name : '—',
+          total:   0,
+          present: 0,
+          absent:  0,
+          late:    0,
+          leave:   0,
+        };
+      }
+      studentMap[id].total++;
+      if (r.status === 'PRESENT') studentMap[id].present++;
+      else if (r.status === 'ABSENT') studentMap[id].absent++;
+      else if (r.status === 'LATE')   studentMap[id].late++;
+      else if (r.status === 'LEAVE')  studentMap[id].leave++;
+    });
+
+    const result = Object.values(studentMap).map((s) => ({
+      ...s,
+      percentage: s.total ? Math.round((s.present / s.total) * 100) : 0,
+    }));
+
+    return sendSuccess(res, result);
   } catch (err) { next(err); }
 }
 

@@ -196,70 +196,85 @@
 
   function todayStr() { return new Date().toISOString().split('T')[0]; }
 
+  async function loadDepartmentFilter() {
+    try {
+      var res = await API.teachers.list({ limit: 200 });
+      var teachers = (res && res.success) ? (res.data.data || res.data || []) : [];
+      var sel = document.getElementById('filterDept');
+      var depts = {};
+      teachers.forEach(function(t){ if (t.department) depts[t.department] = 1; });
+      sel.innerHTML = '<option value="">All Departments</option>';
+      Object.keys(depts).sort().forEach(function(d){
+        sel.innerHTML += '<option value="' + d + '">' + d + '</option>';
+      });
+    } catch(e) {}
+  }
+
   async function loadTeachers() {
     var dept = document.getElementById('filterDept').value;
-    var params = { limit: 200, status: 'ACTIVE' };
+    var params = { limit: 200 };
     if (dept) params.department = dept;
     var res = await API.teachers.list(params);
-    if (!res || !res.success) return;
+    if (!res || !res.success) { API.toast('Failed to load teachers.', 'danger'); return; }
     loadedTeachers = res.data.data || res.data || [];
     var date = document.getElementById('attDate').value || todayStr();
 
-    // Load existing attendance for this date
     var attRes = await API.attendance.listTeachers({ date: date });
     var saved = (attRes && attRes.success) ? (attRes.data || []) : [];
 
     var tbody = document.getElementById('teacherBody');
-    if (loadedTeachers.length === 0) {
+    if (!loadedTeachers.length) {
       tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-4">No teachers found.</td></tr>';
       return;
     }
     tbody.innerHTML = loadedTeachers.map(function(t, i) {
       var existing = saved.find(function(r) { return r.teacherId === t.id; });
-      var status = existing ? existing.status : 'PRESENT';
-      var timeIn = existing ? (existing.timeIn || '') : '';
+      var status  = existing ? existing.status  : 'PRESENT';
       var remarks = existing ? (existing.remarks || '') : '';
       return '<tr>' +
         '<td>' + (i + 1) + '</td>' +
-        '<td><strong>' + t.name + '</strong></td>' +
-        '<td>' + (t.department || '-') + '</td>' +
-        '<td>-</td>' +
+        '<td><strong>' + (t.name || '') + '</strong></td>' +
+        '<td>' + (t.department || '—') + '</td>' +
+        '<td>' + (t.qualification || '—') + '</td>' +
         '<td><select class="form-select form-select-sm" id="status-' + t.id + '" style="width:120px">' +
           '<option' + (status === 'PRESENT' ? ' selected' : '') + ' value="PRESENT">Present</option>' +
-          '<option' + (status === 'ABSENT' ? ' selected' : '') + ' value="ABSENT">Absent</option>' +
-          '<option' + (status === 'LATE' ? ' selected' : '') + ' value="LATE">Late</option>' +
-          '<option' + (status === 'LEAVE' ? ' selected' : '') + ' value="LEAVE">Leave</option>' +
+          '<option' + (status === 'ABSENT'  ? ' selected' : '') + ' value="ABSENT">Absent</option>' +
+          '<option' + (status === 'LATE'    ? ' selected' : '') + ' value="LATE">Late</option>' +
+          '<option' + (status === 'LEAVE'   ? ' selected' : '') + ' value="LEAVE">Leave</option>' +
         '</select></td>' +
-        '<td><input type="time" class="form-control form-control-sm" id="time-' + t.id + '" value="' + timeIn + '" style="width:110px"></td>' +
+        '<td><input type="time" class="form-control form-control-sm" id="time-' + t.id + '" style="width:110px"></td>' +
         '<td><input type="text" class="form-control form-control-sm" id="rem-' + t.id + '" value="' + remarks + '" placeholder="Optional"></td>' +
         '</tr>';
     }).join('');
-    updateStats(saved, date);
+    updateStats(saved);
   }
 
   function markAll(status) {
-    var rows = document.querySelectorAll('[id^="status-"]');
-    rows.forEach(function(sel) { sel.value = status; });
+    loadedTeachers.forEach(function(t) {
+      var sel = document.getElementById('status-' + t.id);
+      if (sel) sel.value = status;
+    });
   }
 
   async function saveAttendance() {
     var date = document.getElementById('attDate').value || todayStr();
-    var rows = document.querySelectorAll('[id^="status-"]');
-    if (rows.length === 0) { API.toast('Load teachers first.', 'warning'); return; }
+    if (!loadedTeachers.length) { API.toast('Load teachers first.', 'warning'); return; }
 
     var records = loadedTeachers.map(function(t) {
+      var statusEl  = document.getElementById('status-' + t.id);
+      var remarksEl = document.getElementById('rem-' + t.id);
       return {
         teacherId: t.id,
-        date: date,
-        status: document.getElementById('status-' + t.id).value,
-        remarks: document.getElementById('rem-' + t.id).value || null
+        date:      date,
+        status:    statusEl  ? statusEl.value  : 'PRESENT',
+        remarks:   remarksEl ? (remarksEl.value || null) : null
       };
     });
 
-    var res = await API.attendance.markTeachers({ date: date, records: records });
+    var res = await API.attendance.markTeachers({ records: records });
     if (res && res.success) {
       API.toast('Attendance saved for ' + date, 'success');
-      updateStats(records, date);
+      updateStats(records);
     } else {
       API.toast((res && res.message) || 'Save failed', 'danger');
     }
@@ -268,41 +283,43 @@
   async function viewRecords() {
     var date = document.getElementById('viewDate').value || todayStr();
     var res = await API.attendance.listTeachers({ date: date });
-    if (!res || !res.success) return;
+    if (!res || !res.success) { API.toast('Failed to load records.', 'danger'); return; }
     var recs = res.data || [];
     var tbody = document.getElementById('recordsBody');
-    if (recs.length === 0) {
+    if (!recs.length) {
       tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-3">No records for this date.</td></tr>';
+      updateStats([]);
       return;
     }
     tbody.innerHTML = recs.map(function(r, i) {
       var badge = r.status === 'PRESENT' ? 'bg-success' : r.status === 'ABSENT' ? 'bg-danger' : r.status === 'LATE' ? 'bg-warning text-dark' : 'bg-secondary';
-      var name = r.teacher ? r.teacher.name : '—';
-      var dept = r.teacher ? r.teacher.department : '—';
+      var name  = r.teacher ? (r.teacher.name || '') : '—';
+      var dept  = r.teacher ? (r.teacher.department || '—') : '—';
       var dateStr = r.date ? r.date.substring(0, 10) : '—';
-      return '<tr><td>' + (i + 1) + '</td><td>' + dateStr + '</td><td>' + name + '</td><td>' + dept + '</td>' +
+      return '<tr><td>' + (i+1) + '</td><td>' + dateStr + '</td><td>' + name + '</td><td>' + dept + '</td>' +
         '<td><span class="badge ' + badge + '">' + r.status + '</span></td>' +
-        '<td>-</td><td>' + (r.remarks || '-') + '</td></tr>';
+        '<td>—</td><td>' + (r.remarks || '—') + '</td></tr>';
     }).join('');
-    updateStats(recs, date);
+    updateStats(recs);
   }
 
-  function updateStats(recs, date) {
+  function updateStats(recs) {
     var present = recs.filter(function(r) { return r.status === 'PRESENT'; }).length;
-    var absent = recs.filter(function(r) { return r.status === 'ABSENT'; }).length;
-    var late = recs.filter(function(r) { return r.status === 'LATE'; }).length;
-    var total = recs.length;
+    var absent  = recs.filter(function(r) { return r.status === 'ABSENT';  }).length;
+    var late    = recs.filter(function(r) { return r.status === 'LATE';    }).length;
+    var total   = recs.length;
     document.getElementById('statPresent').textContent = present;
-    document.getElementById('statAbsent').textContent = absent;
-    document.getElementById('statLate').textContent = late;
-    document.getElementById('statRate').textContent = total ? Math.round((present / total) * 100) + '%' : '0%';
+    document.getElementById('statAbsent').textContent  = absent;
+    document.getElementById('statLate').textContent    = late;
+    document.getElementById('statRate').textContent    = total ? Math.round((present / total) * 100) + '%' : '0%';
   }
 
   function printRecords() { window.print(); }
 
   document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('attDate').value = todayStr();
+    document.getElementById('attDate').value  = todayStr();
     document.getElementById('viewDate').value = todayStr();
+    loadDepartmentFilter();
   });
 </script>
 </body>

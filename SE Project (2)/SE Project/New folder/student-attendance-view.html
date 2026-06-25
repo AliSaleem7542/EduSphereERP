@@ -115,12 +115,13 @@
     list = list.slice().sort(function(a, b) { return b.date > a.date ? 1 : -1; });
 
     var present = list.filter(function(a) { return a.status === 'PRESENT'; }).length;
-    var absent = list.filter(function(a) { return a.status === 'ABSENT'; }).length;
-    var leave = list.filter(function(a) { return a.status === 'LEAVE' || a.status === 'LATE'; }).length;
+    var absent  = list.filter(function(a) { return a.status === 'ABSENT'; }).length;
+    var leave   = list.filter(function(a) { return a.status === 'LEAVE'; }).length;
+    var late    = list.filter(function(a) { return a.status === 'LATE'; }).length;
     var pct = list.length ? Math.round((present / list.length) * 100) : 0;
     document.getElementById('statPresent').textContent = present;
-    document.getElementById('statAbsent').textContent = absent;
-    document.getElementById('statLeave').textContent = leave;
+    document.getElementById('statAbsent').textContent  = absent;
+    document.getElementById('statLeave').textContent   = leave + (late > 0 ? ' (Late: ' + late + ')' : '');
     document.getElementById('statPct').textContent = pct + '%';
 
     var tbody = document.getElementById('attBody');

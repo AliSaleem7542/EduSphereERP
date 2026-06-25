@@ -157,8 +157,12 @@
   }
 
   function markAll(status) {
+    var statusUpper = status.toUpperCase();
     studentCache.forEach(function(s) {
-      var radio = document.getElementById((status==='PRESENT'?'p_':status==='ABSENT'?'a_':'l_')+s.id);
+      var radio = document.getElementById(
+        statusUpper === 'PRESENT' ? 'p_' + s.id :
+        statusUpper === 'ABSENT'  ? 'a_' + s.id : 'l_' + s.id
+      );
       if (radio) radio.checked = true;
     });
   }
