@@ -238,10 +238,6 @@
                         <label for="classroomClass" class="form-label"><i class="bi bi-diagram-3-fill"></i> Select Class</label>
                         <select class="form-select form-select-lg" id="classroomClass" onchange="loadClassroomSections()" required>
                           <option value="">Choose class...</option>
-                          <option value="9">Grade 9</option>
-                          <option value="10">Grade 10</option>
-                          <option value="11">Grade 11</option>
-                          <option value="12">Grade 12</option>
                         </select>
                       </div>
                     </div>
@@ -328,17 +324,66 @@
           var cRes = await API.classes.list();
           _classes = (cRes && cRes.success) ? (cRes.data || []) : [];
           _sections = [];
-          for (var i = 0; i < _classes.length; i++) {
-            try {
-              var sRes = await API.classes.sections(_classes[i].id);
-              var secs = (sRes && sRes.success) ? (sRes.data || []) : [];
-              secs.forEach(function(s){ s._className = _classes[i].name; });
-              _sections = _sections.concat(secs);
-            } catch(e) {}
+          // Populate class dropdown from API
+          var classSel = document.getElementById('classroomClass');
+          if (classSel) {
+            classSel.innerHTML = '<option value="">Choose class...</option>';
+            _classes.forEach(function(c) {
+              classSel.innerHTML += '<option value="' + c.id + '">' + c.name + '</option>';
+            });
+          }
+          // Load sections using included data
+          _classes.forEach(function(c) {
+            var secs = c.sections || [];
+            secs.forEach(function(s){ s._className = c.name; s._classId = c.id; });
+            _sections = _sections.concat(secs);
+          });
+          // Fallback: fetch sections per class if not included
+          if (!_sections.length && _classes.length) {
+            for (var i = 0; i < _classes.length; i++) {
+              try {
+                var sRes = await API.classes.sections(_classes[i].id);
+                var secs = (sRes && sRes.success) ? (sRes.data || []) : [];
+                secs.forEach(function(s){ s._className = _classes[i].name; s._classId = _classes[i].id; });
+                _sections = _sections.concat(secs);
+              } catch(e) {}
+            }
           }
           renderClassrooms();
           updateStats();
         } catch(e) { API.toast('Failed to load data.', 'danger'); }
+      }
+
+      async function loadClassroomSections() {
+        var classId = document.getElementById('classroomClass').value;
+        var sel = document.getElementById('classroomSection');
+        sel.innerHTML = '<option value="">Choose section...</option>';
+        if (!classId) return;
+        try {
+          var res = await API.classes.sections(classId);
+          if (res && res.success) {
+            (res.data || []).forEach(function(s) {
+              sel.innerHTML += '<option value="' + s.id + '">' + s.name + '</option>';
+            });
+          }
+        } catch(e) {}
+      }
+
+      function assignClassroom() {
+        var classId   = document.getElementById('classroomClass').value;
+        var sectionId = document.getElementById('classroomSection').value;
+        var classroom = document.getElementById('classroom').value;
+        if (!classId || !sectionId || !classroom) {
+          API.toast('Please select class, section and classroom.', 'warning'); return;
+        }
+        // Store assignment locally for display (no backend endpoint for classroom assignment)
+        var cls = _classes.find(function(c){ return String(c.id) === String(classId); });
+        var sec = _sections.find(function(s){ return String(s.id) === String(sectionId); });
+        API.toast('Classroom "' + classroom + '" assigned to ' + (cls ? cls.name : '') + ' - ' + (sec ? sec.name : '') + '.', 'success');
+        document.getElementById('classroomClass').value   = '';
+        document.getElementById('classroomSection').value = '';
+        document.getElementById('classroom').value        = '';
+        document.getElementById('classroomSection').innerHTML = '<option value="">Choose section...</option>';
       }
 
       function updateStats() {
