@@ -408,9 +408,7 @@
         ['promoteFromClass','promoteToClass'].forEach(function(selId) {
           var sel = document.getElementById(selId);
           if (!sel) return;
-          var first = sel.options[0];
-          sel.innerHTML = '';
-          sel.appendChild(first);
+          sel.innerHTML = '<option value="">Choose class...</option>';
           _classes.forEach(function(c) {
             sel.innerHTML += '<option value="' + c.id + '">' + c.name + '</option>';
           });

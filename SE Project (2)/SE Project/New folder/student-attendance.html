@@ -176,7 +176,7 @@
                         <div class="col-lg-3 col-6">
                             <div class="small-box text-bg-warning">
                                 <div class="inner">
-                                    <h3 id="todayLate">25</h3>
+                                    <h3 id="todayLate">0</h3>
                                     <p>Late Today</p>
                                 </div>
                                 <div class="small-box-icon">
@@ -420,26 +420,21 @@
           var res = await API.classes.list();
           if (!res || !res.success) return;
           var classes = res.data || [];
-          var selIds = ['classSelect', 'viewClass'];
-          selIds.forEach(function(selId) {
+          ['classSelect', 'viewClass'].forEach(function(selId) {
             var sel = document.getElementById(selId);
             if (!sel) return;
-            var first = sel.options[0];
-            sel.innerHTML = '';
-            sel.appendChild(first);
+            sel.innerHTML = '<option value="">Select Class</option>';
             classes.forEach(function(c) {
               sel.innerHTML += '<option value="' + c.id + '">' + c.name + '</option>';
             });
           });
-        } catch(e) {}
+        } catch(e) { console.error('loadClassDropdowns error:', e); }
       }
 
       async function loadSectionDropdown(classId, selId) {
         var sel = document.getElementById(selId);
         if (!sel) return;
-        var first = sel.options[0];
-        sel.innerHTML = '';
-        sel.appendChild(first);
+        sel.innerHTML = '<option value="">All Sections</option>';
         if (!classId) return;
         try {
           var res = await API.classes.sections(classId);
@@ -448,7 +443,7 @@
               sel.innerHTML += '<option value="' + s.id + '">' + s.name + '</option>';
             });
           }
-        } catch(e) {}
+        } catch(e) { console.error('loadSectionDropdown error:', e); }
       }
 
       document.getElementById('classSelect').addEventListener('change', function() {

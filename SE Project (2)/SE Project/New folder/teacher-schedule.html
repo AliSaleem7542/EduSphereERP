@@ -446,9 +446,7 @@
     ['sTeacher','filterTeacher'].forEach(function(selId) {
       var sel = document.getElementById(selId);
       if (!sel) return;
-      var first = sel.options[0];
-      sel.innerHTML = '';
-      sel.appendChild(first);
+      sel.innerHTML = '<option value="">-- Select Teacher --</option>';
       _teachers.forEach(function(t) {
         var name = t.name || ((t.firstName||'') + ' ' + (t.lastName||'')).trim();
         sel.innerHTML += '<option value="' + name + '">' + name + (t.department ? ' (' + t.department + ')' : '') + '</option>';
