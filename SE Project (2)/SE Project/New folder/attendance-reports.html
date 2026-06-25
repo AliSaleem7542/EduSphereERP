@@ -182,7 +182,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <label for="classFilter" class="form-label">Class</label>
-                                    <select class="form-select" id="classFilter">
+                                    <select class="form-select" id="classFilter" onchange="loadSectionFilter()">
                                         <option value="">All Classes</option>
                                     </select>
                                 </div>
@@ -415,6 +415,21 @@
         }
       }
 
+      async function loadSectionFilter() {
+        var classId = document.getElementById('classFilter').value;
+        var sel = document.getElementById('sectionFilter');
+        sel.innerHTML = '<option value="">All Sections</option>';
+        if (!classId) return;
+        try {
+          var res = await API.classes.sections(classId);
+          if (res && res.success) {
+            (res.data || []).forEach(function(s) {
+              sel.innerHTML += '<option value="' + s.id + '">' + s.name + '</option>';
+            });
+          }
+        } catch(e) { console.error('loadSectionFilter error:', e); }
+      }
+
       function initializeCharts() {
         var trendCtx = document.getElementById('attendanceTrendChart').getContext('2d');
         trendChart = new Chart(trendCtx, {
@@ -457,16 +472,18 @@
       }
 
       async function generateReport() {
-        var type    = document.getElementById('reportType').value;
-        var period  = document.getElementById('timePeriod').value;
-        var classId = document.getElementById('classFilter').value;
-        var range   = getDateRange(period);
-        var tbody   = document.getElementById('reportTableBody');
+        var type      = document.getElementById('reportType').value;
+        var period    = document.getElementById('timePeriod').value;
+        var classId   = document.getElementById('classFilter').value;
+        var sectionId = document.getElementById('sectionFilter').value;
+        var range     = getDateRange(period);
+        var tbody     = document.getElementById('reportTableBody');
         tbody.innerHTML = '<tr><td colspan="10" class="text-center py-3"><span class="spinner-border spinner-border-sm me-2"></span>Loading...</td></tr>';
 
         try {
           var params = { startDate: range.startDate, endDate: range.endDate };
-          if (classId) params.classId = classId;
+          if (classId)   params.classId   = classId;
+          if (sectionId) params.sectionId = sectionId;
 
           if (type === 'teacher') {
             var res = await API.attendance.listTeachers(params);
