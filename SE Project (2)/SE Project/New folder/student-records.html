@@ -321,7 +321,7 @@
 
       async function loadStats() {
         try {
-          var res = await API.students.list({ limit: 1000 });
+          var res = await API.students.list({ limit: 1000, status: 'ACTIVE' });
           if (res && res.success) {
             var all = res.data.data || [];
             allStudentsCache = all;

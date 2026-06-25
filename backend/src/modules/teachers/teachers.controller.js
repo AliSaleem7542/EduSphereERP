@@ -180,9 +180,28 @@ async function update(req, res, next) {
 async function remove(req, res, next) {
   try {
     const id = parseInt(req.params.id);
-    await prisma.teacher.update({ where: { id }, data: { status: 'INACTIVE' } });
+
+    // Delete all related records first to avoid foreign key constraint errors
+    await prisma.timetable.deleteMany({ where: { teacherId: id } });
+    await prisma.examResult.deleteMany({ where: { enteredById: id } });
+    await prisma.studentAttendance.deleteMany({ where: { markedById: id } });
+    await prisma.teacherAttendance.deleteMany({ where: { teacherId: id } });
+    await prisma.teacherSubject.deleteMany({ where: { teacherId: id } });
+
+    // Remove class teacher assignment from sections
+    await prisma.section.updateMany({ where: { classTeacherId: id }, data: { classTeacherId: null } });
+
+    // Get userId to delete the linked user account too
+    const teacher = await prisma.teacher.findUnique({ where: { id }, select: { userId: true } });
+
+    await prisma.teacher.delete({ where: { id } });
+
+    if (teacher?.userId) {
+      await prisma.user.delete({ where: { id: teacher.userId } }).catch(() => {});
+    }
+
     await logActivity({ userId: req.user.id, action: 'DELETE_TEACHER', entity: 'Teacher', entityId: id, ipAddress: req.ip });
-    return sendSuccess(res, null, 'Teacher deactivated successfully');
+    return sendSuccess(res, null, 'Teacher deleted successfully');
   } catch (err) {
     next(err);
   }

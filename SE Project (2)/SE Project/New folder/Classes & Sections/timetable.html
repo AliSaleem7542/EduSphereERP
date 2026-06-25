@@ -320,7 +320,7 @@
           }
           var mTch = document.getElementById('mTeacher');
           if (mTch) {
-            mTch.innerHTML = '<option value="">— (Break / None)</option>';
+            mTch.innerHTML = '<option value="">ï¿½ (Break / None)</option>';
             _teachers.forEach(function(t){ var name = t.name || ((t.firstName||'') + ' ' + (t.lastName||'')).trim(); mTch.innerHTML += '<option value="' + t.id + '">' + name + '</option>'; });
           }
         } catch(e) {}
