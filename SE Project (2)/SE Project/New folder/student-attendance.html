@@ -412,24 +412,41 @@
 
       // Load class dropdowns from API
       async function loadClassDropdowns() {
-        try {
-          var res = await API.classes.list();
-          if (!res || !res.success) {
-            // Render server may be waking up — retry once after 3 seconds
-            await new Promise(function(r){ setTimeout(r, 3000); });
-            res = await API.classes.list();
+        var selIds = ['classSelect', 'viewClass'];
+
+        // Show loading state
+        selIds.forEach(function(selId) {
+          var sel = document.getElementById(selId);
+          if (sel) sel.innerHTML = '<option value="">Loading classes...</option>';
+        });
+
+        var classes = [];
+        // Try up to 3 times with increasing delays (handles Render cold start)
+        for (var attempt = 1; attempt <= 3; attempt++) {
+          try {
+            var res = await API.classes.list();
+            if (res && res.success && res.data && res.data.length > 0) {
+              classes = res.data;
+              break;
+            }
+          } catch(e) { console.warn('Attempt ' + attempt + ' failed:', e); }
+          if (attempt < 3) {
+            await new Promise(function(r){ setTimeout(r, attempt * 2000); });
           }
-          if (!res || !res.success) return;
-          var classes = res.data || [];
-          ['classSelect', 'viewClass'].forEach(function(selId) {
-            var sel = document.getElementById(selId);
-            if (!sel) return;
+        }
+
+        selIds.forEach(function(selId) {
+          var sel = document.getElementById(selId);
+          if (!sel) return;
+          if (classes.length === 0) {
+            sel.innerHTML = '<option value="">No classes found — please refresh</option>';
+          } else {
             sel.innerHTML = '<option value="">Select Class</option>';
             classes.forEach(function(c) {
               sel.innerHTML += '<option value="' + c.id + '">' + c.name + '</option>';
             });
-          });
-        } catch(e) { console.error('loadClassDropdowns error:', e); }
+          }
+        });
       }
 
       async function loadSectionDropdown(classId, selId) {
@@ -621,8 +638,6 @@
         a.download = 'attendance-report.csv';
         a.click();
       }
-      }
-
       function uploadAttendance() {
         API.toast('Bulk import via CSV is not yet supported.', 'info');
       }

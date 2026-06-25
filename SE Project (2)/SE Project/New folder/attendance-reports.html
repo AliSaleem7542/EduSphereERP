@@ -395,20 +395,24 @@
       });
 
       async function loadClassDropdown() {
-        try {
-          var res = await API.classes.list();
-          if (!res || !res.success) {
-            await new Promise(function(r){ setTimeout(r, 3000); });
-            res = await API.classes.list();
-          }
-          if (res && res.success) {
-            var sel = document.getElementById('classFilter');
-            sel.innerHTML = '<option value="">All Classes</option>';
-            res.data.forEach(function(c) {
-              sel.innerHTML += '<option value="' + c.id + '">' + c.name + '</option>';
-            });
-          }
-        } catch(e) { console.error('loadClassDropdown error:', e); }
+        var sel = document.getElementById('classFilter');
+        if (sel) sel.innerHTML = '<option value="">Loading classes...</option>';
+        var classes = [];
+        for (var attempt = 1; attempt <= 3; attempt++) {
+          try {
+            var res = await API.classes.list();
+            if (res && res.success && res.data && res.data.length > 0) {
+              classes = res.data; break;
+            }
+          } catch(e) {}
+          if (attempt < 3) await new Promise(function(r){ setTimeout(r, attempt * 2000); });
+        }
+        if (sel) {
+          sel.innerHTML = '<option value="">All Classes</option>';
+          classes.forEach(function(c) {
+            sel.innerHTML += '<option value="' + c.id + '">' + c.name + '</option>';
+          });
+        }
       }
 
       function initializeCharts() {
