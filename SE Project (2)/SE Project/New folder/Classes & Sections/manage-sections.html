@@ -364,9 +364,7 @@
         ['sectionClass','editSectionClass'].forEach(function(selId) {
           var sel = document.getElementById(selId);
           if (!sel) return;
-          var first = sel.options[0];
-          sel.innerHTML = '';
-          sel.appendChild(first);
+          sel.innerHTML = '<option value="">Choose class...</option>';
           _classes.forEach(function(c) {
             sel.innerHTML += '<option value="' + c.id + '">' + c.name + '</option>';
           });
@@ -375,13 +373,23 @@
 
       async function loadAllSections() {
         _allSections = [];
-        for (var i = 0; i < _classes.length; i++) {
-          try {
-            var res = await API.classes.sections(_classes[i].id);
-            var secs = (res && res.success) ? (res.data || []) : [];
-            secs.forEach(function(s) { s._className = _classes[i].name; s._classId = _classes[i].id; });
-            _allSections = _allSections.concat(secs);
-          } catch(e) {}
+        // Use sections already included in the classes list response (no N+1 loop)
+        _classes.forEach(function(c) {
+          var secs = c.sections || [];
+          secs.forEach(function(s) { s._className = c.name; s._classId = c.id; });
+          _allSections = _allSections.concat(secs);
+        });
+
+        // If sections were not included, fall back to fetching per class
+        if (!_allSections.length && _classes.length) {
+          for (var i = 0; i < _classes.length; i++) {
+            try {
+              var res = await API.classes.sections(_classes[i].id);
+              var secs = (res && res.success) ? (res.data || []) : [];
+              secs.forEach(function(s) { s._className = _classes[i].name; s._classId = _classes[i].id; });
+              _allSections = _allSections.concat(secs);
+            } catch(e) {}
+          }
         }
         renderSections();
       }
