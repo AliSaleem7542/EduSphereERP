@@ -321,7 +321,12 @@
 
       async function loadData() {
         try {
-          var cRes = await API.classes.list();
+          var cRes = null;
+          for (var attempt = 1; attempt <= 3; attempt++) {
+            cRes = await API.classes.list();
+            if (cRes && cRes.success && cRes.data && cRes.data.length > 0) break;
+            if (attempt < 3) await new Promise(function(r){ setTimeout(r, attempt * 2000); });
+          }
           _classes = (cRes && cRes.success) ? (cRes.data || []) : [];
           _sections = [];
           // Populate class dropdown from API
