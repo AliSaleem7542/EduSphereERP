@@ -382,26 +382,29 @@
         if (!classId || !sectionId || !classroom) {
           API.toast('Please select class, section and classroom.', 'warning'); return;
         }
-        var cls = _classes.find(function(c){ return String(c.id) === String(classId); });
-        var sec = _sections.find(function(s){ return String(s.id) === String(sectionId); });
-        if (!cls || !sec) { API.toast('Invalid selection.', 'danger'); return; }
+
+        // Get names directly from dropdown text — no dependency on _sections array
+        var classSel   = document.getElementById('classroomClass');
+        var sectionSel = document.getElementById('classroomSection');
+        var className   = classSel.options[classSel.selectedIndex]   ? classSel.options[classSel.selectedIndex].text   : classId;
+        var sectionName = sectionSel.options[sectionSel.selectedIndex] ? sectionSel.options[sectionSel.selectedIndex].text : sectionId;
 
         // Save to localStorage
         var assignments = JSON.parse(localStorage.getItem('classroomAssignments') || '[]');
         // Remove existing assignment for this section
-        assignments = assignments.filter(function(a){ return a.sectionId !== sectionId; });
+        assignments = assignments.filter(function(a){ return String(a.sectionId) !== String(sectionId); });
         assignments.push({
-          classId:   classId,
-          className: cls.name,
-          sectionId: sectionId,
-          sectionName: sec.name,
-          classroom:  classroom,
-          date:       new Date().toISOString().split('T')[0],
-          status:     'Active'
+          classId:     classId,
+          className:   className,
+          sectionId:   sectionId,
+          sectionName: sectionName,
+          classroom:   classroom,
+          date:        new Date().toISOString().split('T')[0],
+          status:      'Active'
         });
         localStorage.setItem('classroomAssignments', JSON.stringify(assignments));
 
-        API.toast('Classroom "' + classroom + '" assigned to ' + cls.name + ' - ' + sec.name + '.', 'success');
+        API.toast('Classroom "' + classroom + '" assigned to ' + className + ' - ' + sectionName + '.', 'success');
         document.getElementById('classroomClass').value   = '';
         document.getElementById('classroomSection').value = '';
         document.getElementById('classroom').value        = '';
