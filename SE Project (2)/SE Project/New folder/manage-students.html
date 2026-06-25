@@ -422,6 +422,10 @@
         <strong>Copyright &copy; 2014-2025&nbsp;<a href="#" class="text-decoration-none">EDU-SPHERE</a>.</strong> All rights reserved.
       </footer>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="js/adminlte.js"></script>
     <script src="js/config.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/api.js"></script>
@@ -575,21 +579,27 @@
             '<tr><th>Status</th><td><span class="badge ' + (s.status==='ACTIVE'?'text-bg-success':'text-bg-secondary') + '">' + (s.status||'—') + '</span></td></tr>' +
           '</table></div>' +
           '</div></div></div>';
-        new bootstrap.Modal(document.getElementById('viewModal')).show();
+        var viewModalEl = document.getElementById('viewModal');
+        var existingView = bootstrap.Modal.getInstance(viewModalEl);
+        if (existingView) existingView.dispose();
+        new bootstrap.Modal(viewModalEl).show();
       }
 
       var editStudentData = null;
       async function editStudent(id) {
-        // Show loading state on edit button
-        API.toast('Loading student data...', 'info');
-
         var res = await API.students.get(id);
         if (!res || !res.success) { API.toast('Failed to load student', 'danger'); return; }
         var s = res.data;
         editStudentData = s;
 
-        // Populate class dropdown first (needed before setting values)
-        await loadFilterDropdowns();
+        // Populate class dropdown
+        var ec = document.getElementById('editClass');
+        ec.innerHTML = '<option value="">-- Select Class --</option>';
+        var cRes = await API.classes.list();
+        var classes = (cRes && cRes.success) ? (cRes.data || []) : [];
+        classes.forEach(function(c) {
+          ec.innerHTML += '<option value="' + c.id + '">' + c.name + '</option>';
+        });
 
         // Populate all form fields
         document.getElementById('editId').value          = s.id;
@@ -603,22 +613,25 @@
         document.getElementById('editFatherPhone').value = s.fatherPhone || '';
         document.getElementById('editAddress').value     = s.address     || '';
 
-        // Set class value
-        var ec = document.getElementById('editClass');
-        if (ec && s.classId) {
+        // Set class value and load sections
+        if (s.classId) {
           ec.value = s.classId;
-          // Load sections for this class
-          await updateEditSectionOptions();
-          // Set section value after sections are loaded
+          var sRes = await API.classes.sections(s.classId);
           var es = document.getElementById('editSection');
-          if (es && s.sectionId) {
-            es.value = s.sectionId;
+          es.innerHTML = '<option value="">-- Select Section --</option>';
+          if (sRes && sRes.success) {
+            (sRes.data || []).forEach(function(sec) {
+              es.innerHTML += '<option value="' + sec.id + '">' + sec.name + '</option>';
+            });
           }
+          if (s.sectionId) es.value = s.sectionId;
         }
 
-        // Open the modal
-        var modal = new bootstrap.Modal(document.getElementById('editModal'));
-        modal.show();
+        // Open modal
+        var modalEl = document.getElementById('editModal');
+        var existing = bootstrap.Modal.getInstance(modalEl);
+        if (existing) existing.dispose();
+        new bootstrap.Modal(modalEl).show();
       }
 
       async function saveEdit() {
