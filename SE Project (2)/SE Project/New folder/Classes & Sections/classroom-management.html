@@ -420,19 +420,16 @@
           tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-3">No assignments yet.</td></tr>';
           return;
         }
-        tbody.innerHTML = assignments.map(function(a, i) {
-          var stuCount = _sections.filter(function(s){ return String(s.id) === String(a.sectionId); }).length > 0
-            ? (_students ? _students.filter(function(st){ return String(st.sectionId) === String(a.sectionId); }).length : 0)
-            : 0;
+        tbody.innerHTML = assignments.map(function(a, idx) {
           return '<tr>' +
             '<td><span class="badge text-bg-primary">' + a.className + '</span></td>' +
             '<td>' + a.sectionName + '</td>' +
             '<td><i class="bi bi-building me-1"></i>' + a.classroom + '</td>' +
-            '<td>—</td>' +
-            '<td>—</td>' +
+            '<td>-</td>' +
+            '<td>-</td>' +
             '<td>' + a.date + '</td>' +
             '<td><span class="badge text-bg-success">' + a.status + '</span></td>' +
-            '<td><button class="btn btn-sm btn-outline-danger" onclick="removeAssignment(' + i + ')"><i class="bi bi-trash"></i></button></td>' +
+            '<td><button class="btn btn-sm btn-outline-danger" onclick="removeAssignment(' + idx + ')"><i class="bi bi-trash"></i></button></td>' +
             '</tr>';
         }).join('');
       }
