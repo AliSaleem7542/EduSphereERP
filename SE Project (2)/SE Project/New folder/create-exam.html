@@ -288,13 +288,28 @@
 
       // Load classes from API into the exam class dropdown
       async function loadClassDropdown() {
-        var res = await API.classes.list();
-        if (!res || !res.success) return;
         var sel = document.getElementById('examClass');
-        sel.innerHTML = '<option value="">-- Select Class (optional) --</option>';
-        (res.data || []).forEach(function(c) {
-          sel.innerHTML += '<option value="' + c.id + '">' + c.name + '</option>';
-        });
+        if (sel) sel.innerHTML = '<option value="">Loading...</option>';
+        var classes = [];
+        for (var attempt = 1; attempt <= 3; attempt++) {
+          var res = await API.classes.list();
+          if (res && res.success && res.data && res.data.length > 0) { classes = res.data; break; }
+          if (attempt < 3) await new Promise(function(r){ setTimeout(r, attempt * 2000); });
+        }
+        if (sel) {
+          sel.innerHTML = '<option value="">-- Select Class (optional) --</option>';
+          classes.forEach(function(c) {
+            sel.innerHTML += '<option value="' + c.id + '">' + c.name + '</option>';
+          });
+        }
+        // Also populate filter class dropdown
+        var fsel = document.getElementById('filterClass');
+        if (fsel) {
+          fsel.innerHTML = '<option value="">All Classes</option>';
+          classes.forEach(function(c) {
+            fsel.innerHTML += '<option value="' + c.id + '">' + c.name + '</option>';
+          });
+        }
       }
 
       // Load subjects for selected class

@@ -72,7 +72,10 @@ async function update(req, res, next) {
 
 async function remove(req, res, next) {
   try {
-    await prisma.exam.delete({ where: { id: parseInt(req.params.id) } });
+    const id = parseInt(req.params.id);
+    // Delete results first to avoid FK constraint error
+    await prisma.examResult.deleteMany({ where: { examId: id } });
+    await prisma.exam.delete({ where: { id } });
     return sendSuccess(res, null, 'Exam deleted');
   } catch (err) { next(err); }
 }

@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -238,14 +238,21 @@
       var currentExam = null;
 
       async function populateExamSelect() {
-        var res = await API.exams.list();
-        if (!res || !res.success) return;
-        examCache = res.data || [];
         var sel = document.getElementById('selectExam');
-        sel.innerHTML = '<option value="">-- Select Exam --</option>';
-        examCache.forEach(function(e) {
-          sel.innerHTML += '<option value="'+e.id+'">'+e.title+' ('+(e.class?e.class.name:'All')+' - '+(e.subject?e.subject.name:'All')+')</option>';
-        });
+        if (sel) sel.innerHTML = '<option value="">Loading exams...</option>';
+        var exams = [];
+        for (var attempt = 1; attempt <= 3; attempt++) {
+          var res = await API.exams.list();
+          if (res && res.success) { exams = res.data || []; break; }
+          if (attempt < 3) await new Promise(function(r){ setTimeout(r, attempt * 2000); });
+        }
+        examCache = exams;
+        if (sel) {
+          sel.innerHTML = '<option value="">-- Select Exam --</option>';
+          examCache.forEach(function(e) {
+            sel.innerHTML += '<option value="'+e.id+'">'+e.title+' ('+(e.class?e.class.name:'All')+' - '+(e.subject?e.subject.name:'All')+')</option>';
+          });
+        }
       }
 
       async function loadExamStudents() {
@@ -370,190 +377,6 @@
       document.addEventListener('DOMContentLoaded', function() {
         populateExamSelect();
         loadSavedResults();
-      });
-    </script>
-  </body>
-</html>
-
-      function getGrade(pct) {
-        var s = JSON.parse(localStorage.getItem('sysSettings') || '{}');
-        var aPlus = s.gradeAPlus !== undefined ? parseFloat(s.gradeAPlus) : 90;
-        var a     = s.gradeA     !== undefined ? parseFloat(s.gradeA)     : 80;
-        var b     = s.gradeB     !== undefined ? parseFloat(s.gradeB)     : 70;
-        var c     = s.gradeC     !== undefined ? parseFloat(s.gradeC)     : 60;
-        var d     = s.gradeD     !== undefined ? parseFloat(s.gradeD)     : 50;
-        if (pct >= aPlus) return 'A+';
-        if (pct >= a)     return 'A';
-        if (pct >= b)     return 'B';
-        if (pct >= c)     return 'C';
-        if (pct >= d)     return 'D';
-        return 'F';
-      }
-
-      function populateExamSelect() {
-        var sel = document.getElementById('selectExam');
-        var exams = getExams();
-        sel.innerHTML = '<option value="">-- Select Exam --</option>';
-        exams.forEach(function(e) {
-          sel.innerHTML += '<option value="'+e.id+'">'+e.title+' ('+e.class+' - '+e.subject+')</option>';
-        });
-      }
-
-      function loadExamStudents() {
-        var examId = parseInt(document.getElementById('selectExam').value);
-        var cls = document.getElementById('filterClass').value;
-        var sec = document.getElementById('filterSection').value;
-        var tbody = document.getElementById('marksBody');
-        if (!examId) { tbody.innerHTML = '<tr><td colspan="10" class="text-center text-muted py-4">Select an exam to enter marks.</td></tr>'; return; }
-
-        var exam = getExams().find(function(e){ return e.id===examId; });
-        if (!exam) return;
-        document.getElementById('examInfo').textContent = exam.title + ' | Total: ' + exam.marks + ' | Pass: ' + exam.passing;
-
-        var students = getStudents().filter(function(s) {
-          var mc = !cls || s.class === cls;
-          var ms = !sec || s.section === sec;
-          var me = exam.class === 'All Classes' || s.class === exam.class;
-          return mc && ms && me;
-        });
-
-        var savedResults = getResults();
-
-        if (students.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="10" class="text-center text-muted py-4">No students found for this exam/filter.</td></tr>';
-          return;
-        }
-
-        tbody.innerHTML = students.map(function(s, i) {
-          var existing = savedResults.find(function(r){ return r.studentId===s.id && r.examId===examId; });
-          var obtained = existing ? existing.obtained : '';
-          var pct = obtained !== '' ? Math.round((obtained / exam.marks) * 100) : '';
-          var grade = pct !== '' ? getGrade(pct) : '';
-          var pass = pct !== '' ? (obtained >= exam.passing) : null;
-          return '<tr id="row-'+s.id+'">' +
-            '<td>'+(i+1)+'</td>' +
-            '<td><code>'+(s.rollNo||'-')+'</code></td>' +
-            '<td>'+s.name+'</td>' +
-            '<td>'+s.class+'</td>' +
-            '<td>'+(s.section||'-')+'</td>' +
-            '<td>'+exam.marks+'</td>' +
-            '<td><input type="number" class="form-control form-control-sm" style="width:90px" id="marks-'+s.id+'" value="'+(obtained!==''?obtained:'')+'" min="0" max="'+exam.marks+'" oninput="calcRow('+s.id+','+exam.marks+','+exam.passing+')"></td>' +
-            '<td id="pct-'+s.id+'">'+(pct!==''?pct+'%':'-')+'</td>' +
-            '<td id="grade-'+s.id+'">'+(grade?'<span class="badge bg-primary">'+grade+'</span>':'-')+'</td>' +
-            '<td id="result-'+s.id+'">'+(pass===null?'-':pass?'<span class="badge bg-success">Pass</span>':'<span class="badge bg-danger">Fail</span>')+'</td>' +
-            '</tr>';
-        }).join('');
-      }
-
-      function calcRow(studentId, totalMarks, passingMarks) {
-        var val = parseFloat(document.getElementById('marks-'+studentId).value);
-        if (isNaN(val) || val < 0) { document.getElementById('pct-'+studentId).textContent='-'; document.getElementById('grade-'+studentId).textContent='-'; document.getElementById('result-'+studentId).textContent='-'; return; }
-        var pct = Math.round((val / totalMarks) * 100);
-        var grade = getGrade(pct);
-        var pass = val >= passingMarks;
-        document.getElementById('pct-'+studentId).textContent = pct + '%';
-        document.getElementById('grade-'+studentId).innerHTML = '<span class="badge bg-primary">'+grade+'</span>';
-        document.getElementById('result-'+studentId).innerHTML = pass ? '<span class="badge bg-success">Pass</span>' : '<span class="badge bg-danger">Fail</span>';
-      }
-
-      function saveAllResults() {
-        var examId = parseInt(document.getElementById('selectExam').value);
-        if (!examId) { alert('Please select an exam first.'); return; }
-        var exam = getExams().find(function(e){ return e.id===examId; });
-        var inputs = document.querySelectorAll('[id^="marks-"]');
-        if (inputs.length === 0) { alert('No students loaded.'); return; }
-        var results = getResults().filter(function(r){ return r.examId !== examId; });
-        var count = 0;
-        inputs.forEach(function(inp) {
-          var studentId = parseInt(inp.id.replace('marks-',''));
-          var val = parseFloat(inp.value);
-          if (isNaN(val)) return;
-          var pct = Math.round((val / exam.marks) * 100);
-          var student = getStudents().find(function(s){ return s.id===studentId; });
-          results.push({
-            id: Date.now() + Math.random(),
-            examId: examId, examTitle: exam.title, subject: exam.subject,
-            studentId: studentId, studentName: student ? student.name : '-',
-            rollNo: student ? student.rollNo : '-',
-            totalMarks: exam.marks, obtained: val,
-            percentage: pct, grade: getGrade(pct),
-            pass: val >= exam.passing
-          });
-          count++;
-        });
-        saveResults(results);
-        updateStats();
-        renderSavedResults();
-        alert(count + ' results saved successfully.');
-      }
-
-      function renderSavedResults() {
-        var results = getResults();
-        var tbody = document.getElementById('resultsBody');
-        if (results.length === 0) { tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-3">No results saved yet.</td></tr>'; return; }
-        tbody.innerHTML = results.slice(0,50).map(function(r, i) {
-          return '<tr><td>'+(i+1)+'</td><td>'+r.studentName+'<br><small class="text-muted">'+r.rollNo+'</small></td>' +
-            '<td>'+r.examTitle+'</td><td>'+r.subject+'</td>' +
-            '<td>'+r.obtained+' / '+r.totalMarks+'</td>' +
-            '<td>'+r.percentage+'%</td>' +
-            '<td><span class="badge bg-primary">'+r.grade+'</span></td>' +
-            '<td>'+(r.pass?'<span class="badge bg-success">Pass</span>':'<span class="badge bg-danger">Fail</span>')+'</td></tr>';
-        }).join('');
-      }
-
-      function updateStats() {
-        var results = getResults();
-        var pass = results.filter(function(r){ return r.pass; }).length;
-        var fail = results.filter(function(r){ return !r.pass; }).length;
-        var avg = results.length ? Math.round(results.reduce(function(s,r){ return s+r.percentage; },0)/results.length) : 0;
-        document.getElementById('statEntered').textContent = results.length;
-        document.getElementById('statPass').textContent = pass;
-        document.getElementById('statFail').textContent = fail;
-        document.getElementById('statAvg').textContent = avg + '%';
-      }
-
-      function clearResults() {
-        if (!confirm('Clear all saved results?')) return;
-        saveResults([]);
-        updateStats();
-        renderSavedResults();
-      }
-
-      function printResults() {
-        var results = getResults();
-        if (results.length === 0) { alert('No results to print.'); return; }
-        var rows = results.map(function(r, i) {
-          return '<tr>' +
-            '<td>'+(i+1)+'</td>' +
-            '<td>'+r.studentName+'</td>' +
-            '<td>'+r.rollNo+'</td>' +
-            '<td>'+r.examTitle+'</td>' +
-            '<td>'+r.subject+'</td>' +
-            '<td>'+r.obtained+' / '+r.totalMarks+'</td>' +
-            '<td>'+r.percentage+'%</td>' +
-            '<td>'+r.grade+'</td>' +
-            '<td>'+(r.pass ? 'Pass' : 'Fail')+'</td>' +
-            '</tr>';
-        }).join('');
-        var win = window.open('', '_blank');
-        win.document.write('<!DOCTYPE html><html><head><title>Results - EDU-SPHERE</title>' +
-          '<style>body{font-family:Arial,sans-serif;margin:20px}h2{text-align:center}' +
-          'table{width:100%;border-collapse:collapse}th,td{border:1px solid #ccc;padding:6px 10px;text-align:left}' +
-          'th{background:#333;color:#fff}tr:nth-child(even){background:#f9f9f9}' +
-          '.pass{color:green;font-weight:bold}.fail{color:red;font-weight:bold}</style></head><body>' +
-          '<h2>EDU-SPHERE &mdash; Student Results</h2>' +
-          '<p style="text-align:center">Printed on: '+new Date().toLocaleDateString()+'</p>' +
-          '<table><thead><tr><th>#</th><th>Student Name</th><th>Roll No</th><th>Exam</th><th>Subject</th><th>Marks</th><th>%</th><th>Grade</th><th>Result</th></tr></thead>' +
-          '<tbody>'+rows+'</tbody></table></body></html>');
-        win.document.close();
-        win.focus();
-        win.print();
-      }
-
-      document.addEventListener('DOMContentLoaded', function() {
-        populateExamSelect();
-        updateStats();
-        renderSavedResults();
       });
     </script>
   </body>
