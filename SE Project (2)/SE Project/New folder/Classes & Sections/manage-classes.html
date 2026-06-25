@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -219,11 +219,11 @@
               </div>
               <div class="col-md-3">
                 <div class="info-box"><span class="info-box-icon text-bg-warning shadow-sm"><i class="bi bi-people-fill"></i></span>
-                  <div class="info-box-content"><span class="info-box-text">Total Capacity</span><span class="info-box-number" id="statCapacity">0</span></div></div>
+                  <div class="info-box-content"><span class="info-box-text">Total Sections</span><span class="info-box-number" id="statCapacity">0</span></div></div>
               </div>
               <div class="col-md-3">
                 <div class="info-box"><span class="info-box-icon text-bg-danger shadow-sm"><i class="bi bi-x-circle-fill"></i></span>
-                  <div class="info-box-content"><span class="info-box-text">Inactive Classes</span><span class="info-box-number" id="statInactive">0</span></div></div>
+                  <div class="info-box-content"><span class="info-box-text">Total Students</span><span class="info-box-number" id="statInactive">0</span></div></div>
               </div>
             </div>
 
@@ -312,13 +312,14 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script src="../js/adminlte.js"></script>
-    <script src="../js/config.js"></script>`n    <script src="../js/auth.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/auth.js"></script>
     <script src="../js/api.js"></script>
     <script src="../js/header.js"></script>
     <script>
       AUTH.requireAuth('ADMIN');
 
-      var _classes = [], _teachers = [], _students = [];
+      var _classes = [], _teachers = [], _students = [], _sections = [];
       var BAR_COLORS = ['primary','success','warning','danger','info','secondary'];
 
       async function loadData() {
@@ -331,6 +332,9 @@
           _classes  = (cRes && cRes.success) ? (cRes.data || []) : [];
           _teachers = (tRes && tRes.success) ? (tRes.data.data || tRes.data || []) : [];
           _students = (sRes && sRes.success) ? (sRes.data.data || sRes.data || []) : [];
+          // Use sections already included in classes response
+          _sections = [];
+          _classes.forEach(function(c){ if (c.sections) _sections = _sections.concat(c.sections); });
           populateEditTeacherDropdown();
           renderClasses();
         } catch(e) { API.toast('Failed to load data.', 'danger'); }
@@ -347,8 +351,8 @@
       function updateStats() {
         document.getElementById('statTotal').textContent    = _classes.length;
         document.getElementById('statActive').textContent   = _classes.length;
-        document.getElementById('statCapacity').textContent = _classes.length + ' classes';
-        document.getElementById('statInactive').textContent = _students.length + ' students';
+        document.getElementById('statCapacity').textContent = _sections.length;
+        document.getElementById('statInactive').textContent = _students.length;
       }
 
       async function renderClasses() {

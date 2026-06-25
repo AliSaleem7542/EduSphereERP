@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -230,15 +230,23 @@
               <div class="card-body">
                 <form id="assignTeacherForm">
                   <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                       <div class="mb-3">
                         <label for="teacherClass" class="form-label"><i class="bi bi-diagram-3-fill"></i> Select Class</label>
-                        <select class="form-select form-select-lg" id="teacherClass" required>
+                        <select class="form-select form-select-lg" id="teacherClass" required onchange="loadSectionsForAssign()">
                           <option value="">Choose class...</option>
                         </select>
                       </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
+                      <div class="mb-3">
+                        <label for="teacherSection" class="form-label"><i class="bi bi-grid-3x3-gap-fill"></i> Select Section</label>
+                        <select class="form-select form-select-lg" id="teacherSection" required>
+                          <option value="">Choose section...</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
                       <div class="mb-3">
                         <label for="teacher" class="form-label"><i class="bi bi-person-badge-fill"></i> Select Teacher</label>
                         <select class="form-select form-select-lg" id="teacher" required>
@@ -263,7 +271,7 @@
                   <table class="table table-striped table-hover mb-0">
                     <thead>
                       <tr>
-                        <th>Class</th><th>Teacher</th><th>Assigned Date</th><th>Status</th><th>Actions</th>
+                        <th>Class</th><th>Section</th><th>Teacher</th><th>Status</th><th>Actions</th>
                       </tr>
                     </thead>
                     <tbody id="assignmentsTable">
@@ -286,13 +294,14 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script src="../js/adminlte.js"></script>
-    <script src="../js/config.js"></script>`n    <script src="../js/auth.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/auth.js"></script>
     <script src="../js/api.js"></script>
     <script src="../js/header.js"></script>
     <script>
       AUTH.requireAuth('ADMIN');
 
-      var _classes = [], _teachers = [], _sections = [];
+      var _classes = [], _teachers = [], _allSections = [];
 
       async function loadData() {
         try {
@@ -300,7 +309,7 @@
           _classes  = (cRes && cRes.success) ? (cRes.data || []) : [];
           _teachers = (tRes && tRes.success) ? (tRes.data.data || tRes.data || []) : [];
           populateDropdowns();
-          renderTable();
+          await renderTable();
         } catch(e) { API.toast('Failed to load data.', 'danger'); }
       }
 
@@ -319,50 +328,83 @@
         updateStats();
       }
 
-      function updateStats() {
-        var assigned = _classes.filter(function(c){ return c.classTeacherId; }).length;
-        document.getElementById('statClasses').textContent    = _classes.length;
-        document.getElementById('statAssigned').textContent   = assigned;
-        document.getElementById('statUnassigned').textContent = Math.max(0, _classes.length - assigned);
+      async function loadSectionsForAssign() {
+        var classId = document.getElementById('teacherClass').value;
+        var sel = document.getElementById('teacherSection');
+        sel.innerHTML = '<option value="">Choose section...</option>';
+        if (!classId) return;
+        try {
+          var res = await API.classes.sections(classId);
+          if (res && res.success) {
+            (res.data || []).forEach(function(s) {
+              sel.innerHTML += '<option value="' + s.id + '">' + s.name + '</option>';
+            });
+          }
+        } catch(e) {}
       }
 
-      function renderTable() {
+      function updateStats() {
+        document.getElementById('statClasses').textContent    = _classes.length;
+        // sections with classTeacherId will be counted in renderTable
+      }
+
+      async function renderTable() {
         var tbody = document.getElementById('assignmentsTable');
-        var assigned = _classes.filter(function(c){ return c.classTeacherId || c.classTeacher; });
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center py-2"><span class="spinner-border spinner-border-sm"></span></td></tr>';
+        _allSections = [];
+        for (var i = 0; i < _classes.length; i++) {
+          try {
+            var res = await API.classes.sections(_classes[i].id);
+            var secs = (res && res.success) ? (res.data || []) : [];
+            secs.forEach(function(s) { s._className = _classes[i].name; _allSections.push(s); });
+          } catch(e) {}
+        }
+        var assigned = _allSections.filter(function(s){ return s.classTeacherId || s.classTeacher; });
+        document.getElementById('statAssigned').textContent   = assigned.length;
+        document.getElementById('statUnassigned').textContent = Math.max(0, _allSections.length - assigned.length);
+
         if (!assigned.length) {
           tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-3">No assignments yet.</td></tr>';
           return;
         }
-        tbody.innerHTML = assigned.map(function(c) {
-          var teacherName = c.classTeacher ? (c.classTeacher.name || ((c.classTeacher.firstName||'') + ' ' + (c.classTeacher.lastName||'')).trim()) : '—';
+        tbody.innerHTML = assigned.map(function(s) {
+          var teacherName = s.classTeacher
+            ? (s.classTeacher.name || ((s.classTeacher.firstName||'') + ' ' + (s.classTeacher.lastName||'')).trim())
+            : '—';
           return '<tr>' +
-            '<td><span class="badge text-bg-primary">' + c.name + '</span></td>' +
+            '<td><span class="badge text-bg-primary">' + s._className + '</span></td>' +
+            '<td><span class="badge text-bg-secondary ms-1">' + s.name + '</span></td>' +
             '<td><i class="bi bi-person-badge-fill text-success me-1"></i>' + teacherName + '</td>' +
-            '<td>—</td>' +
             '<td><span class="badge text-bg-success">Active</span></td>' +
-            '<td><button class="btn btn-sm btn-outline-danger" onclick="removeAssignment(' + c.id + ')"><i class="bi bi-trash"></i> Remove</button></td>' +
+            '<td><button class="btn btn-sm btn-outline-danger" onclick="removeAssignment(' + s.id + ')"><i class="bi bi-trash"></i> Remove</button></td>' +
             '</tr>';
         }).join('');
       }
 
       async function assignTeacher() {
         var classId   = document.getElementById('teacherClass').value;
+        var sectionId = document.getElementById('teacherSection').value;
         var teacherId = document.getElementById('teacher').value;
-        if (!classId || !teacherId) { API.toast('Please select both class and teacher.', 'warning'); return; }
+        if (!classId)   { API.toast('Please select a class.', 'warning'); return; }
+        if (!sectionId) { API.toast('Please select a section.', 'warning'); return; }
+        if (!teacherId) { API.toast('Please select a teacher.', 'warning'); return; }
         try {
-          var res = await API.classes.update(classId, { classTeacherId: parseInt(teacherId) });
+          // Correct API: POST /classes/sections/:sectionId/assign-teacher
+          var res = await API.classes.assignTeacher(sectionId, { teacherId: parseInt(teacherId) });
           if (res && res.success) {
             API.toast('Teacher assigned successfully.', 'success');
             document.getElementById('assignTeacherForm').reset();
+            document.getElementById('teacherSection').innerHTML = '<option value="">Choose section...</option>';
             await loadData();
           } else { API.toast((res && res.message) || 'Assignment failed.', 'danger'); }
         } catch(e) { API.toast('Error: ' + e.message, 'danger'); }
       }
 
-      async function removeAssignment(classId) {
-        if (!confirm('Remove this assignment?')) return;
+      async function removeAssignment(sectionId) {
+        if (!confirm('Remove this class teacher assignment?')) return;
         try {
-          var res = await API.classes.update(classId, { classTeacherId: null });
+          // Set classTeacherId to null via updateSection
+          var res = await API.classes.updateSection(sectionId, { classTeacherId: null });
           if (res && res.success) { API.toast('Assignment removed.', 'success'); await loadData(); }
           else API.toast('Remove failed.', 'danger');
         } catch(e) { API.toast('Error: ' + e.message, 'danger'); }

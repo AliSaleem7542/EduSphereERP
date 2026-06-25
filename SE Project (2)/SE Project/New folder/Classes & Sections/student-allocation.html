@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -244,7 +244,7 @@
                     <div class="col-md-4">
                       <div class="mb-3">
                         <label for="allocationClass" class="form-label"><i class="bi bi-diagram-3-fill"></i> Select Class</label>
-                        <select class="form-select form-select-lg" id="allocationClass" required>
+                        <select class="form-select form-select-lg" id="allocationClass" required onchange="onClassChange()">
                           <option value="">Choose class...</option>
                           <option value="9">Grade 9</option>
                           <option value="10">Grade 10</option>
@@ -312,7 +312,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script src="../js/adminlte.js"></script>
-    <script src="../js/config.js"></script>`n    <script src="../js/auth.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/auth.js"></script>
     <script src="../js/api.js"></script>
     <script src="../js/header.js"></script>
     <script>
@@ -349,9 +350,9 @@
         cSel.innerHTML = '<option value="">Choose class...</option>';
         _classes.forEach(function(c){ cSel.innerHTML += '<option value="' + c.id + '">' + c.name + '</option>'; });
 
+        // Section starts empty — filtered by class on change
         var sSel = document.getElementById('allocationSection');
-        sSel.innerHTML = '<option value="">Choose section...</option>';
-        _sections.forEach(function(s){ sSel.innerHTML += '<option value="' + s.id + '">' + s._className + ' - ' + s.name + '</option>'; });
+        sSel.innerHTML = '<option value="">-- Select class first --</option>';
 
         var stSel = document.getElementById('student');
         stSel.innerHTML = '<option value="">Choose student...</option>';
@@ -359,6 +360,16 @@
           var name = (s.firstName||'') + ' ' + (s.lastName||'');
           stSel.innerHTML += '<option value="' + s.id + '">' + name.trim() + ' (' + (s.rollNo||'') + ')</option>';
         });
+      }
+
+      // FIX: Filter section dropdown by selected class
+      function onClassChange() {
+        var classId = document.getElementById('allocationClass').value;
+        var sSel = document.getElementById('allocationSection');
+        sSel.innerHTML = '<option value="">Choose section...</option>';
+        if (!classId) return;
+        var filtered = _sections.filter(function(s){ return String(s._classId) === String(classId); });
+        filtered.forEach(function(s){ sSel.innerHTML += '<option value="' + s.id + '">' + s.name + '</option>'; });
       }
 
       function updateStats() {
