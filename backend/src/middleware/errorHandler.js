@@ -41,13 +41,12 @@ function errorHandler(err, req, res, next) {
   }
 
   if (err instanceof Prisma.PrismaClientValidationError) {
-    // Log the full validation error so we can diagnose field/type mismatches
+    // Log the full validation error for server-side debugging
     console.error('❌ PrismaClientValidationError:', err.message);
+    // Never expose internal database schema details to clients
     return res.status(400).json({
       success: false,
       message: 'Invalid data provided to database',
-      // Include detail in non-production so the frontend can surface it
-      ...(process.env.NODE_ENV !== 'production' && { detail: err.message }),
     });
   }
 

@@ -43,12 +43,21 @@ async function getOne(req, res, next) {
 
     // Students can only view their own profile
     if (req.user.role === 'STUDENT') {
-      const student = await prisma.student.findUnique({ where: { userId: req.user.id } });
-      if (!student || student.id !== id) {
-        return sendError(res, 'Access denied', 403);
+      const student = await prisma.student.findUnique({
+        where: { userId: req.user.id },
+        include: { class: true, section: true, academicYear: true },
+      });
+      if (!student) {
+        return sendError(res, 'Student profile not found', 404);
       }
+      if (student.id !== id) {
+        return sendError(res, 'Access denied: You can only view your own profile', 403);
+      }
+      // Early return with student's own data - prevents further queries
+      return sendSuccess(res, student);
     }
 
+    // Admin/Teacher path - fetch any student
     const student = await prisma.student.findUnique({
       where: { id },
       include: { class: true, section: true, academicYear: true },

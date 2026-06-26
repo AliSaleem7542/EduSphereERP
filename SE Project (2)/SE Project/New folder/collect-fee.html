@@ -21,6 +21,7 @@
 })();
 </script>
 <script src="assets/js/role-sidebar-filter.js"></script>
+<script src="js/security.js"></script>
 </head>
   <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
     <div class="app-wrapper">
@@ -385,10 +386,27 @@
           if (!res || !res.success) return;
           var list = res.data.data || [];
           if (!list.length) { dd.style.display = 'none'; return; }
-          dd.innerHTML = list.map(function(s) {
-            return '<a href="#" class="list-group-item list-group-item-action py-1" onclick="selectStudent(' + JSON.stringify(s).replace(/"/g,'&quot;') + ');return false;">' +
-              '<strong>' + s.firstName + ' ' + (s.lastName||'') + '</strong> <small class="text-muted">(' + s.rollNo + ') ' + (s.class ? s.class.name : '') + '</small></a>';
-          }).join('');
+          
+          // XSS Prevention: Use DOM manipulation instead of innerHTML
+          dd.innerHTML = ''; // Clear existing
+          list.forEach(function(s) {
+            var link = document.createElement('a');
+            link.href = '#';
+            link.className = 'list-group-item list-group-item-action py-1';
+            link.onclick = function() { selectStudent(s); return false; };
+            
+            var strong = document.createElement('strong');
+            strong.textContent = s.firstName + ' ' + (s.lastName || '');
+            
+            var small = document.createElement('small');
+            small.className = 'text-muted';
+            small.textContent = ' (' + s.rollNo + ') ' + (s.class ? s.class.name : '');
+            
+            link.appendChild(strong);
+            link.appendChild(small);
+            dd.appendChild(link);
+          });
+          
           dd.style.display = 'block';
         }, 300);
       }

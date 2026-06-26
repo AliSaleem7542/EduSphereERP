@@ -1,7 +1,22 @@
 const jwt = require('jsonwebtoken');
 
-const ACCESS_SECRET = process.env.JWT_ACCESS_SECRET || 'fallback_access_secret_change_me';
-const REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'fallback_refresh_secret_change_me';
+// ─── Security: JWT secrets are REQUIRED ──────────────────────────────────────
+// Application will not start if these are not set.
+// This prevents using weak fallback secrets in production.
+const ACCESS_SECRET = process.env.JWT_ACCESS_SECRET;
+const REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
+
+if (!ACCESS_SECRET || !REFRESH_SECRET) {
+  console.error('❌ FATAL SECURITY ERROR: JWT secrets are not configured!');
+  console.error('   Please set the following environment variables:');
+  console.error('   - JWT_ACCESS_SECRET');
+  console.error('   - JWT_REFRESH_SECRET');
+  console.error('');
+  console.error('   Generate strong secrets using:');
+  console.error('   node -e "console.log(require(\'crypto\').randomBytes(64).toString(\'hex\'))"');
+  process.exit(1);
+}
+
 const ACCESS_EXPIRES = process.env.JWT_ACCESS_EXPIRES_IN || '15m';
 const REFRESH_EXPIRES = process.env.JWT_REFRESH_EXPIRES_IN || '7d';
 
