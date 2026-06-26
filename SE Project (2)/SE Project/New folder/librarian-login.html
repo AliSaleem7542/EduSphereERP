@@ -80,22 +80,34 @@
       btn.disabled = true;
       btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Signing in...';
 
-      var result = await AUTH.loginAdmin(username, password);
-      btn.disabled = false;
-      btn.innerHTML = '<i class="bi bi-box-arrow-in-right me-2"></i>Sign In';
+      try {
+        var result = await AUTH.loginAdmin(username, password);
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-box-arrow-in-right me-2"></i>Sign In';
 
-      if (result.success) {
-        // Override role to LIBRARIAN in localStorage
-        localStorage.setItem('edu_role', 'LIBRARIAN');
-        var user = AUTH.getUser();
-        if (user) {
-          user.role = 'LIBRARIAN';
-          localStorage.setItem('edu_user', JSON.stringify(user));
+        if (result.success) {
+          // Override role to LIBRARIAN in localStorage (frontend-only role)
+          localStorage.setItem('edu_role', 'LIBRARIAN');
+          var user = AUTH.getUser();
+          if (user) {
+            user.role = 'LIBRARIAN';
+            user.displayRole = 'LIBRARIAN';
+            localStorage.setItem('edu_user', JSON.stringify(user));
+          }
+          sessionStorage.setItem('librarianSession', JSON.stringify({ 
+            username: username, 
+            role: 'LIBRARIAN',
+            timestamp: Date.now()
+          }));
+          window.location.href = 'librarian-dashboard.html';
+        } else {
+          showAlert(result.message || 'Invalid username or password.', 'danger');
         }
-        sessionStorage.setItem('librarianSession', JSON.stringify({ username: username, role: 'LIBRARIAN' }));
-        window.location.href = 'librarian-dashboard.html';
-      } else {
-        showAlert(result.message || 'Invalid username or password.', 'danger');
+      } catch (err) {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-box-arrow-in-right me-2"></i>Sign In';
+        showAlert('Login failed. Please check credentials or try again.', 'danger');
+        console.error('Librarian login error:', err);
       }
     }
   </script>

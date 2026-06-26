@@ -18,8 +18,6 @@ enum Role {
   ADMIN
   TEACHER
   STUDENT
-  CASHIER
-  LIBRARIAN
 }
 
 enum Gender {
