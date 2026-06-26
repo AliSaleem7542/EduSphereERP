@@ -366,7 +366,7 @@
               '<td>'+issDate+'</td>' +
               '<td>'+dueDate+'</td>' +
               '<td>'+(overdue?'<span class="badge bg-danger">Overdue</span>':'<span class="badge bg-success">On Time</span>')+'</td>' +
-              '<td><span class="text-muted small">—</span></td></tr>';
+              '<td><a href="return-book.html" class="btn btn-sm btn-outline-warning"><i class="bi bi-arrow-return-left"></i> Return</a></td></tr>';
           }).join('');
         } catch(e) {
           tbody.innerHTML = '<tr><td colspan="7" class="text-center text-danger py-4">Failed to load issued books.</td></tr>';
@@ -405,11 +405,17 @@
         } catch(e) { /* non-critical */ }
       }
 
-      document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener('DOMContentLoaded', async function() {
         var today = new Date().toISOString().split('T')[0];
         var due   = new Date(); due.setDate(due.getDate() + 14);
         document.getElementById('issueDate').value = today;
         document.getElementById('dueDate').value   = due.toISOString().split('T')[0];
+        // Retry for Render cold start
+        for (var attempt = 1; attempt <= 3; attempt++) {
+          var test = await API.library.issues({ limit: 1 });
+          if (test && test.success) break;
+          if (attempt < 3) await new Promise(function(r){ setTimeout(r, attempt * 2000); });
+        }
         updateStats(); renderIssued(); renderPending(); renderReturnRequests();
       });
     </script>

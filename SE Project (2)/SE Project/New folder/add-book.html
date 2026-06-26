@@ -330,7 +330,15 @@
         document.getElementById('formTitle').textContent = 'Add New Book';
       }
 
-      document.addEventListener('DOMContentLoaded', function() { loadBooks(); });
+      document.addEventListener('DOMContentLoaded', async function() {
+        // Retry for Render cold start
+        for (var attempt = 1; attempt <= 3; attempt++) {
+          var test = await API.library.books({ limit: 1 });
+          if (test && test.success) break;
+          if (attempt < 3) await new Promise(function(r){ setTimeout(r, attempt * 2000); });
+        }
+        loadBooks();
+      });
     </script>
   </body>
 </html>

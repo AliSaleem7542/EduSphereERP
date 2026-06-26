@@ -31,7 +31,13 @@ async function updateBook(req, res, next) {
 
 async function deleteBook(req, res, next) {
   try {
-    await prisma.book.delete({ where: { id: parseInt(req.params.id) } });
+    const id = parseInt(req.params.id);
+    // Check for active (unreturned) issues
+    const activeIssues = await prisma.bookIssue.count({ where: { bookId: id, status: 'ISSUED' } });
+    if (activeIssues > 0) return sendError(res, 'Cannot delete book with active issues. Return all copies first.', 400);
+    // Delete issue history first, then book
+    await prisma.bookIssue.deleteMany({ where: { bookId: id } });
+    await prisma.book.delete({ where: { id } });
     return sendSuccess(res, null, 'Book deleted');
   } catch (err) { next(err); }
 }
