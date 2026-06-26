@@ -75,17 +75,11 @@
       box-shadow: 0 15px 40px rgba(0,0,0,0.3);
     }
     
-    .role-card.admin {
-      --role-color: #e74c3c;
-    }
-    
-    .role-card.teacher {
-      --role-color: #27ae60;
-    }
-    
-    .role-card.student {
-      --role-color: #3498db;
-    }
+    .role-card.admin    { --role-color: #e74c3c; }
+    .role-card.teacher  { --role-color: #27ae60; }
+    .role-card.student  { --role-color: #3498db; }
+    .role-card.librarian{ --role-color: #1a3a5c; }
+    .role-card.cashier  { --role-color: #1a5c2e; }
     
     .role-icon {
       width: 70px;
@@ -203,6 +197,20 @@
         </p>
         <button class="role-btn">Login as Student</button>
       </div>
+      <!-- Librarian Card -->
+      <div class="role-card librarian" onclick="navigateToLogin('librarian')">
+        <div class="role-icon"><i class="bi bi-book-fill"></i></div>
+        <h2 class="role-title">Librarian</h2>
+        <p class="role-description">Manage books, issue and return books, view library records</p>
+        <button class="role-btn">Login as Librarian</button>
+      </div>
+      <!-- Cashier Card -->
+      <div class="role-card cashier" onclick="navigateToLogin('cashier')">
+        <div class="role-icon"><i class="bi bi-cash-coin"></i></div>
+        <h2 class="role-title">Cashier</h2>
+        <p class="role-description">Collect fees, manage receipts, view pending and refund records</p>
+        <button class="role-btn">Login as Cashier</button>
+      </div>
     </div>
     
     <!-- Footer -->
@@ -217,9 +225,11 @@
   <script>
     function navigateToLogin(role) {
       switch(role) {
-        case 'admin':   window.location.href = 'admin-login.html';   break;
-        case 'teacher': window.location.href = 'teacher-login.html'; break;
-        case 'student': window.location.href = 'student-login.html'; break;
+        case 'admin':     window.location.href = 'admin-login.html';     break;
+        case 'teacher':   window.location.href = 'teacher-login.html';   break;
+        case 'student':   window.location.href = 'student-login.html';   break;
+        case 'librarian': window.location.href = 'librarian-login.html'; break;
+        case 'cashier':   window.location.href = 'cashier-login.html';   break;
         default: console.error('Invalid role');
       }
     }

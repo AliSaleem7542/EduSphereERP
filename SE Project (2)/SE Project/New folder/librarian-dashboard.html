@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EDU-SPHERE — Librarian Dashboard</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/adminlte.css">
+  <script>
+    (function(){
+      var s = JSON.parse(localStorage.getItem('sysSettings') || '{}');
+      var theme = s.sidebarTheme || 'dark';
+      document.addEventListener('DOMContentLoaded', function() {
+        var el = document.querySelector('.app-sidebar');
+        if (el) el.setAttribute('data-bs-theme', theme);
+      });
+    })();
+  </script>
+</head>
+<body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+<div class="app-wrapper">
+
+  <!-- HEADER -->
+  <nav class="app-header navbar navbar-expand bg-body">
+    <div class="container-fluid">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" data-lte-toggle="sidebar" href="#" role="button"><i class="bi bi-list"></i></a></li>
+        <li class="nav-item d-none d-md-block"><span class="nav-link fw-semibold text-primary"><i class="bi bi-book-fill me-1"></i>Librarian Portal</span></li>
+      </ul>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item dropdown user-menu">
+          <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+            <img src="assets/img/user2-160x160.jpg" class="user-image rounded-circle shadow" alt="Librarian">
+            <span class="d-none d-md-inline" id="navName">Librarian</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+            <li class="user-header text-bg-primary">
+              <img src="assets/img/user2-160x160.jpg" class="rounded-circle shadow" alt="Librarian">
+              <p id="navNameFull">Librarian<small>Library Staff</small></p>
+            </li>
+            <li class="user-footer">
+              <a href="#" class="btn btn-default btn-flat float-end" onclick="logout()">Sign out</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- SIDEBAR — Library only -->
+  <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+    <div class="sidebar-brand">
+      <a href="librarian-dashboard.html" class="brand-link">
+        <img src="assets/img/eduspherelogo (2).png" alt="EDU-SPHERE Logo" class="brand-image opacity-75 shadow">
+        <span class="brand-text fw-light">EDU-SPHERE</span>
+      </a>
+    </div>
+    <div class="sidebar-wrapper">
+      <nav class="mt-2">
+        <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" data-accordion="false">
+          <li class="nav-item">
+            <a href="librarian-dashboard.html" class="nav-link active">
+              <i class="nav-icon bi bi-speedometer2"></i><p>Dashboard</p>
+            </a>
+          </li>
+          <li class="nav-item menu-open">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon bi bi-book-fill"></i>
+              <p>Library<i class="nav-arrow bi bi-chevron-right"></i></p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item"><a href="add-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Add Book</p></a></li>
+              <li class="nav-item"><a href="issue-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Issue Book</p></a></li>
+              <li class="nav-item"><a href="return-book.html" class="nav-link"><i class="nav-icon bi bi-circle"></i><p>Return Book</p></a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="app-main">
+    <div class="app-content-header">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-6"><h3 class="mb-0">Library Dashboard</h3></div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-end">
+              <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="app-content">
+      <div class="container-fluid">
+        <!-- Stats -->
+        <div class="row mb-4">
+          <div class="col-md-3">
+            <div class="info-box">
+              <span class="info-box-icon text-bg-primary shadow-sm"><i class="bi bi-book-fill"></i></span>
+              <div class="info-box-content"><span class="info-box-text">Total Books</span><span class="info-box-number" id="statBooks">0</span></div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="info-box">
+              <span class="info-box-icon text-bg-success shadow-sm"><i class="bi bi-check-circle-fill"></i></span>
+              <div class="info-box-content"><span class="info-box-text">Available</span><span class="info-box-number" id="statAvail">0</span></div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="info-box">
+              <span class="info-box-icon text-bg-warning shadow-sm"><i class="bi bi-arrow-right-circle-fill"></i></span>
+              <div class="info-box-content"><span class="info-box-text">Issued</span><span class="info-box-number" id="statIssued">0</span></div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="info-box">
+              <span class="info-box-icon text-bg-danger shadow-sm"><i class="bi bi-exclamation-triangle-fill"></i></span>
+              <div class="info-box-content"><span class="info-box-text">Overdue</span><span class="info-box-number" id="statOverdue">0</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="row mb-4">
+          <div class="col-md-4">
+            <a href="add-book.html" class="card text-decoration-none shadow-sm h-100 border-0">
+              <div class="card-body text-center py-4">
+                <i class="bi bi-plus-circle-fill text-primary" style="font-size:2.5rem"></i>
+                <h5 class="mt-3 mb-1">Add Book</h5>
+                <p class="text-muted small mb-0">Add new books to catalog</p>
+              </div>
+            </a>
+          </div>
+          <div class="col-md-4">
+            <a href="issue-book.html" class="card text-decoration-none shadow-sm h-100 border-0">
+              <div class="card-body text-center py-4">
+                <i class="bi bi-arrow-right-circle-fill text-warning" style="font-size:2.5rem"></i>
+                <h5 class="mt-3 mb-1">Issue Book</h5>
+                <p class="text-muted small mb-0">Issue book to a student</p>
+              </div>
+            </a>
+          </div>
+          <div class="col-md-4">
+            <a href="return-book.html" class="card text-decoration-none shadow-sm h-100 border-0">
+              <div class="card-body text-center py-4">
+                <i class="bi bi-arrow-return-left text-success" style="font-size:2.5rem"></i>
+                <h5 class="mt-3 mb-1">Return Book</h5>
+                <p class="text-muted small mb-0">Process book return</p>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- Recent Issues -->
+        <div class="card shadow">
+          <div class="card-header bg-primary text-white">
+            <h3 class="card-title mb-0"><i class="bi bi-clock-history me-2"></i>Recent Issues</h3>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-striped table-hover mb-0">
+                <thead class="table-dark">
+                  <tr><th>Student</th><th>Book</th><th>Issue Date</th><th>Due Date</th><th>Status</th></tr>
+                </thead>
+                <tbody id="recentIssues">
+                  <tr><td colspan="5" class="text-center text-muted py-4"><span class="spinner-border spinner-border-sm me-2"></span>Loading...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <strong>Copyright &copy; 2025 <a href="#" class="text-decoration-none">EDU-SPHERE</a>.</strong> Librarian Portal
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="js/adminlte.js"></script>
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/api.js"></script>
+<script src="js/header.js"></script>
+<script>
+  AUTH.requireAuth('ADMIN');
+
+  var session = JSON.parse(sessionStorage.getItem('librarianSession') || '{}');
+  if (session.username) {
+    document.getElementById('navName').textContent = session.username;
+    document.getElementById('navNameFull').innerHTML = session.username + '<small>Librarian</small>';
+  }
+
+  function logout() {
+    sessionStorage.removeItem('librarianSession');
+    AUTH.logout('librarian-login.html');
+  }
+
+  async function loadStats() {
+    try {
+      var [booksRes, issuesRes, overdueRes] = await Promise.all([
+        API.library.books({ limit: 1000 }),
+        API.library.issues({ status: 'ISSUED' }),
+        API.library.overdue()
+      ]);
+      var books   = (booksRes   && booksRes.success)   ? (booksRes.data   || []) : [];
+      var issues  = (issuesRes  && issuesRes.success)  ? (issuesRes.data  || []) : [];
+      var overdue = (overdueRes && overdueRes.success) ? (overdueRes.data || []) : [];
+      var totalCopies = books.reduce(function(s,b){ return s+(b.totalCopies||0); }, 0);
+      var availCopies = books.reduce(function(s,b){ return s+(b.availableCopies||0); }, 0);
+      document.getElementById('statBooks').textContent   = books.length;
+      document.getElementById('statAvail').textContent   = availCopies;
+      document.getElementById('statIssued').textContent  = issues.length;
+      document.getElementById('statOverdue').textContent = overdue.length;
+
+      var today = new Date().toISOString().split('T')[0];
+      var tbody = document.getElementById('recentIssues');
+      var recent = issues.slice(0, 10);
+      if (!recent.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">No books currently issued.</td></tr>';
+      } else {
+        tbody.innerHTML = recent.map(function(i) {
+          var sName = i.student ? ((i.student.firstName||'') + ' ' + (i.student.lastName||'')).trim() : '—';
+          var bTitle = i.book ? (i.book.title || '—') : '—';
+          var issDate = i.issueDate ? i.issueDate.substring(0,10) : '—';
+          var dueDate = i.dueDate   ? i.dueDate.substring(0,10)   : '—';
+          var isOverdue = i.dueDate && i.dueDate.substring(0,10) < today;
+          return '<tr class="' + (isOverdue ? 'table-danger' : '') + '">' +
+            '<td>' + sName + '</td>' +
+            '<td>' + bTitle + '</td>' +
+            '<td>' + issDate + '</td>' +
+            '<td>' + dueDate + '</td>' +
+            '<td>' + (isOverdue ? '<span class="badge bg-danger">Overdue</span>' : '<span class="badge bg-success">On Time</span>') + '</td>' +
+            '</tr>';
+        }).join('');
+      }
+    } catch(e) {
+      document.getElementById('recentIssues').innerHTML = '<tr><td colspan="5" class="text-center text-danger py-4">Failed to load data.</td></tr>';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    loadStats();
+    var sw = document.querySelector('.sidebar-wrapper');
+    if (sw && typeof OverlayScrollbarsGlobal !== 'undefined' && OverlayScrollbarsGlobal.OverlayScrollbars) {
+      OverlayScrollbarsGlobal.OverlayScrollbars(sw, { scrollbars: { theme: 'os-theme-light', autoHide: 'leave', clickScroll: true } });
+    }
+  });
+</script>
+</body>
+</html>
