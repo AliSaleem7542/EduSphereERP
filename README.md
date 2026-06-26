@@ -48,14 +48,16 @@ npm run dev                 # Start server on port 5000
 Open `SE Project (2)/SE Project/New folder/index.html` in a browser
 or use VS Code Live Server (port 5500).
 
-## Login Credentials
+## Authentication
 
-| Role | Field | Value |
-|---|---|---|
-| Admin | Username | `admin` |
-| Admin | Password | `admin123` |
-| Student | Roll No | e.g. `201` |
-| Student | Password | same as roll number |
+The system supports role-based authentication with the following roles:
+- **Admin**: Full system access
+- **Teacher**: Classes, attendance, exams, results
+- **Student**: View attendance, results, library records
+- **Cashier**: Fee management only
+- **Librarian**: Library management only
+
+Default credentials are created during database seeding. For security reasons, please change default passwords after first login.
 
 ## Tech Stack
 
