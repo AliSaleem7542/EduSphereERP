@@ -8,8 +8,42 @@
 (function() {
   // Run after DOM is loaded
   document.addEventListener('DOMContentLoaded', function() {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    const userRole = user.role ? user.role.toUpperCase() : '';
+    // Try multiple sources for user data
+    let userRole = '';
+    
+    // 1. Check localStorage (AUTH.js format: 'edu_user' or 'edu_role')
+    const eduUser = JSON.parse(localStorage.getItem('edu_user') || 'null');
+    if (eduUser && eduUser.role) {
+      userRole = eduUser.role.toUpperCase();
+    } else {
+      const eduRole = localStorage.getItem('edu_role');
+      if (eduRole) {
+        userRole = eduRole.toUpperCase();
+      }
+    }
+    
+    // 2. Check sessionStorage (cashier/librarian login format)
+    if (!userRole) {
+      const cashierSession = JSON.parse(sessionStorage.getItem('cashierSession') || 'null');
+      if (cashierSession && cashierSession.role) {
+        userRole = cashierSession.role.toUpperCase();
+      }
+    }
+    
+    if (!userRole) {
+      const librarianSession = JSON.parse(sessionStorage.getItem('librarianSession') || 'null');
+      if (librarianSession && librarianSession.role) {
+        userRole = librarianSession.role.toUpperCase();
+      }
+    }
+    
+    // 3. Fallback to legacy format
+    if (!userRole) {
+      const user = JSON.parse(localStorage.getItem('user') || 'null');
+      if (user && user.role) {
+        userRole = user.role.toUpperCase();
+      }
+    }
 
     if (!userRole || userRole === 'ADMIN' || userRole === 'TEACHER' || userRole === 'STUDENT') {
       // For ADMIN, TEACHER, STUDENT - keep full sidebar (already handled by existing logic)

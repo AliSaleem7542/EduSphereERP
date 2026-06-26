@@ -83,6 +83,13 @@
       btn.innerHTML = '<i class="bi bi-box-arrow-in-right me-2"></i>Sign In';
 
       if (result.success) {
+        // Override role to CASHIER in localStorage
+        localStorage.setItem('edu_role', 'CASHIER');
+        var user = AUTH.getUser();
+        if (user) {
+          user.role = 'CASHIER';
+          localStorage.setItem('edu_user', JSON.stringify(user));
+        }
         sessionStorage.setItem('cashierSession', JSON.stringify({ username: username, role: 'CASHIER' }));
         window.location.href = 'cashier-dashboard.html';
       } else {

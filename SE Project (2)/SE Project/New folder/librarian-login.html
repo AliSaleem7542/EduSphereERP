@@ -85,7 +85,13 @@
       btn.innerHTML = '<i class="bi bi-box-arrow-in-right me-2"></i>Sign In';
 
       if (result.success) {
-        // Store librarian session
+        // Override role to LIBRARIAN in localStorage
+        localStorage.setItem('edu_role', 'LIBRARIAN');
+        var user = AUTH.getUser();
+        if (user) {
+          user.role = 'LIBRARIAN';
+          localStorage.setItem('edu_user', JSON.stringify(user));
+        }
         sessionStorage.setItem('librarianSession', JSON.stringify({ username: username, role: 'LIBRARIAN' }));
         window.location.href = 'librarian-dashboard.html';
       } else {
