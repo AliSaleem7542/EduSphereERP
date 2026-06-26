@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -260,9 +260,9 @@
         var role     = document.getElementById('uRole').value;
         var editId   = document.getElementById('editId').value;
 
-        var VALID_ROLES = ['ADMIN', 'TEACHER', 'STUDENT'];
+        var VALID_ROLES = ['ADMIN', 'TEACHER', 'STUDENT', 'LIBRARIAN', 'CASHIER'];
         if (!username)                    { API.toast('Username is required.', 'warning'); return; }
-        if (!role || !VALID_ROLES.includes(role)) { API.toast('Please select a valid role (Admin, Teacher, or Student).', 'warning'); return; }
+        if (!role || !VALID_ROLES.includes(role)) { API.toast('Please select a valid role.', 'warning'); return; }
         if (!editId && !password)         { API.toast('Password is required for new users.', 'warning'); return; }
         if (password && password.length < 6) { API.toast('Password must be at least 6 characters.', 'warning'); return; }
 
