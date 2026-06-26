@@ -424,9 +424,15 @@
     document.getElementById('formTitle').textContent = 'New Entry';
   }
 
-  document.addEventListener('DOMContentLoaded', function(){
+  document.addEventListener('DOMContentLoaded', async function(){
     updateCategories();
     document.getElementById('entryDate').value = new Date().toISOString().split('T')[0];
+    // Retry for Render cold start
+    for (var attempt = 1; attempt <= 3; attempt++) {
+      var test = await API.accounts.entries({ limit: 1 });
+      if (test && test.success) break;
+      if (attempt < 3) await new Promise(function(r){ setTimeout(r, attempt * 2000); });
+    }
     updateStats();
     renderEntries();
   });

@@ -262,9 +262,13 @@
 
   async function loadAndRender() {
     try {
-      var res = await API.accounts.ledger();
+      var res = null;
+      for (var attempt = 1; attempt <= 3; attempt++) {
+        res = await API.accounts.ledger();
+        if (res && res.success) break;
+        if (attempt < 3) await new Promise(function(r){ setTimeout(r, attempt * 2000); });
+      }
       if (res && res.success) {
-        // API returns { ledger: [...], closingBalance: N }
         _allEntries = res.data.ledger || res.data.data || (Array.isArray(res.data) ? res.data : []);
       } else {
         _allEntries = [];
