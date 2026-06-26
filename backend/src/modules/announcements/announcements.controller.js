@@ -7,8 +7,17 @@ async function getAll(req, res, next) {
     const where = {};
     if (audience) where.audience = audience;
     if (category) where.category = category;
-    if (active === 'true') where.OR = [{ expiryDate: null }, { expiryDate: { gte: new Date() } }];
-    if (search) where.OR = [{ title: { contains: search, mode: 'insensitive' } }, { message: { contains: search, mode: 'insensitive' } }];
+    if (active === 'true') {
+      where.AND = [
+        { OR: [{ expiryDate: null }, { expiryDate: { gte: new Date() } }] }
+      ];
+    }
+    if (search) {
+      where.OR = [
+        { title:   { contains: search, mode: 'insensitive' } },
+        { message: { contains: search, mode: 'insensitive' } },
+      ];
+    }
 
     // Filter by role audience
     if (req.user.role === 'STUDENT') where.audience = { in: ['ALL', 'STUDENTS'] };
