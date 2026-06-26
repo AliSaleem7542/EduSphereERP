@@ -48,15 +48,6 @@ npm run dev                 # Start server on port 5000
 Open `SE Project (2)/SE Project/New folder/index.html` in a browser
 or use VS Code Live Server (port 5500).
 
-## Login Credentials
-
-| Role | Field | Value |
-|---|---|---|
-| Admin | Username | `admin` |
-| Admin | Password | `admin123` |
-| Student | Roll No | e.g. `201` |
-| Student | Password | same as roll number |
-
 ## Tech Stack
 
 **Backend:** Node.js, Express, Prisma ORM, PostgreSQL, JWT, bcrypt, multer  
