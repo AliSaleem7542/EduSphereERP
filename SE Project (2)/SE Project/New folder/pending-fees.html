@@ -229,8 +229,6 @@
                     <label class="form-label">Class</label>
                     <select class="form-select" id="filterClass" onchange="renderTable()">
                       <option value="">All Classes</option>
-                      <option>Grade 9</option><option>Grade 10</option>
-                      <option>Grade 11</option><option>Grade 12</option>
                     </select>
                   </div>
                   <div class="col-md-2">
@@ -301,38 +299,82 @@
     <script src="js/header.js"></script>
     <script>
       AUTH.requireAuth('ADMIN');
-      var PER_PAGE = 10, currentPage = 1, filtered = [];
+      var PER_PAGE = 10, currentPage = 1, filtered = [], _feeMap = {};
 
       async function loadData() {
-        // Load all students and fee records to compute pending
-        var res = await API.fees.pending();
-        if (!res || !res.success) return;
-        var students = res.data || [];
+        // Retry for Render cold start
+        var pendingRes = null, feeRes = null;
+        for (var attempt = 1; attempt <= 3; attempt++) {
+          var results = await Promise.all([
+            API.fees.pending(),
+            API.fees.list({ limit: 1000 }),
+            API.classes.list()
+          ]);
+          pendingRes = results[0]; feeRes = results[1];
+          var classRes = results[2];
+          if (pendingRes && pendingRes.success) {
+            // Populate class filter
+            if (classRes && classRes.success) {
+              var cSel = document.getElementById('filterClass');
+              cSel.innerHTML = '<option value="">All Classes</option>';
+              (classRes.data || []).forEach(function(c) {
+                cSel.innerHTML += '<option value="' + c.name + '">' + c.name + '</option>';
+              });
+            }
+            break;
+          }
+          if (attempt < 3) await new Promise(function(r){ setTimeout(r, attempt * 2000); });
+        }
+        if (!pendingRes || !pendingRes.success) return;
 
+        // Build fee payment map per student from fee records
+        _feeMap = {};
+        if (feeRes && feeRes.success) {
+          var feeRecords = feeRes.data.data || feeRes.data || [];
+          feeRecords.forEach(function(r) {
+            if (r.status === 'REFUNDED') return;
+            var sid = String(r.studentId);
+            if (!_feeMap[sid]) _feeMap[sid] = { annual: null, inst1: null, inst2: null, inst3: null, inst4: null };
+            var inst = (r.installment || '').toLowerCase();
+            var amt = Number(r.amount) + Number(r.transportAmount || 0);
+            if      (inst.indexOf('annual') > -1) _feeMap[sid].annual = amt;
+            else if (inst.indexOf('1st')    > -1) _feeMap[sid].inst1  = amt;
+            else if (inst.indexOf('2nd')    > -1) _feeMap[sid].inst2  = amt;
+            else if (inst.indexOf('3rd')    > -1) _feeMap[sid].inst3  = amt;
+            else if (inst.indexOf('4th')    > -1) _feeMap[sid].inst4  = amt;
+          });
+        }
+
+        var students = pendingRes.data || [];
         var totalStudentsRes = await API.students.list({ limit: 1, status: 'ACTIVE' });
-        var totalStudents = (totalStudentsRes && totalStudentsRes.success) ? (totalStudentsRes.data.total || 0) : 0;
-
+        var totalStudents = (totalStudentsRes && totalStudentsRes.success) ? (totalStudentsRes.data.pagination ? totalStudentsRes.data.pagination.total : totalStudentsRes.data.total || 0) : 0;
         var pendingAmt = students.reduce(function(sum, s) { return sum + Number(s.pendingAmount || 0); }, 0);
-        var cleared = totalStudents - students.length;
 
         document.getElementById('statDefaulters').textContent = students.length;
         document.getElementById('statPendingAmt').textContent = 'Rs. ' + pendingAmt.toLocaleString();
         document.getElementById('statStudents').textContent = totalStudents;
-        document.getElementById('statCleared').textContent = Math.max(0, cleared);
+        document.getElementById('statCleared').textContent = Math.max(0, totalStudents - students.length);
 
         filtered = students;
         renderTable();
       }
 
+      function instCell(val, pkg) {
+        if (val !== null) return '<span class="text-success fw-bold">Rs. ' + Number(val).toLocaleString() + '</span>';
+        // Show expected installment amount (pkg / 4) as pending
+        var exp = pkg > 0 ? Math.round(pkg / 4) : null;
+        return exp ? '<span class="text-danger">Pending<br><small>~Rs.' + exp.toLocaleString() + '</small></span>' : '<span class="text-muted">—</span>';
+      }
+
       function renderTable() {
-        var q = document.getElementById('searchInput').value.toLowerCase();
+        var q   = document.getElementById('searchInput').value.toLowerCase();
         var cls = document.getElementById('filterClass').value;
         var cat = document.getElementById('filterCat').value;
 
         var rows = filtered.filter(function(s) {
           var name = (s.firstName || '') + ' ' + (s.lastName || '');
-          var mq = !q || name.toLowerCase().indexOf(q) > -1 || (s.rollNo || '').toLowerCase().indexOf(q) > -1;
-          var mc = !cls || (s.class && s.class.name === cls);
+          var mq   = !q   || name.toLowerCase().indexOf(q) > -1 || (s.rollNo || '').toLowerCase().indexOf(q) > -1;
+          var mc   = !cls || (s.class && s.class.name === cls);
           var mcat = !cat || s.feeCategory === cat.toUpperCase().replace(' ', '_');
           return mq && mc && mcat;
         });
@@ -341,24 +383,31 @@
         var totalPages = Math.max(1, Math.ceil(rows.length / PER_PAGE));
         if (currentPage > totalPages) currentPage = 1;
         var start = (currentPage - 1) * PER_PAGE;
-        var page = rows.slice(start, start + PER_PAGE);
+        var page  = rows.slice(start, start + PER_PAGE);
         var tbody = document.getElementById('pendingBody');
 
-        if (page.length === 0) {
+        if (!page.length) {
           tbody.innerHTML = '<tr><td colspan="12" class="text-center text-muted py-4">No students with pending fees.</td></tr>';
         } else {
           tbody.innerHTML = page.map(function(s, i) {
-            var pkg = Number(s.packageTotal || 0);
-            var paid = Number(s.totalPaid || 0);
-            var remaining = Number(s.pendingAmount || (pkg - paid));
-            var name = (s.firstName || '') + ' ' + (s.lastName || '');
+            var pkg       = Number(s.packageTotal || 0);
+            var paid      = Number(s.totalPaid    || 0);
+            var remaining = Number(s.pendingAmount || Math.max(0, pkg - paid));
+            var name      = (s.firstName || '') + ' ' + (s.lastName || '');
+            var sid       = String(s.id);
+            var fm        = _feeMap[sid] || {};
+
             return '<tr class="table-warning">' +
               '<td>' + (start + i + 1) + '</td>' +
               '<td><code>' + (s.rollNo || '-') + '</code></td>' +
-              '<td>' + name + '</td>' +
+              '<td><strong>' + name.trim() + '</strong><br><small class="text-muted">' + (s.class ? s.class.name : '-') + ' | ' + (s.feeCategory || '-') + '</small></td>' +
               '<td><span class="badge bg-secondary">' + (s.section ? s.section.name : '-') + '</span></td>' +
-              '<td>' + (pkg ? 'Rs. ' + pkg.toLocaleString() : '-') + '</td>' +
-              '<td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>' +
+              '<td><strong>' + (pkg ? 'Rs. ' + pkg.toLocaleString() : '-') + '</strong></td>' +
+              '<td>' + instCell(fm.annual, pkg) + '</td>' +
+              '<td>' + instCell(fm.inst1, pkg) + '</td>' +
+              '<td>' + instCell(fm.inst2, pkg) + '</td>' +
+              '<td>' + instCell(fm.inst3, pkg) + '</td>' +
+              '<td>' + instCell(fm.inst4, pkg) + '</td>' +
               '<td><strong>Rs. ' + paid.toLocaleString() + '</strong></td>' +
               '<td class="text-danger fw-bold">Rs. ' + Math.abs(remaining).toLocaleString() + ' <i class="bi bi-exclamation-circle"></i></td>' +
               '</tr>';
@@ -381,16 +430,14 @@
       function clearFilters() {
         document.getElementById('searchInput').value = '';
         document.getElementById('filterClass').value = '';
-        document.getElementById('filterCat').value = '';
+        document.getElementById('filterCat').value   = '';
         document.getElementById('filterMonth').value = '';
         currentPage = 1; renderTable();
       }
 
       function printPending() { window.print(); }
 
-      document.addEventListener('DOMContentLoaded', function() {
-        loadData();
-      });
+      document.addEventListener('DOMContentLoaded', function() { loadData(); });
     </script>
   </body>
 </html>

@@ -363,7 +363,12 @@
       var PER_PAGE = 15, currentPage = 1, filtered = [];
 
       async function loadData() {
-        var res = await API.fees.list({ limit: 500 });
+        var res = null;
+        for (var attempt = 1; attempt <= 3; attempt++) {
+          res = await API.fees.list({ limit: 500 });
+          if (res && res.success) break;
+          if (attempt < 3) await new Promise(function(r){ setTimeout(r, attempt * 2000); });
+        }
         if (!res || !res.success) return;
         var records = res.data.data || res.data || [];
         window._feeRecords = records;
@@ -411,6 +416,12 @@
           }
           var amt = Number(r.amount) + Number(r.transportAmount || 0);
           studentMap[sid].totalPaid += amt;
+          // Store student fee info
+          if (r.student) {
+            studentMap[sid].tuitionFee   = r.student.tuitionFee   || null;
+            studentMap[sid].transportFee = r.student.transportFee || null;
+            studentMap[sid].section      = r.student.section ? r.student.section.name : '-';
+          }
           var inst = (r.installment || '').toLowerCase();
           if (inst.indexOf('annual') > -1) { studentMap[sid].annual = amt; studentMap[sid].annualR = r.receiptNo; }
           else if (inst.indexOf('1st') > -1) { studentMap[sid].inst1 = amt; studentMap[sid].inst1R = r.receiptNo; }

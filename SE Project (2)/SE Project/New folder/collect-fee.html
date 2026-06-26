@@ -529,7 +529,14 @@
         document.getElementById('transportFeeSection').style.display = 'none';
       }
 
-      document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener('DOMContentLoaded', async function() {
+        // Retry for Render cold start
+        var loaded = false;
+        for (var attempt = 1; attempt <= 3; attempt++) {
+          var testRes = await API.fees.summary();
+          if (testRes && testRes.success) { loaded = true; break; }
+          if (attempt < 3) await new Promise(function(r){ setTimeout(r, attempt * 2000); });
+        }
         loadStats();
         renderReceipts();
         var now = new Date();

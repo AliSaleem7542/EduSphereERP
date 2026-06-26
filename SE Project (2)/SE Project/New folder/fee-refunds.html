@@ -247,10 +247,13 @@
       var allFeeRecords = [];
 
       async function loadData() {
-        var [refundRes, feeRes] = await Promise.all([
-          API.fees.refunds(),
-          API.fees.list({ limit: 500 })
-        ]);
+        var refundRes = null, feeRes = null;
+        for (var attempt = 1; attempt <= 3; attempt++) {
+          var results = await Promise.all([API.fees.refunds(), API.fees.list({ limit: 500 })]);
+          refundRes = results[0]; feeRes = results[1];
+          if (refundRes && refundRes.success) break;
+          if (attempt < 3) await new Promise(function(r){ setTimeout(r, attempt * 2000); });
+        }
         if (refundRes && refundRes.success) {
           var refunds = refundRes.data || [];
           filtered = refunds;

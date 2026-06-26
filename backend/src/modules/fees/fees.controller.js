@@ -16,7 +16,7 @@ async function getAll(req, res, next) {
       if (endDate)   where.date.lte = new Date(endDate);
     }
     const [records, total] = await Promise.all([
-      prisma.feeRecord.findMany({ where, skip, take: parseInt(limit), include: { student: true }, orderBy: { date: 'desc' } }),
+      prisma.feeRecord.findMany({ where, skip, take: parseInt(limit), include: { student: { include: { class: true, section: true } } }, orderBy: { date: 'desc' } }),
       prisma.feeRecord.count({ where }),
     ]);
     return sendSuccess(res, paginate(records, total, page, limit));
