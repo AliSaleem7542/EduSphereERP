@@ -29,7 +29,26 @@ async function create(req, res, next) {
 
 async function update(req, res, next) {
   try {
-    const subject = await prisma.subject.update({ where: { id: parseInt(req.params.id) }, data: req.body });
+    const id = parseInt(req.params.id);
+    
+    // Mass Assignment Prevention: Whitelist only allowed fields
+    const allowedFields = ['name', 'code', 'classId'];
+    const data = {};
+    
+    allowedFields.forEach(field => {
+      if (req.body[field] !== undefined && req.body[field] !== '') {
+        data[field] = req.body[field];
+      }
+    });
+    
+    // Coerce classId to integer
+    if (data.classId) data.classId = parseInt(data.classId);
+    
+    if (Object.keys(data).length === 0) {
+      return sendError(res, 'No valid fields to update', 400);
+    }
+    
+    const subject = await prisma.subject.update({ where: { id }, data });
     return sendSuccess(res, subject, 'Subject updated');
   } catch (err) { next(err); }
 }

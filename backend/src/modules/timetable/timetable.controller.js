@@ -48,7 +48,36 @@ async function create(req, res, next) {
 
 async function update(req, res, next) {
   try {
-    const row = await prisma.timetable.update({ where: { id: parseInt(req.params.id) }, data: req.body, include });
+    const id = parseInt(req.params.id);
+    
+    // Mass Assignment Prevention: Whitelist only allowed fields
+    const allowedFields = ['classId', 'sectionId', 'subjectId', 'teacherId', 'day', 'periodNo', 'startTime', 'endTime', 'room', 'academicYearId'];
+    const data = {};
+    
+    allowedFields.forEach(field => {
+      if (req.body[field] !== undefined) {
+        // Allow explicit null for optional fields
+        if ((field === 'sectionId' || field === 'room') && req.body[field] === null) {
+          data[field] = null;
+        } else if (req.body[field] !== '') {
+          data[field] = req.body[field];
+        }
+      }
+    });
+    
+    // Coerce numeric fields
+    const numericFields = ['classId', 'sectionId', 'subjectId', 'teacherId', 'periodNo', 'academicYearId'];
+    numericFields.forEach(field => {
+      if (data[field] !== undefined && data[field] !== null) {
+        data[field] = parseInt(data[field]);
+      }
+    });
+    
+    if (Object.keys(data).length === 0) {
+      return sendError(res, 'No valid fields to update', 400);
+    }
+    
+    const row = await prisma.timetable.update({ where: { id }, data, include });
     return sendSuccess(res, row, 'Period updated');
   } catch (err) { next(err); }
 }

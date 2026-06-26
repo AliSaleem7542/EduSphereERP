@@ -47,7 +47,28 @@ async function saveBulk(req, res, next) {
 
 async function update(req, res, next) {
   try {
-    const result = await prisma.examResult.update({ where: { id: parseInt(req.params.id) }, data: req.body });
+    const id = parseInt(req.params.id);
+    
+    // Mass Assignment Prevention: Whitelist only allowed fields
+    const allowedFields = ['obtainedMarks', 'percentage', 'grade', 'isPassed'];
+    const data = {};
+    
+    allowedFields.forEach(field => {
+      if (req.body[field] !== undefined) {
+        data[field] = req.body[field];
+      }
+    });
+    
+    // Coerce numeric fields
+    if (data.obtainedMarks) data.obtainedMarks = parseFloat(data.obtainedMarks);
+    if (data.percentage) data.percentage = parseFloat(data.percentage);
+    if (data.isPassed !== undefined) data.isPassed = Boolean(data.isPassed);
+    
+    if (Object.keys(data).length === 0) {
+      return sendError(res, 'No valid fields to update', 400);
+    }
+    
+    const result = await prisma.examResult.update({ where: { id }, data });
     return sendSuccess(res, result, 'Result updated');
   } catch (err) { next(err); }
 }

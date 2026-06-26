@@ -30,7 +30,26 @@ async function create(req, res, next) {
 
 async function update(req, res, next) {
   try {
-    const cls = await prisma.class.update({ where: { id: parseInt(req.params.id) }, data: req.body });
+    const id = parseInt(req.params.id);
+    
+    // Mass Assignment Prevention: Whitelist only allowed fields
+    const allowedFields = ['name', 'academicYearId'];
+    const data = {};
+    
+    allowedFields.forEach(field => {
+      if (req.body[field] !== undefined && req.body[field] !== '') {
+        data[field] = req.body[field];
+      }
+    });
+    
+    // Coerce academicYearId to integer
+    if (data.academicYearId) data.academicYearId = parseInt(data.academicYearId);
+    
+    if (Object.keys(data).length === 0) {
+      return sendError(res, 'No valid fields to update', 400);
+    }
+    
+    const cls = await prisma.class.update({ where: { id }, data });
     return sendSuccess(res, cls, 'Class updated');
   } catch (err) { next(err); }
 }
@@ -65,7 +84,32 @@ async function createSection(req, res, next) {
 
 async function updateSection(req, res, next) {
   try {
-    const section = await prisma.section.update({ where: { id: parseInt(req.params.sectionId) }, data: req.body });
+    const id = parseInt(req.params.sectionId);
+    
+    // Mass Assignment Prevention: Whitelist only allowed fields
+    const allowedFields = ['name', 'classId', 'classTeacherId'];
+    const data = {};
+    
+    allowedFields.forEach(field => {
+      if (req.body[field] !== undefined) {
+        // Allow explicit null for classTeacherId (unassign teacher)
+        if (field === 'classTeacherId' && req.body[field] === null) {
+          data[field] = null;
+        } else if (req.body[field] !== '') {
+          data[field] = req.body[field];
+        }
+      }
+    });
+    
+    // Coerce numeric fields
+    if (data.classId) data.classId = parseInt(data.classId);
+    if (data.classTeacherId) data.classTeacherId = parseInt(data.classTeacherId);
+    
+    if (Object.keys(data).length === 0) {
+      return sendError(res, 'No valid fields to update', 400);
+    }
+    
+    const section = await prisma.section.update({ where: { id }, data });
     return sendSuccess(res, section, 'Section updated');
   } catch (err) { next(err); }
 }

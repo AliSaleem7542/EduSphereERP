@@ -24,7 +24,27 @@ async function addBook(req, res, next) {
 
 async function updateBook(req, res, next) {
   try {
-    const book = await prisma.book.update({ where: { id: parseInt(req.params.id) }, data: req.body });
+    const id = parseInt(req.params.id);
+    
+    // Mass Assignment Prevention: Whitelist only allowed fields
+    const allowedFields = ['title', 'author', 'isbn', 'category', 'publisher', 'edition', 'totalCopies', 'availableCopies', 'shelfNo'];
+    const data = {};
+    
+    allowedFields.forEach(field => {
+      if (req.body[field] !== undefined) {
+        data[field] = req.body[field];
+      }
+    });
+    
+    // Coerce numeric fields
+    if (data.totalCopies) data.totalCopies = parseInt(data.totalCopies);
+    if (data.availableCopies) data.availableCopies = parseInt(data.availableCopies);
+    
+    if (Object.keys(data).length === 0) {
+      return sendError(res, 'No valid fields to update', 400);
+    }
+    
+    const book = await prisma.book.update({ where: { id }, data });
     return sendSuccess(res, book, 'Book updated');
   } catch (err) { next(err); }
 }
