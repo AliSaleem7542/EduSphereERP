@@ -123,5 +123,4 @@ All endpoints require `Authorization: Bearer <token>` except login routes.
 - **Backend:** Render.com — `render.yaml` is included in the `backend/` folder
 - **Frontend:** Vercel / Netlify / GitHub Pages (static HTML, no build step needed)
 
-After deploying the backend, update the API base URL in `js/auth.js`:
 
