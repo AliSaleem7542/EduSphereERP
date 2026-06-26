@@ -335,7 +335,13 @@
         API.toast('Data clearing is not supported via API. Please use database tools.', 'warning');
       }
 
-      document.addEventListener('DOMContentLoaded', function(){
+      document.addEventListener('DOMContentLoaded', async function(){
+        // Retry for Render cold start
+        for (var attempt = 1; attempt <= 3; attempt++) {
+          var test = await API.reports.dashboard();
+          if (test && test.success) break;
+          if (attempt < 3) await new Promise(function(r){ setTimeout(r, attempt * 2000); });
+        }
         renderStats();
         renderModuleBackups();
         renderHistory();

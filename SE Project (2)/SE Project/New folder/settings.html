@@ -408,7 +408,15 @@ body">
       function getSettings() { return JSON.parse(localStorage.getItem('sysSettings') || '{}'); }
       function saveSettings(obj) { localStorage.setItem('sysSettings', JSON.stringify(obj)); }
 
-      function loadAll() {
+      async function loadAll() {
+        // First try loading from backend API, fall back to localStorage
+        try {
+          var res = await API.system.settings();
+          if (res && res.success && Object.keys(res.data || {}).length > 0) {
+            var s = res.data;
+            localStorage.setItem('sysSettings', JSON.stringify(s));
+          }
+        } catch(e) {}
         var s = getSettings();
         // school
         ['schoolName','principalName','schoolPhone','schoolEmail','schoolWebsite','schoolYear','schoolAddress','schoolMotto'].forEach(function(id){
@@ -452,7 +460,7 @@ body">
         }
       }
 
-      function saveSetting(section) {
+      async function saveSetting(section) {
         var s = getSettings();
         var ids = {
           school:       ['schoolName','principalName','schoolPhone','schoolEmail','schoolWebsite','schoolYear','schoolAddress','schoolMotto'],
@@ -470,9 +478,13 @@ body">
         (ids[section]||[]).forEach(function(id){ s[id] = document.getElementById(id).value; });
         (checkboxIds[section]||[]).forEach(function(id){ s[id] = document.getElementById(id).checked; });
         saveSettings(s);
-        if (section === 'appearance') {
-          applyAppearance();
-        }
+
+        // Also save to backend API
+        try {
+          await API.system.updateSettings(s);
+        } catch(e) { /* non-critical — localStorage already saved */ }
+
+        if (section === 'appearance') applyAppearance();
         showToast('Settings saved successfully.');
       }
 
@@ -513,8 +525,8 @@ body">
         setTimeout(function(){ window.location.href='index2.html'; }, 1500);
       }
 
-      document.addEventListener('DOMContentLoaded', function(){
-        loadAll();
+      document.addEventListener('DOMContentLoaded', async function(){
+        await loadAll();
         applyAppearance();
       });
     </script>
