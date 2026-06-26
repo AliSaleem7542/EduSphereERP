@@ -7,9 +7,9 @@ const router = Router();
 router.use(authenticate, authorize('ADMIN'));
 
 router.get('/',        c.getAll);
+router.get('/roles',   c.getRoles);
 router.post('/',       c.create);
 router.put('/:id',     c.update);
 router.delete('/:id',  c.deactivate);
-router.get('/roles',   c.getRoles);
 
 module.exports = router;

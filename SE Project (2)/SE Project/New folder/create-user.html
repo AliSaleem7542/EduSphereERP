@@ -327,7 +327,14 @@
         else { inp.type='password'; icon.className='bi bi-eye'; }
       }
 
-      document.addEventListener('DOMContentLoaded', function(){ loadUsers(); });
+      document.addEventListener('DOMContentLoaded', async function(){
+        for (var attempt = 1; attempt <= 3; attempt++) {
+          var test = await API.users.list();
+          if (test && test.success) break;
+          if (attempt < 3) await new Promise(function(r){ setTimeout(r, attempt * 2000); });
+        }
+        loadUsers();
+      });
     </script>
   </body>
 </html>

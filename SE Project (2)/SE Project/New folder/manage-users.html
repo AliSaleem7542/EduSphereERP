@@ -355,9 +355,17 @@
         new bootstrap.Modal(document.getElementById('pwdModal')).show();
       }
 
-      function savePassword() {
-        bootstrap.Modal.getInstance(document.getElementById('pwdModal')).hide();
-        API.toast('Password reset not supported via API', 'warning');
+      async function savePassword() {
+        var id  = document.getElementById('pwdUserId').value;
+        var pwd = document.getElementById('newPassword').value;
+        if (!pwd || pwd.length < 6) { API.toast('Password must be at least 6 characters.', 'warning'); return; }
+        var res = await API.users.update(id, { password: pwd });
+        if (res && res.success) {
+          API.toast('Password reset successfully.', 'success');
+          bootstrap.Modal.getInstance(document.getElementById('pwdModal')).hide();
+        } else {
+          API.toast((res && res.message) || 'Failed to reset password.', 'danger');
+        }
       }
 
       async function toggleStatus(id) {
@@ -384,7 +392,15 @@
         }
       }
 
-      document.addEventListener('DOMContentLoaded', function(){ loadUsers(); });
+      document.addEventListener('DOMContentLoaded', async function(){
+        // Retry for Render cold start
+        for (var attempt = 1; attempt <= 3; attempt++) {
+          var test = await API.users.list();
+          if (test && test.success) break;
+          if (attempt < 3) await new Promise(function(r){ setTimeout(r, attempt * 2000); });
+        }
+        loadUsers();
+      });
     </script>
   </body>
 </html>
