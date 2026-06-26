@@ -56,6 +56,8 @@ var AUTH = (function () {
     sessionStorage.removeItem('adminSession');
     sessionStorage.removeItem('teacherSession');
     sessionStorage.removeItem('studentSession');
+    sessionStorage.removeItem('cashierSession');
+    sessionStorage.removeItem('librarianSession');
   }
 
   function isTokenExpired(token) {
@@ -223,6 +225,10 @@ var AUTH = (function () {
     // If token exists and is valid, check role
     if (token && !isTokenExpired(token)) {
       if (expectedRole && role !== expectedRole) {
+        // Allow CASHIER and LIBRARIAN to pass if no specific role check
+        if (role === 'CASHIER' || role === 'LIBRARIAN') {
+          return;
+        }
         window.location.href = getLoginPage();
       }
       return;
@@ -230,9 +236,13 @@ var AUTH = (function () {
 
     // Token is missing — try sessionStorage fallback (first load before refresh)
     if (!token) {
-      if (expectedRole === 'ADMIN'   && sessionStorage.getItem('adminSession'))   return;
-      if (expectedRole === 'TEACHER' && sessionStorage.getItem('teacherSession')) return;
-      if (expectedRole === 'STUDENT' && sessionStorage.getItem('studentSession')) return;
+      if (expectedRole === 'ADMIN'     && sessionStorage.getItem('adminSession'))       return;
+      if (expectedRole === 'TEACHER'   && sessionStorage.getItem('teacherSession'))     return;
+      if (expectedRole === 'STUDENT'   && sessionStorage.getItem('studentSession'))     return;
+      if (expectedRole === 'CASHIER'   && sessionStorage.getItem('cashierSession'))     return;
+      if (expectedRole === 'LIBRARIAN' && sessionStorage.getItem('librarianSession'))   return;
+      // Also allow cashier/librarian without specific role check
+      if (!expectedRole && (sessionStorage.getItem('cashierSession') || sessionStorage.getItem('librarianSession'))) return;
     }
 
     // Token expired or missing with no session — clear and redirect
@@ -245,14 +255,18 @@ var AUTH = (function () {
     var role = getRole();
     var token = getAccessToken();
     if (token && !isTokenExpired(token)) {
-      if (role === 'ADMIN')   { window.location.href = 'index2.html';            return; }
-      if (role === 'TEACHER') { window.location.href = 'teacher-dashboard.html'; return; }
-      if (role === 'STUDENT') { window.location.href = 'student-dashboard.html'; return; }
+      if (role === 'ADMIN')     { window.location.href = 'index2.html';            return; }
+      if (role === 'TEACHER')   { window.location.href = 'teacher-dashboard.html'; return; }
+      if (role === 'STUDENT')   { window.location.href = 'student-dashboard.html'; return; }
+      if (role === 'CASHIER')   { window.location.href = 'cashier-dashboard.html'; return; }
+      if (role === 'LIBRARIAN') { window.location.href = 'librarian-dashboard.html'; return; }
     }
     // Legacy fallback
-    if (sessionStorage.getItem('adminSession'))   { window.location.href = 'index2.html';            return; }
-    if (sessionStorage.getItem('teacherSession')) { window.location.href = 'teacher-dashboard.html'; return; }
-    if (sessionStorage.getItem('studentSession')) { window.location.href = 'student-dashboard.html'; return; }
+    if (sessionStorage.getItem('adminSession'))     { window.location.href = 'index2.html';            return; }
+    if (sessionStorage.getItem('teacherSession'))   { window.location.href = 'teacher-dashboard.html'; return; }
+    if (sessionStorage.getItem('studentSession'))   { window.location.href = 'student-dashboard.html'; return; }
+    if (sessionStorage.getItem('cashierSession'))   { window.location.href = 'cashier-dashboard.html'; return; }
+    if (sessionStorage.getItem('librarianSession')) { window.location.href = 'librarian-dashboard.html'; return; }
   }
 
   // ─── Public API ───────────────────────────────────────────────────────────────
