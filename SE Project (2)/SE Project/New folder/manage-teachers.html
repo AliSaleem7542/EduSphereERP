@@ -22,6 +22,7 @@
 <script src="js/config.js"></script>
     <script src="js/auth.js"></script>
 <script>AUTH.requireAuth('ADMIN');</script>
+<script src="js/security.js"></script>
 </head>
 <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
 <div class="app-wrapper">
@@ -513,14 +514,22 @@ li>p>i>a></a></i>a>
     tableBody.innerHTML = slice.length === 0
       ? '<tr><td colspan="8" class="text-center text-muted py-4">No teachers found.</td></tr>'
       : slice.map(function(t, i) {
+          // XSS Protection: Escape all user-generated content
+          var name = SECURITY.escapeHtml(t.name);
+          var email = SECURITY.escapeHtml(t.email || '—');
+          var phone = SECURITY.escapeHtml(t.phone || '—');
+          var department = SECURITY.escapeHtml(t.department || '—');
+          var qualification = SECURITY.escapeHtml(t.qualification || '—');
+          var experience = SECURITY.sanitizeInteger(t.experience, 0);
+          
           return '<tr>' +
             '<td>' + (start + i + 1) + '</td>' +
-            '<td>' + t.name + '</td>' +
-            '<td>' + (t.email || '—') + '</td>' +
-            '<td>' + (t.phone || '—') + '</td>' +
-            '<td><span class="badge text-bg-info">' + (t.department || '—') + '</span></td>' +
-            '<td>' + (t.qualification || '—') + '</td>' +
-            '<td>' + (t.experience || 0) + ' yr' + (t.experience == 1 ? '' : 's') + '</td>' +
+            '<td>' + name + '</td>' +
+            '<td>' + email + '</td>' +
+            '<td>' + phone + '</td>' +
+            '<td><span class="badge text-bg-info">' + department + '</span></td>' +
+            '<td>' + qualification + '</td>' +
+            '<td>' + experience + ' yr' + (experience == 1 ? '' : 's') + '</td>' +
             '<td>' +
               '<button class="btn btn-warning btn-sm me-1" onclick="editTeacher(' + t.id + ')"><i class="bi bi-pencil-fill"></i></button>' +
               '<button class="btn btn-danger btn-sm" onclick="deleteTeacher(' + t.id + ')"><i class="bi bi-trash-fill"></i></button>' +

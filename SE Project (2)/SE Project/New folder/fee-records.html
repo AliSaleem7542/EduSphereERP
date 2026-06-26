@@ -21,6 +21,7 @@
 })();
 </script>
 <script src="assets/js/role-sidebar-filter.js"></script>
+<script src="js/security.js"></script>
 </head>
   <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
     <div class="app-wrapper">
@@ -454,21 +455,31 @@
           tbody.innerHTML = '<tr><td colspan="14" class="text-center text-muted py-4">No records found.</td></tr>';
         } else {
           tbody.innerHTML = page.map(function(r, i) {
+            // XSS Protection: Escape all user-generated content
+            var rollNo = SECURITY.escapeHtml(r.rollNo || '-');
+            var studentName = SECURITY.escapeHtml(r.studentName);
+            var section = SECURITY.escapeHtml(r.section || '-');
+            var annualR = SECURITY.escapeHtml(r.annualR || '');
+            var inst1R = SECURITY.escapeHtml(r.inst1R || '');
+            var inst2R = SECURITY.escapeHtml(r.inst2R || '');
+            var inst3R = SECURITY.escapeHtml(r.inst3R || '');
+            var inst4R = SECURITY.escapeHtml(r.inst4R || '');
+            
             var remaining = r.packageTotal - r.totalPaid;
             var remClass = remaining > 0 ? 'text-danger fw-bold' : 'text-success fw-bold';
             return '<tr>' +
               '<td>' + (start + i + 1) + '</td>' +
-              '<td>' + (r.rollNo || '-') + '</td>' +
-              '<td>' + r.studentName + '</td>' +
-              '<td><span class="badge bg-secondary">' + (r.section || '-') + '</span></td>' +
+              '<td>' + rollNo + '</td>' +
+              '<td>' + studentName + '</td>' +
+              '<td><span class="badge bg-secondary">' + section + '</span></td>' +
               '<td>' + (r.packageTotal ? 'Rs. ' + Number(r.packageTotal).toLocaleString() : '-') + '</td>' +
-              '<td>' + fmt(r.annual, r.annualR) + '</td>' +
+              '<td>' + fmt(r.annual, annualR) + '</td>' +
               '<td>' + (r.tuitionFee ? 'Rs. ' + Number(r.tuitionFee).toLocaleString() : '-') + '</td>' +
               '<td>' + (r.transportFee ? 'Rs. ' + Number(r.transportFee).toLocaleString() : '-') + '</td>' +
-              '<td>' + fmt(r.inst1, r.inst1R) + '</td>' +
-              '<td>' + fmt(r.inst2, r.inst2R) + '</td>' +
-              '<td>' + fmt(r.inst3, r.inst3R) + '</td>' +
-              '<td>' + fmt(r.inst4, r.inst4R) + '</td>' +
+              '<td>' + fmt(r.inst1, inst1R) + '</td>' +
+              '<td>' + fmt(r.inst2, inst2R) + '</td>' +
+              '<td>' + fmt(r.inst3, inst3R) + '</td>' +
+              '<td>' + fmt(r.inst4, inst4R) + '</td>' +
               '<td><strong>Rs. ' + r.totalPaid.toLocaleString() + '</strong></td>' +
               '<td class="' + remClass + '">Rs. ' + Math.abs(remaining).toLocaleString() + '</td>' +
               '</tr>';
