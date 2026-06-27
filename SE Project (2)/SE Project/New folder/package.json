@@ -1,0 +1,39 @@
+{
+  "name": "edusphere-frontend",
+  "version": "3.0.0",
+  "description": "EduSphere ERP - Enterprise School Management System Frontend",
+  "private": true,
+  "scripts": {
+    "build": "npm run minify-js && npm run minify-css",
+    "minify-js": "terser js/**/*.js --compress --mangle --output dist/js/bundle.min.js --source-map",
+    "minify-css": "cleancss css/adminlte.css -o dist/css/adminlte.min.css --source-map",
+    "optimize-images": "imagemin assets/img/* --out-dir=dist/assets/img",
+    "watch": "npm-watch",
+    "serve": "live-server --port=3000 --no-browser",
+    "dev": "npm run serve",
+    "lint": "eslint js/**/*.js",
+    "lint:fix": "eslint js/**/*.js --fix"
+  },
+  "watch": {
+    "minify-js": {
+      "patterns": ["js"],
+      "extensions": "js"
+    },
+    "minify-css": {
+      "patterns": ["css"],
+      "extensions": "css"
+    }
+  },
+  "devDependencies": {
+    "terser": "^5.31.0",
+    "clean-css-cli": "^5.6.3",
+    "imagemin-cli": "^8.0.0",
+    "imagemin-webp": "^8.0.0",
+    "eslint": "^8.57.0",
+    "npm-watch": "^0.11.0",
+    "live-server": "^1.2.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
