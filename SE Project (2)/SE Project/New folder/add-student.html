@@ -853,9 +853,14 @@
             loadStats();
             setTimeout(function() { document.getElementById('successAlert').classList.add('d-none'); }, 4000);
           } else {
+            console.error('[ADD STUDENT] Error response:', res);
             API.toast((res && res.message) || 'Failed to save student', 'danger');
+            if (res && res.debug) {
+              console.error('[ADD STUDENT] Debug info:', res.debug);
+            }
           }
         } catch(e) {
+          console.error('[ADD STUDENT] Exception:', e);
           API.toast('Error: ' + e.message, 'danger');
         } finally {
           if (btn) { btn.disabled = false; btn.innerHTML = '<i class="bi bi-check-circle me-1"></i>Submit & Save'; }
