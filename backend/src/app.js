@@ -43,10 +43,19 @@ app.use(
       if (!origin) return callback(null, true);
       // Exact match from env list
       if (allowedOrigins.includes(origin)) return callback(null, true);
-      // Allow any localhost origin regardless of port (development)
-      if (/^http:\/\/localhost(:\d+)?$/.test(origin)) return callback(null, true);
-      if (/^http:\/\/127\.0\.0\.1(:\d+)?$/.test(origin)) return callback(null, true);
-      // Allow any Vercel preview/production deployment
+      // Development: Allow any localhost origin regardless of port
+      if (process.env.NODE_ENV !== 'production') {
+        if (/^http:\/\/localhost(:\d+)?$/.test(origin)) return callback(null, true);
+        if (/^http:\/\/127\.0\.0\.1(:\d+)?$/.test(origin)) return callback(null, true);
+      }
+      // Allow specific Vercel deployments (use env var for production)
+      if (process.env.VERCEL_ALLOWED_DOMAINS) {
+        const vercelDomains = process.env.VERCEL_ALLOWED_DOMAINS.split(',');
+        if (vercelDomains.some(domain => origin.includes(domain.trim()))) {
+          return callback(null, true);
+        }
+      }
+      // Fallback: Allow any Vercel deployment (less secure, for development)
       if (/^https:\/\/.*\.vercel\.app$/.test(origin)) return callback(null, true);
       // Allow GitHub Pages
       if (/^https:\/\/.*\.github\.io$/.test(origin)) return callback(null, true);
@@ -71,6 +80,12 @@ const authLimiter = rateLimit({
   message: { success: false, message: 'Too many login attempts, please try again later.' },
 });
 
+const refreshLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30, // Allow more refresh attempts than login
+  message: { success: false, message: 'Too many token refresh attempts, please try again later.' },
+});
+
 app.use(globalLimiter);
 
 // ─── Body Parsing ─────────────────────────────────────────────────────────────
@@ -91,7 +106,7 @@ app.get('/health', (req, res) => {
     success: true,
     message: 'EDU-SPHERE API is running',
     timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'development',
+    // Removed: environment (security - don't expose env to public)
   });
 });
 

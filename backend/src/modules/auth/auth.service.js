@@ -8,6 +8,11 @@ const {
   REFRESH_EXPIRES,
 } = require('../../config/jwt');
 const { logActivity } = require('../../utils/activityLogger');
+const {
+  recordFailedAttempt,
+  isAccountLocked,
+  resetFailedAttempts,
+} = require('../../utils/accountLockout');
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -44,6 +49,12 @@ async function adminLogin(username, password, ipAddress) {
     lookupUsername = username.split('@')[0];
   }
 
+  // Check if account is locked
+  const lockStatus = isAccountLocked(lookupUsername);
+  if (lockStatus.isLocked) {
+    throw { statusCode: 429, message: lockStatus.message };
+  }
+
   const user = await prisma.user.findFirst({
     where: {
       OR: [
@@ -55,7 +66,8 @@ async function adminLogin(username, password, ipAddress) {
   });
 
   if (!user || user.role !== 'ADMIN') {
-    throw { statusCode: 401, message: 'Invalid username or password' };
+    const failResult = recordFailedAttempt(lookupUsername);
+    throw { statusCode: 401, message: failResult.message };
   }
 
   if (!user.isActive) {
@@ -64,8 +76,12 @@ async function adminLogin(username, password, ipAddress) {
 
   const valid = await comparePassword(password, user.passwordHash);
   if (!valid) {
-    throw { statusCode: 401, message: 'Invalid username or password' };
+    const failResult = recordFailedAttempt(lookupUsername);
+    throw { statusCode: 401, message: failResult.message };
   }
+
+  // Success - reset failed attempts
+  resetFailedAttempts(lookupUsername);
 
   const { accessToken, refreshToken } = buildTokenPair(user);
   await storeRefreshToken(user.id, refreshToken);
@@ -88,13 +104,20 @@ async function adminLogin(username, password, ipAddress) {
 // ─── Teacher Login ────────────────────────────────────────────────────────────
 
 async function teacherLogin(phone, password, ipAddress) {
+  // Check if account is locked
+  const lockStatus = isAccountLocked(phone);
+  if (lockStatus.isLocked) {
+    throw { statusCode: 429, message: lockStatus.message };
+  }
+
   const teacher = await prisma.teacher.findUnique({
     where: { phone },
     include: { user: true },
   });
 
   if (!teacher || !teacher.user) {
-    throw { statusCode: 401, message: 'Phone number not found' };
+    const failResult = recordFailedAttempt(phone);
+    throw { statusCode: 401, message: failResult.message };
   }
 
   if (!teacher.user.isActive) {
@@ -109,8 +132,12 @@ async function teacherLogin(phone, password, ipAddress) {
   const storedHash = teacher.user.passwordHash;
   const valid = await comparePassword(password, storedHash);
   if (!valid) {
-    throw { statusCode: 401, message: 'Incorrect password' };
+    const failResult = recordFailedAttempt(phone);
+    throw { statusCode: 401, message: failResult.message };
   }
+
+  // Success - reset failed attempts
+  resetFailedAttempts(phone);
 
   const { accessToken, refreshToken } = buildTokenPair(teacher.user);
   await storeRefreshToken(teacher.user.id, refreshToken);
@@ -141,6 +168,12 @@ async function teacherLogin(phone, password, ipAddress) {
 // ─── Student Login ────────────────────────────────────────────────────────────
 
 async function studentLogin(rollNo, password, ipAddress) {
+  // Check if account is locked
+  const lockStatus = isAccountLocked(rollNo);
+  if (lockStatus.isLocked) {
+    throw { statusCode: 429, message: lockStatus.message };
+  }
+
   // Try exact match first, then try section-prefixed variants
   let student = await prisma.student.findUnique({
     where: { rollNo },
@@ -158,7 +191,8 @@ async function studentLogin(rollNo, password, ipAddress) {
   }
 
   if (!student) {
-    throw { statusCode: 401, message: 'Roll number not found' };
+    const failResult = recordFailedAttempt(rollNo);
+    throw { statusCode: 401, message: failResult.message };
   }
 
   if (student.status !== 'ACTIVE') {
@@ -179,8 +213,12 @@ async function studentLogin(rollNo, password, ipAddress) {
     const validShort = (!valid && !validFull) ? (password === shortPart || password === student.rollNo) : false;
 
     if (!valid && !validFull && !validShort) {
-      throw { statusCode: 401, message: 'Incorrect password' };
+      const failResult = recordFailedAttempt(rollNo);
+      throw { statusCode: 401, message: failResult.message };
     }
+
+    // Success - reset failed attempts
+    resetFailedAttempts(rollNo);
 
     const { accessToken, refreshToken } = buildTokenPair(student.user);
     await storeRefreshToken(student.user.id, refreshToken);
@@ -201,8 +239,12 @@ async function studentLogin(rollNo, password, ipAddress) {
   const shortRollNo = rollNo; // what the user typed
   const fullRollNo = student.rollNo; // what's stored in DB
   if (password !== fullRollNo && password !== shortRollNo) {
-    throw { statusCode: 401, message: 'Incorrect password' };
+    const failResult = recordFailedAttempt(rollNo);
+    throw { statusCode: 401, message: failResult.message };
   }
+
+  // Success - reset failed attempts
+  resetFailedAttempts(rollNo);
 
   // Auto-create a User record for this student
   const passwordHash = await hashPassword(fullRollNo);

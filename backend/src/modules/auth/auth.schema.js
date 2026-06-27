@@ -1,4 +1,16 @@
 const { z } = require('zod');
+const { validatePassword } = require('../../utils/passwordValidator');
+
+// Custom Zod validator for strong passwords
+const strongPasswordValidator = z.string()
+  .min(1, 'Password is required')
+  .refine((password) => {
+    const result = validatePassword(password);
+    return result.valid;
+  }, (password) => {
+    const result = validatePassword(password);
+    return { message: result.errors.join('; ') };
+  });
 
 const adminLoginSchema = z.object({
   username: z
@@ -40,9 +52,7 @@ const changePasswordSchema = z.object({
   currentPassword: z
     .string({ required_error: 'Current password is required' })
     .min(1),
-  newPassword: z
-    .string({ required_error: 'New password is required' })
-    .min(6, 'New password must be at least 6 characters'),
+  newPassword: strongPasswordValidator,
 });
 
 module.exports = {
