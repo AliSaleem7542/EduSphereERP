@@ -809,11 +809,16 @@
         var secEl = document.getElementById('studentSection');
         if (secEl && secEl.value) fd.append('sectionId', secEl.value);
 
-        // Date fields
+        // Date fields - only send if valid
         var dobEl = document.getElementById('dob');
-        if (dobEl && dobEl.value) fd.append('dob', dobEl.value);
+        if (dobEl && dobEl.value && dobEl.value.trim()) {
+          fd.append('dob', dobEl.value);
+        }
+        
         var admDateEl = document.getElementById('admissionDate');
-        if (admDateEl && admDateEl.value) fd.append('admissionDate', admDateEl.value);
+        if (admDateEl && admDateEl.value && admDateEl.value.trim()) {
+          fd.append('admissionDate', admDateEl.value);
+        }
 
         // Blood group
         var bgEl = document.getElementById('bloodGroup');
