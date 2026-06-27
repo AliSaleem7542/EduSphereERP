@@ -388,8 +388,8 @@
                       <input type="text" class="form-control" id="rollNo" placeholder="e.g. 2025-001" required>
                     </div>
                     <div class="col-md-4 mb-3">
-                      <label class="form-label">Admission Date</label>
-                      <input type="date" class="form-control" id="admissionDate">
+                      <label class="form-label">Admission Date <span class="text-danger">*</span></label>
+                      <input type="date" class="form-control" id="admissionDate" required>
                     </div>
                     <div class="col-md-4 mb-3">
                       <label class="form-label">Admission Type</label>
@@ -470,7 +470,7 @@
                 <div id="step3" class="d-none">
                   <div class="row">
                     <div class="col-md-6 mb-3">
-                      <label class="form-label">Father's Name <span class="text-danger">*</span></label>
+                      <label class="form-label">Father's Name</label>
                       <input type="text" class="form-control" id="fatherName" placeholder="Father's full name">
                     </div>
                     <div class="col-md-6 mb-3">
@@ -478,7 +478,7 @@
                       <input type="text" class="form-control" id="fatherOccupation" placeholder="e.g. Engineer">
                     </div>
                     <div class="col-md-6 mb-3">
-                      <label class="form-label">Father's Phone <span class="text-danger">*</span></label>
+                      <label class="form-label">Father's Phone</label>
                       <input type="tel" class="form-control" id="fatherPhone" placeholder="e.g. 0300-1234567">
                     </div>
                     <div class="col-md-6 mb-3">
@@ -636,7 +636,7 @@
       }
 
       function validateStep1() {
-        // Required: firstName, lastName, gender
+        // Database required: firstName, lastName, gender
         var req = ['firstName', 'lastName', 'gender'];
         for (var i = 0; i < req.length; i++) {
           var el = document.getElementById(req[i]);
@@ -645,7 +645,7 @@
               el.classList.add('is-invalid');
               el.focus();
             }
-            API.toast('Please fill all required fields in Personal Info', 'error');
+            API.toast('Please fill all required fields (marked with *)', 'error');
             return false;
           }
           el.classList.remove('is-invalid');
@@ -654,8 +654,8 @@
       }
 
       function validateStep2() {
-        // Check required fields: class and rollNo
-        var req = ['studentClass', 'rollNo'];
+        // Database required: classId, rollNo, admissionDate
+        var req = ['studentClass', 'rollNo', 'admissionDate'];
         for (var i = 0; i < req.length; i++) {
           var el = document.getElementById(req[i]);
           if (!el || !el.value.trim()) {
@@ -663,7 +663,7 @@
               el.classList.add('is-invalid');
               el.focus();
             }
-            API.toast('Please fill all required fields in Academic Info', 'error');
+            API.toast('Please fill all required fields (marked with *)', 'error');
             return false;
           }
           el.classList.remove('is-invalid');
@@ -672,12 +672,8 @@
       }
 
       function validateStep3() {
-        var req = ['fatherName', 'fatherPhone'];
-        for (var i = 0; i < req.length; i++) {
-          var el = document.getElementById(req[i]);
-          if (!el.value.trim()) { el.classList.add('is-invalid'); el.focus(); return false; }
-          el.classList.remove('is-invalid');
-        }
+        // Guardian info is ALL OPTIONAL in database
+        // No validation needed - user can skip
         return true;
       }
 
@@ -716,48 +712,18 @@
       async function submitStudent() {
         var btn = document.getElementById('submitBtn');
         
-        // ── VALIDATION: Check mandatory fields ────────────────────────────────
+        // ── VALIDATION: Check mandatory fields (already validated in steps) ───
         const firstName = document.getElementById('firstName').value.trim();
         const lastName = document.getElementById('lastName').value.trim();
+        const gender = document.getElementById('gender').value;
         const classId = document.getElementById('studentClass').value;
-        
-        // Validate required fields
-        if (!firstName) {
-          API.toast('Please enter first name', 'error');
-          goStep(1); // Go back to step 1
-          document.getElementById('firstName').focus();
-          return;
-        }
-        
-        if (!lastName) {
-          API.toast('Please enter last name', 'error');
-          goStep(1);
-          document.getElementById('lastName').focus();
-          return;
-        }
-        
-        if (!classId) {
-          API.toast('Please select a class', 'error');
-          goStep(2); // Go back to step 2
-          document.getElementById('studentClass').focus();
-          return;
-        }
-        
-        // Additional validation: Check if roll number is entered
         const rollNo = document.getElementById('rollNo').value.trim();
-        if (!rollNo) {
-          API.toast('Please enter roll number', 'error');
-          goStep(2);
-          document.getElementById('rollNo').focus();
-          return;
-        }
+        const admissionDate = document.getElementById('admissionDate').value;
         
-        // Validate gender selection
-        const genderRaw = document.getElementById('gender').value;
-        if (!genderRaw) {
-          API.toast('Please select gender', 'error');
-          goStep(1);
-          document.getElementById('gender').focus();
+        // Final validation check
+        if (!firstName || !lastName || !gender || !classId || !rollNo || !admissionDate) {
+          API.toast('Please fill all required fields marked with *', 'error');
+          goStep(1); // Go back to first incomplete step
           return;
         }
         
