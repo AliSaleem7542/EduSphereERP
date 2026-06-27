@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "name": "edusphere-frontend",
+  "buildCommand": null,
+  "outputDirectory": "SE Project (2)/SE Project/New folder",
+  "devCommand": null,
+  "installCommand": null,
+  "framework": null,
+  "cleanUrls": false,
+  "trailingSlash": false
+}
