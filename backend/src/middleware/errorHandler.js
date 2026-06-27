@@ -43,12 +43,23 @@ function errorHandler(err, req, res, next) {
   if (err instanceof Prisma.PrismaClientValidationError) {
     // Log the full validation error for server-side debugging
     console.error('❌ PrismaClientValidationError:', err.message);
-    console.error('❌ Full error:', err);
-    // Never expose internal database schema details to clients
+    console.error('❌ Full error stack:', err.stack);
+    
+    // Extract field names from error message if possible
+    const fieldMatch = err.message.match(/Argument `(\w+)`.+?(\w+)/);
+    const missingFieldMatch = err.message.match(/required.+?`(\w+)`/i);
+    
+    let userMessage = 'Invalid data provided to database';
+    if (missingFieldMatch) {
+      userMessage = `Missing required field: ${missingFieldMatch[1]}`;
+    } else if (fieldMatch) {
+      userMessage = `Invalid value for field: ${fieldMatch[1]}`;
+    }
+    
     return res.status(400).json({
       success: false,
-      message: 'Invalid data provided to database',
-      debug: process.env.NODE_ENV !== 'production' ? err.message : undefined,
+      message: userMessage,
+      debug: process.env.NODE_ENV !== 'production' ? err.message.substring(0, 500) : undefined,
     });
   }
 

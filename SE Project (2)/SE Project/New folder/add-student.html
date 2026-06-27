@@ -656,18 +656,36 @@
       function validateStep2() {
         // Database required: classId, rollNo, admissionDate
         var req = ['studentClass', 'rollNo', 'admissionDate'];
+        var missing = [];
+        
         for (var i = 0; i < req.length; i++) {
           var el = document.getElementById(req[i]);
-          if (!el || !el.value.trim()) {
+          if (!el || !el.value || !el.value.trim()) {
             if (el) {
               el.classList.add('is-invalid');
-              el.focus();
+              // Add field name for better error message
+              if (req[i] === 'studentClass') missing.push('Class');
+              else if (req[i] === 'rollNo') missing.push('Roll Number');
+              else if (req[i] === 'admissionDate') missing.push('Admission Date');
             }
-            API.toast('Please fill all required fields (marked with *)', 'error');
-            return false;
+          } else {
+            el.classList.remove('is-invalid');
           }
-          el.classList.remove('is-invalid');
         }
+        
+        if (missing.length > 0) {
+          API.toast('Please fill: ' + missing.join(', '), 'error');
+          // Focus first missing field
+          for (var i = 0; i < req.length; i++) {
+            var el = document.getElementById(req[i]);
+            if (el && el.classList.contains('is-invalid')) {
+              el.focus();
+              break;
+            }
+          }
+          return false;
+        }
+        
         return true;
       }
 
@@ -793,16 +811,18 @@
         var secEl = document.getElementById('studentSection');
         if (secEl && secEl.value) fd.append('sectionId', secEl.value);
 
-        // Date fields - only send if valid
+        // Date fields - only send if valid and non-empty
         var dobEl = document.getElementById('dob');
         if (dobEl && dobEl.value && dobEl.value.trim()) {
           fd.append('dob', dobEl.value);
         }
         
+        // admissionDate is REQUIRED - must always be sent
         var admDateEl = document.getElementById('admissionDate');
         if (admDateEl && admDateEl.value && admDateEl.value.trim()) {
           fd.append('admissionDate', admDateEl.value);
         }
+        // Note: if empty, backend will default to current date
 
         // Blood group
         var bgEl = document.getElementById('bloodGroup');
