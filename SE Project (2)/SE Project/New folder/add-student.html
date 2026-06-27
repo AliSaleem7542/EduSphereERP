@@ -358,8 +358,8 @@
                           </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                          <label class="form-label">CNIC / B-Form No.</label>
-                          <input type="text" class="form-control" id="cnic" placeholder="e.g. 35201-1234567-1">
+                          <label class="form-label">CNIC / B-Form No. <span class="text-danger">*</span></label>
+                          <input type="text" class="form-control" id="cnic" placeholder="e.g. 35201-1234567-1" required>
                         </div>
                         <div class="col-md-6 mb-3">
                           <label class="form-label">Religion</label>
@@ -636,20 +636,39 @@
       }
 
       function validateStep1() {
-        // Database required: firstName, lastName, gender
-        var req = ['firstName', 'lastName', 'gender'];
+        // Database required: firstName, lastName, gender, cnic
+        var req = ['firstName', 'lastName', 'gender', 'cnic'];
+        var missing = [];
+        
         for (var i = 0; i < req.length; i++) {
           var el = document.getElementById(req[i]);
-          if (!el || !el.value.trim()) {
+          if (!el || !el.value || !el.value.trim()) {
             if (el) {
               el.classList.add('is-invalid');
-              el.focus();
+              // Add field name for better error message
+              if (req[i] === 'firstName') missing.push('First Name');
+              else if (req[i] === 'lastName') missing.push('Last Name');
+              else if (req[i] === 'gender') missing.push('Gender');
+              else if (req[i] === 'cnic') missing.push('CNIC / B-Form No.');
             }
-            API.toast('Please fill all required fields (marked with *)', 'error');
-            return false;
+          } else {
+            el.classList.remove('is-invalid');
           }
-          el.classList.remove('is-invalid');
         }
+        
+        if (missing.length > 0) {
+          API.toast('Please fill: ' + missing.join(', '), 'error');
+          // Focus first missing field
+          for (var i = 0; i < req.length; i++) {
+            var el = document.getElementById(req[i]);
+            if (el && el.classList.contains('is-invalid')) {
+              el.focus();
+              break;
+            }
+          }
+          return false;
+        }
+        
         return true;
       }
 
@@ -734,12 +753,13 @@
         const firstName = document.getElementById('firstName').value.trim();
         const lastName = document.getElementById('lastName').value.trim();
         const gender = document.getElementById('gender').value;
+        const cnic = document.getElementById('cnic').value.trim();
         const classId = document.getElementById('studentClass').value;
         const rollNo = document.getElementById('rollNo').value.trim();
         const admissionDate = document.getElementById('admissionDate').value;
         
         // Final validation check
-        if (!firstName || !lastName || !gender || !classId || !rollNo || !admissionDate) {
+        if (!firstName || !lastName || !gender || !cnic || !classId || !rollNo || !admissionDate) {
           API.toast('Please fill all required fields marked with *', 'error');
           goStep(1); // Go back to first incomplete step
           return;
@@ -786,6 +806,7 @@
         fd.append('firstName',     document.getElementById('firstName').value.trim());
         fd.append('lastName',      document.getElementById('lastName').value.trim());
         fd.append('rollNo',        document.getElementById('rollNo').value.trim());
+        fd.append('cnic',          document.getElementById('cnic').value.trim());
         fd.append('gender',        genderVal);
         fd.append('admissionType', admTypeVal);
         fd.append('feeCategory',   feeCatVal);
@@ -794,7 +815,7 @@
 
         // Optional string fields — only append if non-empty
         // NOTE: only fields that exist in the Prisma Student model
-        var optStr = ['middleName','cnic','religion','address','fatherName','fatherPhone',
+        var optStr = ['middleName','religion','address','fatherName','fatherPhone',
                       'prevSchool','prevGrade','fatherCnic','fatherOccupation',
                       'motherName','motherPhone','guardianName','guardianPhone','emergencyContact'];
         optStr.forEach(function(id) {

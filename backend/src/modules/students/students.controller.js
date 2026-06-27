@@ -121,7 +121,7 @@ async function create(req, res, next) {
 
     // ── VALIDATION: Check required fields before database operation ──
     const required = { rollNo: body.rollNo, firstName: body.firstName, lastName: body.lastName, 
-                      gender: body.gender, classId: body.classId, admissionDate: body.admissionDate };
+                      gender: body.gender, cnic: body.cnic, classId: body.classId, admissionDate: body.admissionDate };
     const missing = Object.keys(required).filter(k => !required[k]);
     if (missing.length > 0) {
       console.error('[STUDENT CREATE] Missing required fields:', missing);
