@@ -340,8 +340,8 @@
                           <input type="date" class="form-control" id="dob">
                         </div>
                         <div class="col-md-4 mb-3">
-                          <label class="form-label">Gender</label>
-                          <select class="form-select" id="gender">
+                          <label class="form-label">Gender <span class="text-danger">*</span></label>
+                          <select class="form-select" id="gender" required>
                             <option value="">Select...</option>
                             <option>Male</option>
                             <option>Female</option>
@@ -731,6 +731,15 @@
           API.toast('Please enter roll number', 'error');
           goStep(2);
           document.getElementById('rollNo').focus();
+          return;
+        }
+        
+        // Validate gender selection
+        const genderRaw = document.getElementById('gender').value;
+        if (!genderRaw) {
+          API.toast('Please select gender', 'error');
+          goStep(1);
+          document.getElementById('gender').focus();
           return;
         }
         
