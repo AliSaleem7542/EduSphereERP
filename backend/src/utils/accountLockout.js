@@ -14,12 +14,24 @@ const CLEANUP_INTERVAL_MS = 60 * 60 * 1000; // Clean up every hour
 const failedAttempts = new Map();
 
 /**
+ * Generate lockout key combining IP and identifier
+ * @param {string} identifier - Username, phone, or rollNo
+ * @param {string} ipAddress - Client IP address
+ * @returns {string} Combined key for lockout tracking
+ */
+function getLockoutKey(identifier, ipAddress) {
+  // Use both identifier and IP to prevent cross-account brute force
+  return `${String(identifier).toLowerCase().trim()}:${ipAddress}`;
+}
+
+/**
  * Record a failed login attempt
  * @param {string} identifier - Username, phone, or rollNo
+ * @param {string} ipAddress - Client IP address
  * @returns {object} { isLocked: boolean, remainingAttempts: number, lockedUntil: Date|null }
  */
-function recordFailedAttempt(identifier) {
-  const key = String(identifier).toLowerCase().trim();
+function recordFailedAttempt(identifier, ipAddress) {
+  const key = getLockoutKey(identifier, ipAddress);
   const now = Date.now();
 
   let record = failedAttempts.get(key);
@@ -41,7 +53,7 @@ function recordFailedAttempt(identifier) {
       isLocked: true,
       remainingAttempts: 0,
       lockedUntil: new Date(record.lockedUntil),
-      message: `Account locked due to too many failed attempts. Try again in 30 seconds.`,
+      message: `Too many failed login attempts. Your account is locked for 30 seconds.`,
     };
   }
 
@@ -60,10 +72,11 @@ function recordFailedAttempt(identifier) {
 /**
  * Check if an account is currently locked
  * @param {string} identifier - Username, phone, or rollNo
+ * @param {string} ipAddress - Client IP address
  * @returns {object} { isLocked: boolean, lockedUntil: Date|null }
  */
-function isAccountLocked(identifier) {
-  const key = String(identifier).toLowerCase().trim();
+function isAccountLocked(identifier, ipAddress) {
+  const key = getLockoutKey(identifier, ipAddress);
   const record = failedAttempts.get(key);
   const now = Date.now();
 
@@ -78,39 +91,58 @@ function isAccountLocked(identifier) {
     return { isLocked: false, lockedUntil: null };
   }
 
+  // Still locked
+  const remainingSeconds = Math.ceil((record.lockedUntil - now) / 1000);
   return {
     isLocked: true,
     lockedUntil: new Date(record.lockedUntil),
-    message: `Account is temporarily locked. Try again after ${new Date(record.lockedUntil).toLocaleTimeString()}.`,
+    message: `Account is temporarily locked. Please try again in ${remainingSeconds} seconds.`,
   };
 }
 
 /**
  * Reset failed attempts after successful login
  * @param {string} identifier - Username, phone, or rollNo
+ * @param {string} ipAddress - Client IP address
  */
-function resetFailedAttempts(identifier) {
-  const key = String(identifier).toLowerCase().trim();
+function resetFailedAttempts(identifier, ipAddress) {
+  const key = getLockoutKey(identifier, ipAddress);
   failedAttempts.delete(key);
 }
 
 /**
  * Manually unlock an account (admin function)
  * @param {string} identifier - Username, phone, or rollNo
+ * @param {string} ipAddress - Client IP address (optional, unlocks all IPs if not provided)
  */
-function unlockAccount(identifier) {
-  const key = String(identifier).toLowerCase().trim();
-  failedAttempts.delete(key);
-  return { success: true, message: 'Account unlocked successfully' };
+function unlockAccount(identifier, ipAddress) {
+  if (ipAddress) {
+    const key = getLockoutKey(identifier, ipAddress);
+    failedAttempts.delete(key);
+    return { success: true, message: 'Account unlocked successfully' };
+  }
+  
+  // Unlock for all IPs
+  const prefix = `${String(identifier).toLowerCase().trim()}:`;
+  let count = 0;
+  for (const key of failedAttempts.keys()) {
+    if (key.startsWith(prefix)) {
+      failedAttempts.delete(key);
+      count++;
+    }
+  }
+  
+  return { success: true, message: `Account unlocked for ${count} IP address(es)` };
 }
 
 /**
  * Get lockout status for an account
  * @param {string} identifier - Username, phone, or rollNo
+ * @param {string} ipAddress - Client IP address
  * @returns {object} Status information
  */
-function getLockoutStatus(identifier) {
-  const key = String(identifier).toLowerCase().trim();
+function getLockoutStatus(identifier, ipAddress) {
+  const key = getLockoutKey(identifier, ipAddress);
   const record = failedAttempts.get(key);
   const now = Date.now();
 

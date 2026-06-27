@@ -56,7 +56,7 @@ async function adminLogin(username, password, ipAddress, userAgent = null) {
   }
 
   // Check if account is locked
-  const lockStatus = isAccountLocked(lookupUsername);
+  const lockStatus = isAccountLocked(lookupUsername, ipAddress);
   if (lockStatus.isLocked) {
     await logAccountLockout(lookupUsername, ipAddress, userAgent, lockStatus.lockedUntil);
     throw { statusCode: 429, message: lockStatus.message };
@@ -73,7 +73,7 @@ async function adminLogin(username, password, ipAddress, userAgent = null) {
   });
 
   if (!user || user.role !== 'ADMIN') {
-    const failResult = recordFailedAttempt(lookupUsername);
+    const failResult = recordFailedAttempt(lookupUsername, ipAddress);
     await logFailedLogin(lookupUsername, ipAddress, userAgent, failResult.remainingAttempts);
     throw { statusCode: 401, message: failResult.message };
   }
@@ -84,13 +84,13 @@ async function adminLogin(username, password, ipAddress, userAgent = null) {
 
   const valid = await comparePassword(password, user.passwordHash);
   if (!valid) {
-    const failResult = recordFailedAttempt(lookupUsername);
+    const failResult = recordFailedAttempt(lookupUsername, ipAddress);
     await logFailedLogin(lookupUsername, ipAddress, userAgent, failResult.remainingAttempts);
     throw { statusCode: 401, message: failResult.message };
   }
 
   // Success - reset failed attempts
-  resetFailedAttempts(lookupUsername);
+  resetFailedAttempts(lookupUsername, ipAddress);
   await logSuccessfulLogin(user.id, lookupUsername, ipAddress, userAgent, 'ADMIN');
 
   const { accessToken, refreshToken } = buildTokenPair(user);
@@ -115,7 +115,7 @@ async function adminLogin(username, password, ipAddress, userAgent = null) {
 
 async function teacherLogin(phone, password, ipAddress, userAgent = null) {
   // Check if account is locked
-  const lockStatus = isAccountLocked(phone);
+  const lockStatus = isAccountLocked(phone, ipAddress);
   if (lockStatus.isLocked) {
     await logAccountLockout(phone, ipAddress, userAgent, lockStatus.lockedUntil);
     throw { statusCode: 429, message: lockStatus.message };
@@ -127,7 +127,7 @@ async function teacherLogin(phone, password, ipAddress, userAgent = null) {
   });
 
   if (!teacher || !teacher.user) {
-    const failResult = recordFailedAttempt(phone);
+    const failResult = recordFailedAttempt(phone, ipAddress);
     await logFailedLogin(phone, ipAddress, userAgent, failResult.remainingAttempts);
     throw { statusCode: 401, message: failResult.message };
   }
@@ -144,13 +144,13 @@ async function teacherLogin(phone, password, ipAddress, userAgent = null) {
   const storedHash = teacher.user.passwordHash;
   const valid = await comparePassword(password, storedHash);
   if (!valid) {
-    const failResult = recordFailedAttempt(phone);
+    const failResult = recordFailedAttempt(phone, ipAddress);
     await logFailedLogin(phone, ipAddress, userAgent, failResult.remainingAttempts);
     throw { statusCode: 401, message: failResult.message };
   }
 
   // Success - reset failed attempts
-  resetFailedAttempts(phone);
+  resetFailedAttempts(phone, ipAddress);
   await logSuccessfulLogin(teacher.user.id, phone, ipAddress, userAgent, 'TEACHER');
 
   const { accessToken, refreshToken } = buildTokenPair(teacher.user);
@@ -183,7 +183,7 @@ async function teacherLogin(phone, password, ipAddress, userAgent = null) {
 
 async function studentLogin(rollNo, password, ipAddress, userAgent = null) {
   // Check if account is locked
-  const lockStatus = isAccountLocked(rollNo);
+  const lockStatus = isAccountLocked(rollNo, ipAddress);
   if (lockStatus.isLocked) {
     await logAccountLockout(rollNo, ipAddress, userAgent, lockStatus.lockedUntil);
     throw { statusCode: 429, message: lockStatus.message };
@@ -206,7 +206,7 @@ async function studentLogin(rollNo, password, ipAddress, userAgent = null) {
   }
 
   if (!student) {
-    const failResult = recordFailedAttempt(rollNo);
+    const failResult = recordFailedAttempt(rollNo, ipAddress);
     await logFailedLogin(rollNo, ipAddress, userAgent, failResult.remainingAttempts);
     throw { statusCode: 401, message: failResult.message };
   }
@@ -229,13 +229,13 @@ async function studentLogin(rollNo, password, ipAddress, userAgent = null) {
     const validShort = (!valid && !validFull) ? (password === shortPart || password === student.rollNo) : false;
 
     if (!valid && !validFull && !validShort) {
-      const failResult = recordFailedAttempt(rollNo);
+      const failResult = recordFailedAttempt(rollNo, ipAddress);
       await logFailedLogin(rollNo, ipAddress, userAgent, failResult.remainingAttempts);
       throw { statusCode: 401, message: failResult.message };
     }
 
     // Success - reset failed attempts
-    resetFailedAttempts(rollNo);
+    resetFailedAttempts(rollNo, ipAddress);
     await logSuccessfulLogin(student.user.id, rollNo, ipAddress, userAgent, 'STUDENT');
 
     const { accessToken, refreshToken } = buildTokenPair(student.user);
@@ -257,13 +257,13 @@ async function studentLogin(rollNo, password, ipAddress, userAgent = null) {
   const shortRollNo = rollNo; // what the user typed
   const fullRollNo = student.rollNo; // what's stored in DB
   if (password !== fullRollNo && password !== shortRollNo) {
-    const failResult = recordFailedAttempt(rollNo);
+    const failResult = recordFailedAttempt(rollNo, ipAddress);
     await logFailedLogin(rollNo, ipAddress, userAgent, failResult.remainingAttempts);
     throw { statusCode: 401, message: failResult.message };
   }
 
   // Success - reset failed attempts
-  resetFailedAttempts(rollNo);
+  resetFailedAttempts(rollNo, ipAddress);
 
   // Auto-create a User record for this student
   const passwordHash = await hashPassword(fullRollNo);
