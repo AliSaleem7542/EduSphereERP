@@ -639,12 +639,16 @@
       }
 
       function validateStep1() {
+        console.log('[VALIDATION] Step 1 validation started - v2.0');
         // Database required: firstName, lastName, gender, cnic
         var req = ['firstName', 'lastName', 'gender', 'cnic'];
         var missing = [];
         
         for (var i = 0; i < req.length; i++) {
           var el = document.getElementById(req[i]);
+          var val = el ? el.value : '';
+          console.log('[VALIDATION] Checking field:', req[i], '= "' + val + '"');
+          
           if (!el || !el.value || !el.value.trim()) {
             if (el) {
               el.classList.add('is-invalid');
@@ -659,6 +663,8 @@
           }
         }
         
+        console.log('[VALIDATION] Missing fields:', missing);
+        
         if (missing.length > 0) {
           API.toast('Please fill: ' + missing.join(', '), 'error');
           // Focus first missing field
@@ -672,6 +678,7 @@
           return false;
         }
         
+        console.log('[VALIDATION] Step 1 passed!');
         return true;
       }
 
