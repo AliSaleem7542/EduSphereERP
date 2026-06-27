@@ -325,7 +325,7 @@
                       <div class="row">
                         <div class="col-md-4 mb-3">
                           <label class="form-label">First Name <span class="text-danger">*</span></label>
-                          <input type="text" class="form-control" id="firstName" placeholder="First name">
+                          <input type="text" class="form-control" id="firstName" placeholder="First name" required>
                         </div>
                         <div class="col-md-4 mb-3">
                           <label class="form-label">Middle Name</label>
@@ -333,7 +333,7 @@
                         </div>
                         <div class="col-md-4 mb-3">
                           <label class="form-label">Last Name <span class="text-danger">*</span></label>
-                          <input type="text" class="form-control" id="lastName" placeholder="Last name">
+                          <input type="text" class="form-control" id="lastName" placeholder="Last name" required>
                         </div>
                         <div class="col-md-4 mb-3">
                           <label class="form-label">Date of Birth</label>
@@ -358,7 +358,7 @@
                           </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                          <label class="form-label">CNIC / B-Form No. <span class="text-danger">*</span></label>
+                          <label class="form-label">CNIC / B-Form No.</label>
                           <input type="text" class="form-control" id="cnic" placeholder="e.g. 35201-1234567-1">
                         </div>
                         <div class="col-md-6 mb-3">
@@ -384,8 +384,8 @@
                 <div id="step2" class="d-none">
                   <div class="row">
                     <div class="col-md-4 mb-3">
-                      <label class="form-label">Roll Number</label>
-                      <input type="text" class="form-control" id="rollNo" placeholder="e.g. 2025-001">
+                      <label class="form-label">Roll Number <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="rollNo" placeholder="e.g. 2025-001" required>
                     </div>
                     <div class="col-md-4 mb-3">
                       <label class="form-label">Admission Date</label>
@@ -401,7 +401,7 @@
                     </div>
                     <div class="col-md-4 mb-3">
                       <label class="form-label">Class <span class="text-danger">*</span></label>
-                      <select class="form-select" id="studentClass" onchange="loadSectionOptions()">
+                      <select class="form-select" id="studentClass" onchange="loadSectionOptions()" required>
                         <option value="">Select class...</option>
                       </select>
                     </div>
@@ -697,6 +697,45 @@
 
       async function submitStudent() {
         var btn = document.getElementById('submitBtn');
+        
+        // ── VALIDATION: Check mandatory fields ────────────────────────────────
+        const firstName = document.getElementById('firstName').value.trim();
+        const lastName = document.getElementById('lastName').value.trim();
+        const classId = document.getElementById('studentClass').value;
+        
+        // Validate required fields
+        if (!firstName) {
+          API.toast('Please enter first name', 'error');
+          goStep(1); // Go back to step 1
+          document.getElementById('firstName').focus();
+          return;
+        }
+        
+        if (!lastName) {
+          API.toast('Please enter last name', 'error');
+          goStep(1);
+          document.getElementById('lastName').focus();
+          return;
+        }
+        
+        if (!classId) {
+          API.toast('Please select a class', 'error');
+          goStep(2); // Go back to step 2
+          document.getElementById('studentClass').focus();
+          return;
+        }
+        
+        // Additional validation: Check if roll number is entered
+        const rollNo = document.getElementById('rollNo').value.trim();
+        if (!rollNo) {
+          API.toast('Please enter roll number', 'error');
+          goStep(2);
+          document.getElementById('rollNo').focus();
+          return;
+        }
+        
+        // ── END VALIDATION ─────────────────────────────────────────────────────
+        
         if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Saving...'; }
 
         // ── Enum maps matching Prisma schema exactly ──────────────────────────
