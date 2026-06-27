@@ -6,10 +6,15 @@
  * window.EDUSPHERE_API_URL is read by auth.js to build all API requests.
  */
 
-// ── PRODUCTION: Always use Render backend ──────────────────────────────────
-window.EDUSPHERE_API_URL = 'https://edusphereerp-scbr.onrender.com';
+// ── DETECT LOCALHOST: Auto-switch between local and production backend ──────
+if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
+  // LOCALHOST: Use local backend if running
+  window.EDUSPHERE_API_URL = 'http://localhost:5000';
+  console.log('[EDU-SPHERE] Running on LOCALHOST - Using local backend');
+} else {
+  // PRODUCTION: Use Render backend
+  window.EDUSPHERE_API_URL = 'https://edusphereerp-scbr.onrender.com';
+  console.log('[EDU-SPHERE] Running on PRODUCTION - Using Render backend');
+}
 
-// ── LOCAL DEV OVERRIDE: Uncomment the line below when running locally ───────
-// window.EDUSPHERE_API_URL = 'http://localhost:5000';
-
-console.log('[EDU-SPHERE] API:', window.EDUSPHERE_API_URL);
+console.log('[EDU-SPHERE] API URL:', window.EDUSPHERE_API_URL);
