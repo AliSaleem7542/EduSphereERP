@@ -636,20 +636,38 @@
       }
 
       function validateStep1() {
-        // Only firstName and lastName are required (cnic is optional in schema)
-        var req = ['firstName', 'lastName'];
+        // Required: firstName, lastName, gender
+        var req = ['firstName', 'lastName', 'gender'];
         for (var i = 0; i < req.length; i++) {
           var el = document.getElementById(req[i]);
-          if (!el.value.trim()) { el.classList.add('is-invalid'); el.focus(); return false; }
+          if (!el || !el.value.trim()) {
+            if (el) {
+              el.classList.add('is-invalid');
+              el.focus();
+            }
+            API.toast('Please fill all required fields in Personal Info', 'error');
+            return false;
+          }
           el.classList.remove('is-invalid');
         }
         return true;
       }
 
       function validateStep2() {
-        var cls = document.getElementById('studentClass');
-        if (!cls.value.trim()) { cls.classList.add('is-invalid'); cls.focus(); return false; }
-        cls.classList.remove('is-invalid');
+        // Check required fields: class and rollNo
+        var req = ['studentClass', 'rollNo'];
+        for (var i = 0; i < req.length; i++) {
+          var el = document.getElementById(req[i]);
+          if (!el || !el.value.trim()) {
+            if (el) {
+              el.classList.add('is-invalid');
+              el.focus();
+            }
+            API.toast('Please fill all required fields in Academic Info', 'error');
+            return false;
+          }
+          el.classList.remove('is-invalid');
+        }
         return true;
       }
 
