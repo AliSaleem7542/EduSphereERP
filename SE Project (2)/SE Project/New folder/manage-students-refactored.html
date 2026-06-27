@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Manage Students | EDU-SPHERE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- CSS -->
+  <link rel="preload" href="css/adminlte.css" as="style">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/adminlte.css">
+  
+  <!-- Theme Handler -->
+  <script>
+    (function() {
+      const settings = JSON.parse(localStorage.getItem('sysSettings') || '{}');
+      const theme = settings.sidebarTheme || 'dark';
+      document.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.querySelector('.app-sidebar');
+        if (sidebar) {
+          sidebar.setAttribute('data-bs-theme', theme);
+        }
+      });
+    })();
+  </script>
+  
+  <!-- Core Scripts -->
+  <script src="js/config.js" defer></script>
+  <script src="js/security.js" defer></script>
+  <script src="js/auth.js" defer></script>
+  <script src="js/api.js" defer></script>
+  
+  <!-- Utility Scripts -->
+  <script src="js/utils/logger.js" defer></script>
+  <script src="js/utils/formatters.js" defer></script>
+  <script src="js/utils/validators.js" defer></script>
+  
+  <!-- Components -->
+  <script src="js/components/layout.js" defer></script>
+  
+  <!-- Page Script -->
+  <script src="js/pages/manage-students.js" defer></script>
+</head>
+
+<body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
+  <div class="app-wrapper">
+    
+    <!-- Header (will be injected by Layout.js) -->
+    <nav class="main-header"></nav>
+    
+    <!-- Sidebar (will be injected by Layout.js) -->
+    <aside class="main-sidebar"></aside>
+    
+    <!-- Main Content -->
+    <main class="app-main">
+      <!-- Page Header -->
+      <div class="app-content-header">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-sm-6">
+              <h3 class="mb-0">Manage Students</h3>
+            </div>
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-end">
+                <li class="breadcrumb-item"><a href="index2.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Students Management</a></li>
+                <li class="breadcrumb-item active">Manage Students</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Page Content -->
+      <div class="app-content">
+        <div class="container-fluid">
+          
+          <!-- Statistics Cards -->
+          <div class="row mb-4">
+            <div class="col-md-3">
+              <div class="info-box">
+                <span class="info-box-icon text-bg-primary shadow-sm">
+                  <i class="bi bi-people-fill"></i>
+                </span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Total Students</span>
+                  <span class="info-box-number" id="statTotal">0</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="info-box">
+                <span class="info-box-icon text-bg-success shadow-sm">
+                  <i class="bi bi-person-check-fill"></i>
+                </span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Active</span>
+                  <span class="info-box-number" id="statActive">0</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="info-box">
+                <span class="info-box-icon text-bg-warning shadow-sm">
+                  <i class="bi bi-gender-male"></i>
+                </span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Male</span>
+                  <span class="info-box-number" id="statMale">0</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="info-box">
+                <span class="info-box-icon text-bg-info shadow-sm">
+                  <i class="bi bi-gender-female"></i>
+                </span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Female</span>
+                  <span class="info-box-number" id="statFemale">0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Search & Filter Card -->
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="row g-3 align-items-end">
+                <div class="col-md-4">
+                  <label class="form-label">
+                    <i class="bi bi-search"></i> Search
+                  </label>
+                  <input type="text" 
+                         class="form-control" 
+                         id="searchInput" 
+                         placeholder="Name, roll no, father...">
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Class</label>
+                  <select class="form-select" 
+                          id="filterClass" 
+                          onchange="ManageStudents.updateSectionFilter()">
+                    <option value="">All Classes</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Section</label>
+                  <select class="form-select" id="filterSection">
+                    <option value="">All Sections</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Gender</label>
+                  <select class="form-select" id="filterGender">
+                    <option value="">All</option>
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
+                    <option value="OTHER">Other</option>
+                  </select>
+                </div>
+                <div class="col-md-2 d-flex gap-2">
+                  <a href="add-student.html" class="btn btn-primary w-100">
+                    <i class="bi bi-plus-circle"></i> Add New
+                  </a>
+                  <button class="btn btn-outline-secondary" 
+                          onclick="ManageStudents.clearFilters()" 
+                          title="Clear filters">
+                    <i class="bi bi-x-circle"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Students Table Card -->
+          <div class="card shadow">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+              <h3 class="card-title mb-0">
+                <i class="bi bi-table"></i> Students List
+              </h3>
+              <span class="badge text-bg-light text-dark" id="showingCount">0 students</span>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover mb-0">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>#</th>
+                      <th>Photo</th>
+                      <th>Roll No</th>
+                      <th>Name</th>
+                      <th>Class</th>
+                      <th>Section</th>
+                      <th>Gender</th>
+                      <th>DOB</th>
+                      <th>Father</th>
+                      <th>Phone</th>
+                      <th>Fee</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="studentTableBody">
+                    <tr>
+                      <td colspan="12" class="text-center py-4">
+                        <span class="spinner-border spinner-border-sm"></span>
+                        Loading...
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!-- Pagination Footer -->
+            <div class="card-footer d-flex justify-content-between align-items-center">
+              <small class="text-muted" id="pageInfo">Page 1 of 1</small>
+              <nav>
+                <ul class="pagination pagination-sm mb-0" id="pagination"></ul>
+              </nav>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </main>
+    
+    <!-- Footer (will be injected by Layout.js) -->
+    <footer class="main-footer"></footer>
+    
+  </div>
+  
+  <!-- Edit Student Modal -->
+  <div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">
+            <i class="bi bi-pencil-square"></i> Edit Student
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="editId">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">First Name</label>
+              <input type="text" class="form-control" id="editFirstName">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Last Name</label>
+              <input type="text" class="form-control" id="editLastName">
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Roll No</label>
+              <input type="text" class="form-control" id="editRollNo">
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Class</label>
+              <select class="form-select" 
+                      id="editClass" 
+                      onchange="ManageStudents.updateEditSectionOptions()">
+              </select>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Section</label>
+              <select class="form-select" id="editSection"></select>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Gender</label>
+              <select class="form-select" id="editGender">
+                <option value="MALE">Male</option>
+                <option value="FEMALE">Female</option>
+                <option value="OTHER">Other</option>
+              </select>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Date of Birth</label>
+              <input type="date" class="form-control" id="editDob">
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Fee Category</label>
+              <select class="form-select" id="editFee">
+                <option value="REGULAR">Regular</option>
+                <option value="SCHOLARSHIP">Scholarship</option>
+                <option value="HALF_FEE">Half Fee</option>
+                <option value="FREE">Free</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Father's Name</label>
+              <input type="text" class="form-control" id="editFatherName">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Father's Phone</label>
+              <input type="text" class="form-control" id="editFatherPhone">
+            </div>
+            <div class="col-12 mb-3">
+              <label class="form-label">Address</label>
+              <textarea class="form-control" id="editAddress" rows="2"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary" 
+                  id="saveEditBtn" 
+                  onclick="ManageStudents.saveEdit()">
+            <i class="bi bi-check-circle"></i> Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- View Student Modal -->
+  <div class="modal fade" id="viewModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title">
+            <i class="bi bi-person-badge-fill"></i> Student Profile
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="viewModalBody">
+          <!-- Content will be injected by JavaScript -->
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- External Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+  <script src="js/adminlte.js"></script>
+</body>
+</html>
