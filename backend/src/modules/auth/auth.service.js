@@ -13,6 +13,12 @@ const {
   isAccountLocked,
   resetFailedAttempts,
 } = require('../../utils/accountLockout');
+const {
+  logFailedLogin,
+  logAccountLockout,
+  logSuccessfulLogin,
+  logPasswordChange,
+} = require('../../utils/securityLogger');
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -41,7 +47,7 @@ async function storeRefreshToken(userId, token) {
 
 // ─── Admin Login ──────────────────────────────────────────────────────────────
 
-async function adminLogin(username, password, ipAddress) {
+async function adminLogin(username, password, ipAddress, userAgent = null) {
   // Accept username OR email (admin@edusphere.com → username: admin)
   let lookupUsername = username;
   if (username && username.includes('@')) {
@@ -52,6 +58,7 @@ async function adminLogin(username, password, ipAddress) {
   // Check if account is locked
   const lockStatus = isAccountLocked(lookupUsername);
   if (lockStatus.isLocked) {
+    await logAccountLockout(lookupUsername, ipAddress, userAgent, lockStatus.lockedUntil);
     throw { statusCode: 429, message: lockStatus.message };
   }
 
@@ -67,6 +74,7 @@ async function adminLogin(username, password, ipAddress) {
 
   if (!user || user.role !== 'ADMIN') {
     const failResult = recordFailedAttempt(lookupUsername);
+    await logFailedLogin(lookupUsername, ipAddress, userAgent, failResult.remainingAttempts);
     throw { statusCode: 401, message: failResult.message };
   }
 
@@ -77,11 +85,13 @@ async function adminLogin(username, password, ipAddress) {
   const valid = await comparePassword(password, user.passwordHash);
   if (!valid) {
     const failResult = recordFailedAttempt(lookupUsername);
+    await logFailedLogin(lookupUsername, ipAddress, userAgent, failResult.remainingAttempts);
     throw { statusCode: 401, message: failResult.message };
   }
 
   // Success - reset failed attempts
   resetFailedAttempts(lookupUsername);
+  await logSuccessfulLogin(user.id, lookupUsername, ipAddress, userAgent, 'ADMIN');
 
   const { accessToken, refreshToken } = buildTokenPair(user);
   await storeRefreshToken(user.id, refreshToken);
@@ -103,10 +113,11 @@ async function adminLogin(username, password, ipAddress) {
 
 // ─── Teacher Login ────────────────────────────────────────────────────────────
 
-async function teacherLogin(phone, password, ipAddress) {
+async function teacherLogin(phone, password, ipAddress, userAgent = null) {
   // Check if account is locked
   const lockStatus = isAccountLocked(phone);
   if (lockStatus.isLocked) {
+    await logAccountLockout(phone, ipAddress, userAgent, lockStatus.lockedUntil);
     throw { statusCode: 429, message: lockStatus.message };
   }
 
@@ -117,6 +128,7 @@ async function teacherLogin(phone, password, ipAddress) {
 
   if (!teacher || !teacher.user) {
     const failResult = recordFailedAttempt(phone);
+    await logFailedLogin(phone, ipAddress, userAgent, failResult.remainingAttempts);
     throw { statusCode: 401, message: failResult.message };
   }
 
@@ -133,11 +145,13 @@ async function teacherLogin(phone, password, ipAddress) {
   const valid = await comparePassword(password, storedHash);
   if (!valid) {
     const failResult = recordFailedAttempt(phone);
+    await logFailedLogin(phone, ipAddress, userAgent, failResult.remainingAttempts);
     throw { statusCode: 401, message: failResult.message };
   }
 
   // Success - reset failed attempts
   resetFailedAttempts(phone);
+  await logSuccessfulLogin(teacher.user.id, phone, ipAddress, userAgent, 'TEACHER');
 
   const { accessToken, refreshToken } = buildTokenPair(teacher.user);
   await storeRefreshToken(teacher.user.id, refreshToken);
@@ -167,10 +181,11 @@ async function teacherLogin(phone, password, ipAddress) {
 
 // ─── Student Login ────────────────────────────────────────────────────────────
 
-async function studentLogin(rollNo, password, ipAddress) {
+async function studentLogin(rollNo, password, ipAddress, userAgent = null) {
   // Check if account is locked
   const lockStatus = isAccountLocked(rollNo);
   if (lockStatus.isLocked) {
+    await logAccountLockout(rollNo, ipAddress, userAgent, lockStatus.lockedUntil);
     throw { statusCode: 429, message: lockStatus.message };
   }
 
@@ -192,6 +207,7 @@ async function studentLogin(rollNo, password, ipAddress) {
 
   if (!student) {
     const failResult = recordFailedAttempt(rollNo);
+    await logFailedLogin(rollNo, ipAddress, userAgent, failResult.remainingAttempts);
     throw { statusCode: 401, message: failResult.message };
   }
 
@@ -214,11 +230,13 @@ async function studentLogin(rollNo, password, ipAddress) {
 
     if (!valid && !validFull && !validShort) {
       const failResult = recordFailedAttempt(rollNo);
+      await logFailedLogin(rollNo, ipAddress, userAgent, failResult.remainingAttempts);
       throw { statusCode: 401, message: failResult.message };
     }
 
     // Success - reset failed attempts
     resetFailedAttempts(rollNo);
+    await logSuccessfulLogin(student.user.id, rollNo, ipAddress, userAgent, 'STUDENT');
 
     const { accessToken, refreshToken } = buildTokenPair(student.user);
     await storeRefreshToken(student.user.id, refreshToken);
@@ -240,6 +258,7 @@ async function studentLogin(rollNo, password, ipAddress) {
   const fullRollNo = student.rollNo; // what's stored in DB
   if (password !== fullRollNo && password !== shortRollNo) {
     const failResult = recordFailedAttempt(rollNo);
+    await logFailedLogin(rollNo, ipAddress, userAgent, failResult.remainingAttempts);
     throw { statusCode: 401, message: failResult.message };
   }
 
@@ -260,6 +279,8 @@ async function studentLogin(rollNo, password, ipAddress) {
     where: { id: student.id },
     data: { userId: newUser.id },
   });
+
+  await logSuccessfulLogin(newUser.id, rollNo, ipAddress, userAgent, 'STUDENT');
 
   const { accessToken, refreshToken } = buildTokenPair(newUser);
   await storeRefreshToken(newUser.id, refreshToken);
@@ -330,7 +351,7 @@ async function logout(token) {
 
 // ─── Change Password ──────────────────────────────────────────────────────────
 
-async function changePassword(userId, currentPassword, newPassword) {
+async function changePassword(userId, currentPassword, newPassword, ipAddress = null, userAgent = null) {
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (!user) throw { statusCode: 404, message: 'User not found' };
 
@@ -342,6 +363,9 @@ async function changePassword(userId, currentPassword, newPassword) {
     where: { id: userId },
     data: { passwordHash: newHash },
   });
+
+  // Log password change
+  await logPasswordChange(userId, user.username, ipAddress, userAgent);
 
   // Invalidate all refresh tokens
   await prisma.refreshToken.deleteMany({ where: { userId } });

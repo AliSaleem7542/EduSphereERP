@@ -5,7 +5,8 @@ const { sendSuccess, sendError } = require('../../utils/apiResponse');
 async function adminLogin(req, res, next) {
   try {
     const { username, password } = req.body;
-    const result = await authService.adminLogin(username, password, req.ip);
+    const userAgent = req.get('user-agent') || null;
+    const result = await authService.adminLogin(username, password, req.ip, userAgent);
     return sendSuccess(res, result, 'Admin login successful');
   } catch (err) {
     next(err);
@@ -16,7 +17,8 @@ async function adminLogin(req, res, next) {
 async function teacherLogin(req, res, next) {
   try {
     const { phone, password } = req.body;
-    const result = await authService.teacherLogin(phone, password, req.ip);
+    const userAgent = req.get('user-agent') || null;
+    const result = await authService.teacherLogin(phone, password, req.ip, userAgent);
     return sendSuccess(res, result, 'Teacher login successful');
   } catch (err) {
     next(err);
@@ -27,7 +29,8 @@ async function teacherLogin(req, res, next) {
 async function studentLogin(req, res, next) {
   try {
     const { rollNo, password } = req.body;
-    const result = await authService.studentLogin(rollNo, password, req.ip);
+    const userAgent = req.get('user-agent') || null;
+    const result = await authService.studentLogin(rollNo, password, req.ip, userAgent);
     return sendSuccess(res, result, 'Student login successful');
   } catch (err) {
     next(err);
@@ -60,7 +63,8 @@ async function logout(req, res, next) {
 async function changePassword(req, res, next) {
   try {
     const { currentPassword, newPassword } = req.body;
-    await authService.changePassword(req.user.id, currentPassword, newPassword);
+    const userAgent = req.get('user-agent') || null;
+    await authService.changePassword(req.user.id, currentPassword, newPassword, req.ip, userAgent);
     return sendSuccess(res, null, 'Password changed successfully');
   } catch (err) {
     next(err);
