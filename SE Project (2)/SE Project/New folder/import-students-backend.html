@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Import School Data | EDU-SPHERE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="css/adminlte.css">
+</head>
+<body class="bg-body-tertiary">
+<div class="container py-5" style="max-width:800px">
+  <div class="card shadow">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0"><i class="bi bi-cloud-upload-fill"></i> Import School Data &mdash; Superior College Samundri</h4>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-info">
+        <i class="bi bi-info-circle-fill me-2"></i>
+        This will import <strong>252 students</strong>, <strong>12 sections</strong>, and <strong>fee records</strong> from the Excel data to the database.
+        <br><strong>Warning:</strong> This will overwrite existing students, sections, and fee records in the database.
+      </div>
+      <div id="status" class="mb-4"></div>
+      <div id="preview" class="mb-4"></div>
+      <div class="d-flex gap-3 flex-wrap">
+        <button class="btn btn-outline-secondary" onclick="loadPreview()"><i class="bi bi-eye-fill"></i> Preview Data</button>
+        <button class="btn btn-success btn-lg" onclick="importAll()" id="importBtn"><i class="bi bi-check-circle-fill"></i> Import to Database</button>
+        <button class="btn btn-danger" onclick="clearAll()"><i class="bi bi-trash-fill"></i> Clear Database</button>
+        <button class="btn btn-outline-info" onclick="checkStatus()"><i class="bi bi-info-circle"></i> Check Database</button>
+      </div>
+      <div id="result" class="mt-4"></div>
+    </div>
+  </div>
+  <div class="text-center mt-3">
+    <a href="index2.html" class="btn btn-outline-primary"><i class="bi bi-house-fill"></i> Back to Dashboard</a>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"></script>
+<script src="js/utils/api.js"></script>
+<script src="js/utils/auth.js"></script>
+<script src="js/utils/logger.js"></script>
+<script>
+// Get backend URL from auth/API module
+const API_BASE_URL = window.API?.baseURL || 'https://edusphere-r4r5.onrender.com';
+
+// Check if user is logged in
+if (!Auth.isLoggedIn()) {
+  window.location.href = 'login.html';
+}
+
+// SCHOOL_DATA - will be sent to the backend
+var SCHOOL_DATA = {"schoolClasses": [{"id": "1st Year", "name": "1st Year", "description": "First Year - Session 2025-2027", "addedAt": "2025-01-01"}], "schoolSections": [{"id": 1, "name": "C-1", "class": "1st Year", "description": "C-1 Section", "capacity": 50, "addedAt": "2025-01-01"}, {"id": 2, "name": "M-1", "class": "1st Year", "description": "M-1 Section", "capacity": 50, "addedAt": "2025-01-01"}, {"id": 3, "name": "C-2Eco", "class": "1st Year", "description": "C-2Eco Section", "capacity": 50, "addedAt": "2025-01-01"}, {"id": 4, "name": "E-1", "class": "1st Year", "description": "E-1 Section", "capacity": 50, "addedAt": "2025-01-01"}, {"id": 5, "name": "I.Com 1", "class": "1st Year", "description": "I.Com 1 Section", "capacity": 50, "addedAt": "2025-01-01"}, {"id": 6, "name": "IT-1", "class": "1st Year", "description": "IT-1 Section", "capacity": 50, "addedAt": "2025-01-01"}, {"id": 7, "name": "M-4", "class": "1st Year", "description": "M-4 Section", "capacity": 50, "addedAt": "2025-01-01"}, {"id": 8, "name": "C-3", "class": "1st Year", "description": "C-3 Section", "capacity": 50, "addedAt": "2025-01-01"}, {"id": 9, "name": "C-4", "class": "1st Year", "description": "C-4 Section", "capacity": 50, "addedAt": "2025-01-01"}, {"id": 10, "name": "C-5", "class": "1st Year", "description": "C-5 Section", "capacity": 50, "addedAt": "2025-01-01"}, {"id": 11, "name": "IT-2", "class": "1st Year", "description": "IT-2 Section", "capacity": 50, "addedAt": "2025-01-01"}, {"id": 12, "name": "E-2", "1st Year", "description": "E-2 Section", "capacity": 50, "addedAt": "2025-01-01"}], "students": ${JSON.stringify(SCHOOL_DATA.students).substring(0, 100)}..., "feeRecords": ${JSON.stringify(SCHOOL_DATA.feeRecords).substring(0, 100)}...};
+
+// Preview functionality
+function loadPreview() {
+  var data = SCHOOL_DATA;
+  var secCount = {};
+  data.students.forEach(function(s){ secCount[s.section] = (secCount[s.section]||0)+1; });
+  
+  var html = '<div class="row text-center g-3 mb-3">' +
+    '<div class="col-3"><div class="card bg-primary text-white p-3"><h3>' + data.students.length + '</h3><p class="mb-0">Students</p></div></div>' +
+    '<div class="col-3"><div class="card bg-success text-white p-3"><h3>' + data.schoolSections.length + '</h3><p class="mb-0">Sections</p></div></div>' +
+    '<div class="col-3"><div class="card bg-warning text-dark p-3"><h3>' + data.feeRecords.length + '</h3><p class="mb-0">Fee Records</p></div></div>' +
+    '<div class="col-3"><div class="card bg-info text-white p-3"><h3>' + data.schoolClasses.length + '</h3><p class="mb-0">Classes</p></div></div>' +
+    '</div><h6>Section Breakdown:</h6><div class="d-flex flex-wrap gap-2 mb-3">';
+  
+  Object.keys(secCount).sort().forEach(function(sec){
+    html += '<span class="badge bg-secondary fs-6">' + sec + ': ' + secCount[sec] + '</span>';
+  });
+  
+  html += '</div><h6>First 5 Students:</h6><table class="table table-sm table-bordered"><thead class="table-dark"><tr><th>#</th><th>Name</th><th>Father</th><th>Section</th><th>Roll No</th><th>Package (Rs)</th></tr></thead><tbody>';
+  
+  data.students.slice(0,5).forEach(function(s,i){
+    html += '<tr><td>'+(i+1)+'</td><td>'+s.name+'</td><td>'+s.fatherName+'</td><td>'+s.section+'</td><td>'+s.rollNo+'</td><td>'+Number(s.packageTotal).toLocaleString()+'</td></tr>';
+  });
+  
+  html += '</tbody></table>';
+  document.getElementById('preview').innerHTML = html;
+}
+
+// Import to backend database
+async function importAll() {
+  if (!confirm('This will replace existing students, sections, and fee records in the database. Continue?')) return;
+  
+  const importBtn = document.getElementById('importBtn');
+  const resultDiv = document.getElementById('result');
+  
+  try {
+    // Disable button
+    importBtn.disabled = true;
+    importBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Importing...';
+    
+    resultDiv.innerHTML = '<div class="alert alert-info"><i class="bi bi-hourglass-split me-2"></i>Importing data to database... This may take a minute.</div>';
+    
+    const token = Auth.getToken();
+    const response = await fetch(`${API_BASE_URL}/api/v1/import/school-data`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        schoolClasses: SCHOOL_DATA.schoolClasses,
+        schoolSections: SCHOOL_DATA.schoolSections,
+        students: SCHOOL_DATA.students,
+        feeRecords: SCHOOL_DATA.feeRecords,
+        clearExisting: true
+      })
+    });
+    
+    const result = await response.json();
+    
+    if (response.ok && result.success) {
+      const stats = result.data;
+      resultDiv.innerHTML =
+        '<div class="alert alert-success"><i class="bi bi-check-circle-fill me-2"></i>' +
+        '<strong>Import Successful!</strong><br>' +
+        '<div class="mt-2">' +
+        '<strong>Summary:</strong><ul class="mb-0">' +
+        '<li>Classes: ' + stats.classes + '</li>' +
+        '<li>Sections: ' + stats.sections + '</li>' +
+        '<li>Students Imported: ' + stats.studentsImported + '</li>' +
+        '<li>Students Skipped: ' + stats.studentsSkipped + ' (duplicates)</li>' +
+        '<li>Students Failed: ' + stats.studentsFailed + '</li>' +
+        '<li>Fee Records Imported: ' + stats.feesImported + '</li>' +
+        '<li>Fee Records Failed: ' + stats.feesFailed + '</li>' +
+        '</ul></div>' +
+        '<br><a href="manage-students.html" class="btn btn-sm btn-success mt-2 me-2">View Students</a>' +
+        '<a href="fee-records.html" class="btn btn-sm btn-warning mt-2">View Fee Records</a></div>';
+      
+      Logger.log('Import successful', stats);
+    } else {
+      throw new Error(result.message || 'Import failed');
+    }
+  } catch (error) {
+    Logger.error('Import error:', error);
+    resultDiv.innerHTML = '<div class="alert alert-danger"><i class="bi bi-x-circle-fill me-2"></i><strong>Import Failed!</strong><br>' + error.message + '</div>';
+  } finally {
+    // Re-enable button
+    importBtn.disabled = false;
+    importBtn.innerHTML = '<i class="bi bi-check-circle-fill"></i> Import to Database';
+  }
+}
+
+// Clear database
+async function clearAll() {
+  if (!confirm('Clear ALL data from the database? This cannot be undone!')) return;
+  
+  const resultDiv = document.getElementById('result');
+  
+  try {
+    resultDiv.innerHTML = '<div class="alert alert-info"><i class="bi bi-hourglass-split me-2"></i>Clearing database...</div>';
+    
+    const token = Auth.getToken();
+    const response = await fetch(`${API_BASE_URL}/api/v1/import/reset`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    const result = await response.json();
+    
+    if (response.ok && result.success) {
+      resultDiv.innerHTML = '<div class="alert alert-warning"><i class="bi bi-check-circle-fill me-2"></i>All data cleared from database.</div>';
+      document.getElementById('preview').innerHTML = '';
+      document.getElementById('status').innerHTML = '';
+    } else {
+      throw new Error(result.message || 'Clear failed');
+    }
+  } catch (error) {
+    Logger.error('Clear error:', error);
+    resultDiv.innerHTML = '<div class="alert alert-danger"><i class="bi bi-x-circle-fill me-2"></i><strong>Clear Failed!</strong><br>' + error.message + '</div>';
+  }
+}
+
+// Check database status
+async function checkStatus() {
+  const statusDiv = document.getElementById('status');
+  
+  try {
+    statusDiv.innerHTML = '<div class="alert alert-info"><i class="bi bi-hourglass-split me-2"></i>Checking database...</div>';
+    
+    const token = Auth.getToken();
+    const response = await fetch(`${API_BASE_URL}/api/v1/import/status`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    const result = await response.json();
+    
+    if (response.ok && result.success) {
+      const data = result.data;
+      statusDiv.innerHTML =
+        '<div class="alert alert-info"><i class="bi bi-database-fill me-2"></i>' +
+        '<strong>Current Database Status:</strong><ul class="mb-0 mt-2">' +
+        '<li>Students: ' + data.students + '</li>' +
+        '<li>Teachers: ' + data.teachers + '</li>' +
+        '<li>Classes: ' + data.classes + '</li>' +
+        '<li>Sections: ' + data.sections + '</li>' +
+        '<li>Fee Records: ' + data.feeRecords + '</li>' +
+        '<li>Announcements: ' + data.announcements + '</li>' +
+        '</ul></div>';
+    } else {
+      throw new Error(result.message || 'Status check failed');
+    }
+  } catch (error) {
+    Logger.error('Status check error:', error);
+    statusDiv.innerHTML = '<div class="alert alert-danger"><i class="bi bi-x-circle-fill me-2"></i><strong>Status Check Failed!</strong><br>' + error.message + '</div>';
+  }
+}
+
+// Load preview on page load
+loadPreview();
+</script>
+</body>
+</html>
