@@ -7,7 +7,7 @@
  */
 
 const MAX_FAILED_ATTEMPTS = 5;
-const LOCKOUT_DURATION_MS = 30 * 60 * 1000; // 30 minutes
+const LOCKOUT_DURATION_MS = 30 * 1000; // 30 seconds
 const CLEANUP_INTERVAL_MS = 60 * 60 * 1000; // Clean up every hour
 
 // In-memory storage: Map<identifier, { attempts, lockedUntil }>
@@ -41,7 +41,7 @@ function recordFailedAttempt(identifier) {
       isLocked: true,
       remainingAttempts: 0,
       lockedUntil: new Date(record.lockedUntil),
-      message: `Account locked due to too many failed attempts. Try again in 30 minutes.`,
+      message: `Account locked due to too many failed attempts. Try again in 30 seconds.`,
     };
   }
 
@@ -78,7 +78,6 @@ function isAccountLocked(identifier) {
     return { isLocked: false, lockedUntil: null };
   }
 
-  // Still locked
   return {
     isLocked: true,
     lockedUntil: new Date(record.lockedUntil),

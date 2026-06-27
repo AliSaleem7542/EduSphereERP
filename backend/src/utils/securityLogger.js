@@ -153,7 +153,7 @@ async function logAccountLockout(username, ipAddress, userAgent, lockedUntil) {
     userAgent,
     endpoint: '/auth/login',
     method: 'POST',
-    message: `Account locked due to too many failed attempts. Locked until ${lockedUntil}.`,
+    message: `Account locked due to too many failed attempts. Locked for 30 seconds.`,
     metadata: { lockedUntil: lockedUntil.toISOString() },
   });
 }
