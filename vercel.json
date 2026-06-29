@@ -1,15 +1,3 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "SE Project (2)/SE Project/New folder/**",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/SE Project (2)/SE Project/New folder/$1"
-    }
-  ]
+  "version": 2
 }

@@ -1,0 +1,6 @@
+# Ignore everything except frontend folder
+*
+!SE Project (2)/
+!SE Project (2)/SE Project/
+!SE Project (2)/SE Project/New folder/
+!SE Project (2)/SE Project/New folder/**
