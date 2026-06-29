@@ -1,16 +1,15 @@
 {
   "version": 2,
-  "name": "edusphere-frontend",
-  "buildCommand": null,
-  "devCommand": null,
-  "installCommand": null,
-  "framework": null,
-  "cleanUrls": false,
-  "trailingSlash": false,
-  "rewrites": [
+  "builds": [
     {
-      "source": "/(.*)",
-      "destination": "/SE Project (2)/SE Project/New folder/$1"
+      "src": "SE Project (2)/SE Project/New folder/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/SE Project (2)/SE Project/New folder/$1"
     }
   ]
 }
