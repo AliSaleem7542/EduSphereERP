@@ -12,11 +12,11 @@ async function getDashboard(req, res, next) {
       totalFeeCollected, booksIssued,
       totalAnnouncements, totalExams,
     ] = await Promise.all([
-      prisma.student.count({ where: { status: 'ACTIVE' } }),
+      prisma.student.count({ where: { status: 'ACTIVE', deletedAt: null } }),
       prisma.teacher.count({ where: { status: 'ACTIVE' } }),
       prisma.studentAttendance.count({ where: { date: today, status: 'PRESENT' } }),
-      prisma.student.count({ where: { status: 'ACTIVE', packageTotal: { gt: 0 } } }),
-      prisma.feeRecord.aggregate({ where: { status: 'PAID' }, _sum: { amount: true } }),
+      prisma.student.count({ where: { status: 'ACTIVE', packageTotal: { gt: 0 }, deletedAt: null } }),
+      prisma.feeRecord.aggregate({ where: { status: 'PAID', deletedAt: null }, _sum: { amount: true } }),
       prisma.bookIssue.count({ where: { status: 'ISSUED' } }),
       prisma.announcement.count(),
       prisma.exam.count(),
@@ -57,7 +57,7 @@ async function getAttendanceReport(req, res, next) {
 async function getFeesReport(req, res, next) {
   try {
     const { startDate, endDate } = req.query;
-    const where = { status: 'PAID' };
+    const where = { status: 'PAID', deletedAt: null };
     if (startDate || endDate) {
       where.date = {};
       if (startDate) where.date.gte = new Date(startDate);

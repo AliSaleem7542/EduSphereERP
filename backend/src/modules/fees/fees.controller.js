@@ -7,7 +7,7 @@ async function getAll(req, res, next) {
   try {
     const { page = 1, limit = 20, studentId, feeType, startDate, endDate } = req.query;
     const skip = (parseInt(page) - 1) * parseInt(limit);
-    const where = {};
+    const where = { deletedAt: null }; // Only show active records
     if (studentId) where.studentId = parseInt(studentId);
     if (feeType)   where.feeType   = feeType;
     if (startDate || endDate) {
@@ -25,7 +25,10 @@ async function getAll(req, res, next) {
 
 async function getOne(req, res, next) {
   try {
-    const record = await prisma.feeRecord.findUnique({ where: { id: parseInt(req.params.id) }, include: { student: true } });
+    const record = await prisma.feeRecord.findFirst({ 
+      where: { id: parseInt(req.params.id), deletedAt: null }, 
+      include: { student: true } 
+    });
     if (!record) return sendError(res, 'Fee record not found', 404);
     return sendSuccess(res, record);
   } catch (err) { next(err); }
@@ -80,8 +83,12 @@ async function voidRecord(req, res, next) {
 async function getPending(req, res, next) {
   try {
     const students = await prisma.student.findMany({
-      where: { status: 'ACTIVE', packageTotal: { gt: 0 } },
-      include: { feeRecords: true, class: true, section: true },
+      where: { status: 'ACTIVE', packageTotal: { gt: 0 }, deletedAt: null },
+      include: { 
+        feeRecords: { where: { deletedAt: null } }, 
+        class: true, 
+        section: true 
+      },
     });
 
     const pending = students
@@ -102,8 +109,8 @@ async function getSummary(req, res, next) {
     today.setHours(0, 0, 0, 0);
 
     const [todayRecords, allRecords] = await Promise.all([
-      prisma.feeRecord.findMany({ where: { date: { gte: today }, status: 'PAID' } }),
-      prisma.feeRecord.findMany({ where: { status: 'PAID' } }),
+      prisma.feeRecord.findMany({ where: { date: { gte: today }, status: 'PAID', deletedAt: null } }),
+      prisma.feeRecord.findMany({ where: { status: 'PAID', deletedAt: null } }),
     ]);
 
     const collectedToday = todayRecords.reduce((s, r) => s + Number(r.amount), 0);
@@ -115,7 +122,11 @@ async function getSummary(req, res, next) {
 
 async function getRefunds(req, res, next) {
   try {
-    const refunds = await prisma.feeRefund.findMany({ include: { student: true, feeRecord: true }, orderBy: { createdAt: 'desc' } });
+    const refunds = await prisma.feeRefund.findMany({ 
+      where: { deletedAt: null },
+      include: { student: true, feeRecord: true }, 
+      orderBy: { createdAt: 'desc' } 
+    });
     return sendSuccess(res, refunds);
   } catch (err) { next(err); }
 }

@@ -7,7 +7,7 @@ async function getAll(req, res, next) {
     const { page = 1, limit = 20, classId, sectionId, status, search } = req.query;
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
-    const where = {};
+    const where = { deletedAt: null }; // Filter out soft-deleted records
     if (classId)   where.classId   = parseInt(classId);
     if (sectionId) where.sectionId = parseInt(sectionId);
     if (status)    where.status    = status;
@@ -43,8 +43,8 @@ async function getOne(req, res, next) {
 
     // Students can only view their own profile
     if (req.user.role === 'STUDENT') {
-      const student = await prisma.student.findUnique({
-        where: { userId: req.user.id },
+      const student = await prisma.student.findFirst({
+        where: { userId: req.user.id, deletedAt: null },
         include: { class: true, section: true, academicYear: true },
       });
       if (!student) {
@@ -58,8 +58,8 @@ async function getOne(req, res, next) {
     }
 
     // Admin/Teacher path - fetch any student
-    const student = await prisma.student.findUnique({
-      where: { id },
+    const student = await prisma.student.findFirst({
+      where: { id, deletedAt: null },
       include: { class: true, section: true, academicYear: true },
     });
 
@@ -321,7 +321,7 @@ async function getFees(req, res, next) {
   try {
     const studentId = parseInt(req.params.id);
     const records = await prisma.feeRecord.findMany({
-      where: { studentId },
+      where: { studentId, deletedAt: null },
       orderBy: { date: 'desc' },
     });
     const totalPaid = records.reduce((sum, r) => sum + Number(r.amount), 0);
@@ -411,7 +411,10 @@ async function bulkImport(req, res, next) {
 
     const stats = { imported: 0, skipped: 0, failed: 0, errors: [] };
     const seenRollNos = new Set();
-    const existingRollNos = await prisma.student.findMany({ select: { rollNo: true } });
+    const existingRollNos = await prisma.student.findMany({ 
+      where: { deletedAt: null },
+      select: { rollNo: true } 
+    });
     existingRollNos.forEach((s) => seenRollNos.add(s.rollNo));
 
     const classCache = {};

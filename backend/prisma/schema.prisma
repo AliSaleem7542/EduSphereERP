@@ -258,7 +258,7 @@ model Subject {
 model Student {
   id               Int           @id @default(autoincrement())
   userId           Int?          @unique
-  rollNo           String        @unique
+  rollNo           String        // Remove @unique constraint
   firstName        String
   middleName       String?
   lastName         String
@@ -292,6 +292,8 @@ model Student {
   guardianPhone    String?
   emergencyContact String?
   status           StudentStatus @default(ACTIVE)
+  isActive         Boolean       @default(true)
+  deletedAt        DateTime?
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
 
@@ -307,6 +309,7 @@ model Student {
   bookIssues   BookIssue[]
   promotions   StudentPromotion[]
 
+  @@unique([rollNo, deletedAt]) // Composite unique: rollNo must be unique only among non-deleted
   @@map("students")
 }
 
@@ -474,14 +477,17 @@ model FeeRecord {
   studentId       Int
   feeType         FeeType
   period          String?
-  installment     String?
+  installment     String?       // 1st, 2nd, 3rd, 4th, Annual
   amount          Decimal       @db.Decimal(10, 2)
   transportAmount Decimal?      @db.Decimal(10, 2)
   paymentMethod   PaymentMethod @default(CASH)
   remarks         String?
+  transportRemarks String?      // Separate remarks for transport
   date            DateTime      @db.Date
   status          FeeStatus     @default(PAID)
   collectedById   Int
+  isActive        Boolean       @default(true)
+  deletedAt       DateTime?
   createdAt       DateTime      @default(now())
 
   student     Student    @relation(fields: [studentId], references: [id])
@@ -499,6 +505,8 @@ model FeeRefund {
   reason        String
   date          DateTime @db.Date
   processedById Int
+  isActive      Boolean  @default(true)
+  deletedAt     DateTime?
   createdAt     DateTime @default(now())
 
   feeRecord   FeeRecord @relation(fields: [feeRecordId], references: [id])
