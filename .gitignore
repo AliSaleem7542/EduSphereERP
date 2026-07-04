@@ -39,6 +39,7 @@ __pycache__/
 
 # ─── Misc root files ─────────────────────────────────────────────────────────
 3
+package-lock.json
 
 # ─── Temporary debug / test notes (not part of deployment) ───────────────────
 TEST-*.txt
