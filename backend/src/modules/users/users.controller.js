@@ -7,7 +7,7 @@ const VALID_ROLES = ['ADMIN', 'TEACHER', 'STUDENT', 'LIBRARIAN', 'CASHIER'];
 async function getAll(req, res, next) {
   try {
     const users = await prisma.user.findMany({
-      select: { id: true, username: true, email: true, name: true, role: true, isActive: true, lastLogin: true, createdAt: true },
+      select: { id: true, username: true, role: true, isActive: true, createdAt: true, updatedAt: true },
       orderBy: { createdAt: 'desc' },
     });
     return sendSuccess(res, users);

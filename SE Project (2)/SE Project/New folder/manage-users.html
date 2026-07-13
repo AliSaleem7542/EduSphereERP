@@ -332,9 +332,9 @@
         var u = _allUsers.find(function(x){ return x.id === id || String(x.id) === String(id); });
         if (!u) { API.toast('User not found', 'danger'); return; }
         document.getElementById('editId').value       = u.id;
-        document.getElementById('editName').value     = u.name || '';
+        document.getElementById('editName').value     = u.username || '';
         document.getElementById('editUsername').value = u.username || '';
-        document.getElementById('editEmail').value    = u.email || '';
+        document.getElementById('editEmail').value    = '';
         document.getElementById('editRole').value     = u.role || 'TEACHER';
         document.getElementById('editStatus').value   = u.isActive !== false ? 'Active' : 'Inactive';
         new bootstrap.Modal(document.getElementById('editModal')).show();
@@ -342,9 +342,7 @@
 
       async function saveEdit() {
         var id       = document.getElementById('editId').value;
-        var name     = document.getElementById('editName').value.trim();
         var username = document.getElementById('editUsername').value.trim();
-        var email    = document.getElementById('editEmail').value.trim();
         var role     = document.getElementById('editRole').value;
         var statusVal = document.getElementById('editStatus').value;
         var isActive = statusVal === 'Active';
@@ -352,8 +350,6 @@
         if (!username) { API.toast('Username is required.', 'warning'); return; }
         
         var updateBody = { username: username, role: role, isActive: isActive };
-        if (name) updateBody.name = name;
-        if (email) updateBody.email = email;
         
         var res = await API.users.update(id, updateBody);
         if (res && res.success) {
