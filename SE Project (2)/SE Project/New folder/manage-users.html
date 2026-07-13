@@ -239,11 +239,18 @@
       async function loadUsers() {
         try {
           var res = await API.users.list();
-          _allUsers = (res && res.success) ? (res.data || []) : [];
+          if (res && res.success) {
+            _allUsers = res.data || [];
+          } else {
+            API.toast('Failed to load users', 'danger');
+            _allUsers = [];
+          }
           updateStats();
           renderUsers();
         } catch(e) {
-          API.toast('Failed to load users', 'danger');
+          console.error('Load users error:', e);
+          API.toast('Failed to load users: ' + e.message, 'danger');
+          _allUsers = [];
         }
       }
 
@@ -404,12 +411,6 @@
       }
 
       document.addEventListener('DOMContentLoaded', async function(){
-        // Retry for Render cold start
-        for (var attempt = 1; attempt <= 3; attempt++) {
-          var test = await API.users.list();
-          if (test && test.success) break;
-          if (attempt < 3) await new Promise(function(r){ setTimeout(r, attempt * 2000); });
-        }
         loadUsers();
       });
     </script>
