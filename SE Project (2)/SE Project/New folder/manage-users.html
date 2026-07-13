@@ -238,19 +238,25 @@
 
       async function loadUsers() {
         try {
+          console.log('Loading users...');
           var res = await API.users.list();
-          if (res && res.success) {
-            _allUsers = res.data || [];
+          console.log('API Response:', res);
+          
+          if (res && res.success && res.data) {
+            _allUsers = Array.isArray(res.data) ? res.data : [];
+            console.log('Users loaded:', _allUsers.length);
           } else {
-            API.toast('Failed to load users', 'danger');
+            console.error('Invalid response structure:', res);
             _allUsers = [];
+            API.toast('Failed to load users: Invalid response', 'danger');
           }
           updateStats();
           renderUsers();
         } catch(e) {
           console.error('Load users error:', e);
-          API.toast('Failed to load users: ' + e.message, 'danger');
+          API.toast('Failed to load users: ' + (e.message || 'Unknown error'), 'danger');
           _allUsers = [];
+          renderUsers();
         }
       }
 
@@ -286,8 +292,12 @@
         if (currentPage > pages) currentPage = 1;
         var slice = data.slice((currentPage-1)*PAGE_SIZE, currentPage*PAGE_SIZE);
         var tbody = document.getElementById('usersBody');
+        
+        console.log('Rendering:', { total: total, pages: pages, sliceLength: slice.length });
+        
         if (!slice.length) {
           tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4">No users found.</td></tr>';
+          document.getElementById('pageInfo').textContent = 'No users';
         } else {
           tbody.innerHTML = slice.map(function(u, i) {
             var role = (u.role||'').toUpperCase();
@@ -297,13 +307,13 @@
             var statusLabel = isActive ? 'Active' : 'Inactive';
             var toggleIcon  = isActive ? 'bi-pause-circle-fill' : 'bi-play-circle-fill';
             var toggleColor = isActive ? 'secondary' : 'success';
-            var displayName = u.name || u.username || '-';
-            var lastLogin   = u.lastLogin ? (API.fmtDate ? API.fmtDate(u.lastLogin) : u.lastLogin) : '-';
+            var displayName = u.username || '-';
+            var lastLogin   = u.updatedAt ? (API.fmtDate ? API.fmtDate(u.updatedAt) : u.updatedAt) : '-';
             return '<tr>' +
               '<td>' + ((currentPage-1)*PAGE_SIZE + i + 1) + '</td>' +
               '<td><strong>' + displayName + '</strong></td>' +
               '<td><code>' + (u.username||'-') + '</code></td>' +
-              '<td>' + (u.email||'-') + '</td>' +
+              '<td>-</td>' +
               '<td><span class="badge ' + rc + '">' + (u.role||'-') + '</span></td>' +
               '<td><span class="badge ' + sc + '">' + statusLabel + '</span></td>' +
               '<td><small>' + lastLogin + '</small></td>' +
@@ -314,9 +324,11 @@
                 '<button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteUser(' + u.id + '); return false;"><i class="bi bi-trash-fill"></i></button>' +
               '</td></tr>';
           }).join('');
+          
+          document.getElementById('pageInfo').textContent =
+            'Showing ' + (total ? (currentPage-1)*PAGE_SIZE+1 : 0) + ' – ' + Math.min(currentPage*PAGE_SIZE, total) + ' of ' + total;
         }
-        document.getElementById('pageInfo').textContent =
-          'Showing ' + (total ? (currentPage-1)*PAGE_SIZE+1 : 0) + ' – ' + Math.min(currentPage*PAGE_SIZE, total) + ' of ' + total;
+        
         var pg = document.getElementById('pagination');
         pg.innerHTML = '';
         for (var p = 1; p <= pages; p++) {
