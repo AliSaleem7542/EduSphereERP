@@ -301,10 +301,10 @@
               '<td><span class="badge ' + sc + '">' + statusLabel + '</span></td>' +
               '<td><small>' + lastLogin + '</small></td>' +
               '<td class="text-nowrap">' +
-                '<button class="btn btn-sm btn-outline-primary me-1" onclick="openEdit(\'' + u.id + '\')"><i class="bi bi-pencil-fill"></i></button>' +
-                '<button class="btn btn-sm btn-outline-warning me-1" onclick="openPwd(\'' + u.id + '\',\'' + displayName.replace(/'/g,"\\'") + '\')"><i class="bi bi-key-fill"></i></button>' +
-                '<button class="btn btn-sm btn-outline-' + toggleColor + ' me-1" onclick="toggleStatus(\'' + u.id + '\')"><i class="bi ' + toggleIcon + '"></i></button>' +
-                '<button class="btn btn-sm btn-outline-danger" onclick="deleteUser(\'' + u.id + '\')"><i class="bi bi-trash-fill"></i></button>' +
+                '<button type="button" class="btn btn-sm btn-outline-primary me-1" onclick="openEdit(' + u.id + '); return false;"><i class="bi bi-pencil-fill"></i></button>' +
+                '<button type="button" class="btn btn-sm btn-outline-warning me-1" onclick="openPwd(' + u.id + ', \'' + displayName.replace(/'/g,"\\'") + '\'); return false;"><i class="bi bi-key-fill"></i></button>' +
+                '<button type="button" class="btn btn-sm btn-outline-' + toggleColor + ' me-1" onclick="toggleStatus(' + u.id + '); return false;"><i class="bi ' + toggleIcon + '"></i></button>' +
+                '<button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteUser(' + u.id + '); return false;"><i class="bi bi-trash-fill"></i></button>' +
               '</td></tr>';
           }).join('');
         }
@@ -322,8 +322,8 @@
       }
 
       function openEdit(id) {
-        var u = _allUsers.find(function(x){ return String(x.id)===String(id); });
-        if (!u) return;
+        var u = _allUsers.find(function(x){ return x.id === id || String(x.id) === String(id); });
+        if (!u) { API.toast('User not found', 'danger'); return; }
         document.getElementById('editId').value       = u.id;
         document.getElementById('editName').value     = u.name || '';
         document.getElementById('editUsername').value = u.username || '';
@@ -335,12 +335,20 @@
 
       async function saveEdit() {
         var id       = document.getElementById('editId').value;
+        var name     = document.getElementById('editName').value.trim();
         var username = document.getElementById('editUsername').value.trim();
+        var email    = document.getElementById('editEmail').value.trim();
         var role     = document.getElementById('editRole').value;
         var statusVal = document.getElementById('editStatus').value;
         var isActive = statusVal === 'Active';
+        
         if (!username) { API.toast('Username is required.', 'warning'); return; }
-        var res = await API.users.update(id, { username: username, role: role, isActive: isActive });
+        
+        var updateBody = { username: username, role: role, isActive: isActive };
+        if (name) updateBody.name = name;
+        if (email) updateBody.email = email;
+        
+        var res = await API.users.update(id, updateBody);
         if (res && res.success) {
           API.toast('User updated successfully.', 'success');
           bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
@@ -352,7 +360,7 @@
 
       function openPwd(id, name) {
         document.getElementById('pwdUserId').value = id;
-        document.getElementById('pwdUserName').textContent = name;
+        document.getElementById('pwdUserName').textContent = name || 'User';
         document.getElementById('newPassword').value = '';
         new bootstrap.Modal(document.getElementById('pwdModal')).show();
       }
@@ -365,14 +373,15 @@
         if (res && res.success) {
           API.toast('Password reset successfully.', 'success');
           bootstrap.Modal.getInstance(document.getElementById('pwdModal')).hide();
+          loadUsers();
         } else {
           API.toast((res && res.message) || 'Failed to reset password.', 'danger');
         }
       }
 
       async function toggleStatus(id) {
-        var u = _allUsers.find(function(x){ return String(x.id)===String(id); });
-        if (!u) return;
+        var u = _allUsers.find(function(x){ return x.id === id || String(x.id) === String(id); });
+        if (!u) { API.toast('User not found', 'danger'); return; }
         var newIsActive = u.isActive === false ? true : false;
         var res = await API.users.update(id, { isActive: newIsActive });
         if (res && res.success) {
