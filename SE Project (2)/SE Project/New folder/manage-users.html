@@ -361,9 +361,12 @@
         
         if (!username) { API.toast('Username is required.', 'warning'); return; }
         
+        console.log('Saving edit:', { id, username, role, isActive });
         var updateBody = { username: username, role: role, isActive: isActive };
         
         var res = await API.users.update(id, updateBody);
+        console.log('Update response:', res);
+        
         if (res && res.success) {
           API.toast('User updated successfully.', 'success');
           bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
@@ -384,7 +387,11 @@
         var id  = document.getElementById('pwdUserId').value;
         var pwd = document.getElementById('newPassword').value;
         if (!pwd || pwd.length < 6) { API.toast('Password must be at least 6 characters.', 'warning'); return; }
+        
+        console.log('Saving password for user:', id);
         var res = await API.users.update(id, { password: pwd });
+        console.log('Password update response:', res);
+        
         if (res && res.success) {
           API.toast('Password reset successfully.', 'success');
           bootstrap.Modal.getInstance(document.getElementById('pwdModal')).hide();
@@ -398,7 +405,11 @@
         var u = _allUsers.find(function(x){ return x.id === id || String(x.id) === String(id); });
         if (!u) { API.toast('User not found', 'danger'); return; }
         var newIsActive = u.isActive === false ? true : false;
+        
+        console.log('Toggling status for user:', id, 'to', newIsActive);
         var res = await API.users.update(id, { isActive: newIsActive });
+        console.log('Status update response:', res);
+        
         if (res && res.success) {
           API.toast('Status updated.', 'success');
           loadUsers();
@@ -409,7 +420,11 @@
 
       async function deleteUser(id) {
         if (!confirm('Deactivate this user?')) return;
+        
+        console.log('Deactivating user:', id);
         var res = await API.users.deactivate(id);
+        console.log('Deactivate response:', res);
+        
         if (res && res.success) {
           API.toast('User deactivated.', 'success');
           loadUsers();
