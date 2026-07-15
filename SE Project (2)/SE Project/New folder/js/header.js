@@ -70,21 +70,19 @@
     if (isSubfolder) defaultPhoto = '../assets/img/user2-160x160.jpg';
     var photo = resolvePhoto(user.photo) || defaultPhoto;
 
-    // ── Navbar toggle button: name + photo ──────────────────────────────────
+    // ── Navbar toggle button: name only (image hidden) ──────────────────────
     // Pattern: <img class="user-image ..."> <span ...>Ali Saleem</span>
     var userImg = document.querySelector('.user-image.rounded-circle');
     if (userImg) {
-      userImg.src = photo;
-      userImg.onerror = function () { this.src = defaultPhoto; };
+      userImg.style.display = 'none'; // Hide the image
     }
     var nameSpan = document.querySelector('.nav-link.dropdown-toggle .d-none.d-md-inline');
     if (nameSpan) nameSpan.textContent = displayName;
 
-    // ── Dropdown header: photo + name + role ────────────────────────────────
+    // ── Dropdown header: name + role only (image hidden) ─────────────────────
     var headerImg = document.querySelector('.user-header img.rounded-circle');
     if (headerImg) {
-      headerImg.src = photo;
-      headerImg.onerror = function () { this.src = defaultPhoto; };
+      headerImg.style.display = 'none'; // Hide the image
     }
     var headerP = document.querySelector('.user-header p');
     if (headerP) {

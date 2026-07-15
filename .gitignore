@@ -39,3 +39,12 @@ __pycache__/
 
 # ─── Misc root files ─────────────────────────────────────────────────────────
 3
+package-lock.json
+
+# ─── Temporary debug / test notes (not part of deployment) ───────────────────
+TEST-*.txt
+TEST-*.md
+
+# ─── Raw data files (Excel imports, not part of deployment) ──────────────────
+backend/*.xlsx
+backend/*.xls

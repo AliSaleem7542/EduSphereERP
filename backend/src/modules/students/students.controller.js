@@ -7,7 +7,7 @@ async function getAll(req, res, next) {
     const { page = 1, limit = 20, classId, sectionId, status, search } = req.query;
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
-    const where = {};
+    const where = { deletedAt: null }; // Filter out soft-deleted records
     if (classId)   where.classId   = parseInt(classId);
     if (sectionId) where.sectionId = parseInt(sectionId);
     if (status)    where.status    = status;
@@ -43,8 +43,8 @@ async function getOne(req, res, next) {
 
     // Students can only view their own profile
     if (req.user.role === 'STUDENT') {
-      const student = await prisma.student.findUnique({
-        where: { userId: req.user.id },
+      const student = await prisma.student.findFirst({
+        where: { userId: req.user.id, deletedAt: null },
         include: { class: true, section: true, academicYear: true },
       });
       if (!student) {
@@ -58,8 +58,8 @@ async function getOne(req, res, next) {
     }
 
     // Admin/Teacher path - fetch any student
-    const student = await prisma.student.findUnique({
-      where: { id },
+    const student = await prisma.student.findFirst({
+      where: { id, deletedAt: null },
       include: { class: true, section: true, academicYear: true },
     });
 
@@ -77,12 +77,27 @@ async function create(req, res, next) {
 
     // Debug log — visible in Render logs
     console.log('[STUDENT CREATE] Received fields:', Object.keys(body));
+    console.log('[STUDENT CREATE] Raw values:', JSON.stringify(body, null, 2));
 
     // Coerce required integer/date fields from multipart form strings
     if (body.classId)       body.classId       = parseInt(body.classId);
     if (body.sectionId)     body.sectionId     = parseInt(body.sectionId);
-    if (body.dob)           body.dob           = new Date(body.dob);
-    if (body.admissionDate) body.admissionDate = new Date(body.admissionDate);
+    
+    // Date fields - convert to Date objects, handle empty strings
+    if (body.dob && body.dob.trim()) {
+      body.dob = new Date(body.dob);
+    } else {
+      delete body.dob; // Remove empty date field
+    }
+    
+    if (body.admissionDate && body.admissionDate.trim()) {
+      body.admissionDate = new Date(body.admissionDate);
+    } else {
+      // Default to today if not provided
+      body.admissionDate = new Date();
+    }
+    
+    // Numeric fields
     if (body.annualCharges) body.annualCharges = parseFloat(body.annualCharges);
     if (body.tuitionFee)    body.tuitionFee    = parseFloat(body.tuitionFee);
     if (body.transportFee)  body.transportFee  = parseFloat(body.transportFee);
@@ -97,15 +112,21 @@ async function create(req, res, next) {
       body.academicYearId = parseInt(body.academicYearId);
     }
 
-    // Default required enum fields
-    if (!body.gender)        body.gender        = 'MALE';
-    if (!body.admissionType) body.admissionType = 'NEW';
-    if (!body.feeCategory)   body.feeCategory   = 'REGULAR';
-    if (!body.transport)     body.transport     = 'NONE';
-    if (!body.status)        body.status        = 'ACTIVE';
+    // Default required enum fields if not provided
+    if (!body.gender || !body.gender.trim())        body.gender        = 'MALE';
+    if (!body.admissionType)                        body.admissionType = 'NEW';
+    if (!body.feeCategory)                          body.feeCategory   = 'REGULAR';
+    if (!body.transport)                            body.transport     = 'NONE';
+    if (!body.status)                               body.status        = 'ACTIVE';
 
-    // Default admissionDate to today if not provided
-    if (!body.admissionDate) body.admissionDate = new Date();
+    // ── VALIDATION: Check required fields before database operation ──
+    const required = { rollNo: body.rollNo, firstName: body.firstName, lastName: body.lastName, 
+                      gender: body.gender, cnic: body.cnic, classId: body.classId, admissionDate: body.admissionDate };
+    const missing = Object.keys(required).filter(k => !required[k]);
+    if (missing.length > 0) {
+      console.error('[STUDENT CREATE] Missing required fields:', missing);
+      return sendError(res, `Missing required fields: ${missing.join(', ')}`, 400);
+    }
 
     // ── WHITELIST: only pass fields that exist in the Prisma Student model ──
     // This prevents "Invalid data provided to database" from unknown fields
@@ -122,14 +143,20 @@ async function create(req, res, next) {
 
     const data = {};
     Object.keys(body).forEach((k) => {
-      if (ALLOWED_STUDENT_FIELDS.has(k) && body[k] !== '' && body[k] !== undefined && body[k] !== null) {
-        data[k] = body[k];
-      } else if (!ALLOWED_STUDENT_FIELDS.has(k)) {
+      // Only include fields that: 1) exist in schema, 2) have non-empty values
+      if (ALLOWED_STUDENT_FIELDS.has(k)) {
+        const val = body[k];
+        // Skip empty strings, null, undefined - but allow 0, false, Date objects
+        if (val !== '' && val !== null && val !== undefined) {
+          data[k] = val;
+        }
+      } else {
         console.log('[STUDENT CREATE] Stripped unknown field:', k);
       }
     });
 
     console.log('[STUDENT CREATE] Final data keys:', Object.keys(data));
+    console.log('[STUDENT CREATE] Final data values:', JSON.stringify(data, null, 2));
 
     const student = await prisma.student.create({ data });
 
@@ -144,6 +171,7 @@ async function create(req, res, next) {
     return sendSuccess(res, student, 'Student created successfully', 201);
   } catch (err) {
     console.error('[STUDENT CREATE] Error:', err.message);
+    console.error('[STUDENT CREATE] Error stack:', err.stack);
     next(err);
   }
 }
@@ -293,7 +321,7 @@ async function getFees(req, res, next) {
   try {
     const studentId = parseInt(req.params.id);
     const records = await prisma.feeRecord.findMany({
-      where: { studentId },
+      where: { studentId, deletedAt: null },
       orderBy: { date: 'desc' },
     });
     const totalPaid = records.reduce((sum, r) => sum + Number(r.amount), 0);
@@ -383,7 +411,10 @@ async function bulkImport(req, res, next) {
 
     const stats = { imported: 0, skipped: 0, failed: 0, errors: [] };
     const seenRollNos = new Set();
-    const existingRollNos = await prisma.student.findMany({ select: { rollNo: true } });
+    const existingRollNos = await prisma.student.findMany({ 
+      where: { deletedAt: null },
+      select: { rollNo: true } 
+    });
     existingRollNos.forEach((s) => seenRollNos.add(s.rollNo));
 
     const classCache = {};

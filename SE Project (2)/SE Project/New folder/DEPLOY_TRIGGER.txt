@@ -1,0 +1,3 @@
+Deployment trigger: 2025-06-28 12:30 PM
+This file forces Vercel to redeploy with latest changes.
+Changes: CNIC and Roll Number mandatory fields with red asterisks.

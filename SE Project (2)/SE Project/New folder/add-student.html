@@ -2,7 +2,11 @@
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Add Student | EDU-SPHERE</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <!-- DEPLOYMENT VERSION: 2.1 - CNIC & Roll Number Mandatory -->
+    <title>Add Student | EDU-SPHERE v2.1</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
     <link rel="preload" href="css/adminlte.css" as="style" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" crossorigin="anonymous" media="print" onload="this.media='all'" />
@@ -325,7 +329,7 @@
                       <div class="row">
                         <div class="col-md-4 mb-3">
                           <label class="form-label">First Name <span class="text-danger">*</span></label>
-                          <input type="text" class="form-control" id="firstName" placeholder="First name">
+                          <input type="text" class="form-control" id="firstName" placeholder="First name" required>
                         </div>
                         <div class="col-md-4 mb-3">
                           <label class="form-label">Middle Name</label>
@@ -333,15 +337,15 @@
                         </div>
                         <div class="col-md-4 mb-3">
                           <label class="form-label">Last Name <span class="text-danger">*</span></label>
-                          <input type="text" class="form-control" id="lastName" placeholder="Last name">
+                          <input type="text" class="form-control" id="lastName" placeholder="Last name" required>
                         </div>
                         <div class="col-md-4 mb-3">
                           <label class="form-label">Date of Birth</label>
                           <input type="date" class="form-control" id="dob">
                         </div>
                         <div class="col-md-4 mb-3">
-                          <label class="form-label">Gender</label>
-                          <select class="form-select" id="gender">
+                          <label class="form-label">Gender <span class="text-danger">*</span></label>
+                          <select class="form-select" id="gender" required>
                             <option value="">Select...</option>
                             <option>Male</option>
                             <option>Female</option>
@@ -359,7 +363,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                           <label class="form-label">CNIC / B-Form No. <span class="text-danger">*</span></label>
-                          <input type="text" class="form-control" id="cnic" placeholder="e.g. 35201-1234567-1">
+                          <input type="text" class="form-control" id="cnic" placeholder="e.g. 35201-1234567-1" required>
                         </div>
                         <div class="col-md-6 mb-3">
                           <label class="form-label">Religion</label>
@@ -380,16 +384,16 @@
                     <button class="btn btn-primary" onclick="goStep(2)"><i class="bi bi-arrow-right"></i> Next</button>
                   </div>
                 </div>
-                <!-- Step 2: Academic Info -->
+                <!-- Step 2: Academic Info - Updated: Roll Number is MANDATORY -->
                 <div id="step2" class="d-none">
                   <div class="row">
                     <div class="col-md-4 mb-3">
-                      <label class="form-label">Roll Number</label>
-                      <input type="text" class="form-control" id="rollNo" placeholder="e.g. 2025-001">
+                      <label class="form-label">Roll Number <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="rollNo" placeholder="e.g. 2025-001" required>
                     </div>
                     <div class="col-md-4 mb-3">
-                      <label class="form-label">Admission Date</label>
-                      <input type="date" class="form-control" id="admissionDate">
+                      <label class="form-label">Admission Date <span class="text-danger">*</span></label>
+                      <input type="date" class="form-control" id="admissionDate" required>
                     </div>
                     <div class="col-md-4 mb-3">
                       <label class="form-label">Admission Type</label>
@@ -401,7 +405,7 @@
                     </div>
                     <div class="col-md-4 mb-3">
                       <label class="form-label">Class <span class="text-danger">*</span></label>
-                      <select class="form-select" id="studentClass" onchange="loadSectionOptions()">
+                      <select class="form-select" id="studentClass" onchange="loadSectionOptions()" required>
                         <option value="">Select class...</option>
                       </select>
                     </div>
@@ -470,7 +474,7 @@
                 <div id="step3" class="d-none">
                   <div class="row">
                     <div class="col-md-6 mb-3">
-                      <label class="form-label">Father's Name <span class="text-danger">*</span></label>
+                      <label class="form-label">Father's Name</label>
                       <input type="text" class="form-control" id="fatherName" placeholder="Father's full name">
                     </div>
                     <div class="col-md-6 mb-3">
@@ -478,7 +482,7 @@
                       <input type="text" class="form-control" id="fatherOccupation" placeholder="e.g. Engineer">
                     </div>
                     <div class="col-md-6 mb-3">
-                      <label class="form-label">Father's Phone <span class="text-danger">*</span></label>
+                      <label class="form-label">Father's Phone</label>
                       <input type="tel" class="form-control" id="fatherPhone" placeholder="e.g. 0300-1234567">
                     </div>
                     <div class="col-md-6 mb-3">
@@ -636,30 +640,88 @@
       }
 
       function validateStep1() {
-        // Only firstName and lastName are required (cnic is optional in schema)
-        var req = ['firstName', 'lastName'];
+        console.log('[VALIDATION] Step 1 validation started - v2.0');
+        // Database required: firstName, lastName, gender, cnic
+        var req = ['firstName', 'lastName', 'gender', 'cnic'];
+        var missing = [];
+        
         for (var i = 0; i < req.length; i++) {
           var el = document.getElementById(req[i]);
-          if (!el.value.trim()) { el.classList.add('is-invalid'); el.focus(); return false; }
-          el.classList.remove('is-invalid');
+          var val = el ? el.value : '';
+          console.log('[VALIDATION] Checking field:', req[i], '= "' + val + '"');
+          
+          if (!el || !el.value || !el.value.trim()) {
+            if (el) {
+              el.classList.add('is-invalid');
+              // Add field name for better error message
+              if (req[i] === 'firstName') missing.push('First Name');
+              else if (req[i] === 'lastName') missing.push('Last Name');
+              else if (req[i] === 'gender') missing.push('Gender');
+              else if (req[i] === 'cnic') missing.push('CNIC / B-Form No.');
+            }
+          } else {
+            el.classList.remove('is-invalid');
+          }
         }
+        
+        console.log('[VALIDATION] Missing fields:', missing);
+        
+        if (missing.length > 0) {
+          API.toast('Please fill: ' + missing.join(', '), 'error');
+          // Focus first missing field
+          for (var i = 0; i < req.length; i++) {
+            var el = document.getElementById(req[i]);
+            if (el && el.classList.contains('is-invalid')) {
+              el.focus();
+              break;
+            }
+          }
+          return false;
+        }
+        
+        console.log('[VALIDATION] Step 1 passed!');
         return true;
       }
 
       function validateStep2() {
-        var cls = document.getElementById('studentClass');
-        if (!cls.value.trim()) { cls.classList.add('is-invalid'); cls.focus(); return false; }
-        cls.classList.remove('is-invalid');
+        // Database required: classId, rollNo, admissionDate
+        var req = ['studentClass', 'rollNo', 'admissionDate'];
+        var missing = [];
+        
+        for (var i = 0; i < req.length; i++) {
+          var el = document.getElementById(req[i]);
+          if (!el || !el.value || !el.value.trim()) {
+            if (el) {
+              el.classList.add('is-invalid');
+              // Add field name for better error message
+              if (req[i] === 'studentClass') missing.push('Class');
+              else if (req[i] === 'rollNo') missing.push('Roll Number');
+              else if (req[i] === 'admissionDate') missing.push('Admission Date');
+            }
+          } else {
+            el.classList.remove('is-invalid');
+          }
+        }
+        
+        if (missing.length > 0) {
+          API.toast('Please fill: ' + missing.join(', '), 'error');
+          // Focus first missing field
+          for (var i = 0; i < req.length; i++) {
+            var el = document.getElementById(req[i]);
+            if (el && el.classList.contains('is-invalid')) {
+              el.focus();
+              break;
+            }
+          }
+          return false;
+        }
+        
         return true;
       }
 
       function validateStep3() {
-        var req = ['fatherName', 'fatherPhone'];
-        for (var i = 0; i < req.length; i++) {
-          var el = document.getElementById(req[i]);
-          if (!el.value.trim()) { el.classList.add('is-invalid'); el.focus(); return false; }
-          el.classList.remove('is-invalid');
-        }
+        // Guardian info is ALL OPTIONAL in database
+        // No validation needed - user can skip
         return true;
       }
 
@@ -697,6 +759,25 @@
 
       async function submitStudent() {
         var btn = document.getElementById('submitBtn');
+        
+        // ── VALIDATION: Check mandatory fields (already validated in steps) ───
+        const firstName = document.getElementById('firstName').value.trim();
+        const lastName = document.getElementById('lastName').value.trim();
+        const gender = document.getElementById('gender').value;
+        const cnic = document.getElementById('cnic').value.trim();
+        const classId = document.getElementById('studentClass').value;
+        const rollNo = document.getElementById('rollNo').value.trim();
+        const admissionDate = document.getElementById('admissionDate').value;
+        
+        // Final validation check
+        if (!firstName || !lastName || !gender || !cnic || !classId || !rollNo || !admissionDate) {
+          API.toast('Please fill all required fields marked with *', 'error');
+          goStep(1); // Go back to first incomplete step
+          return;
+        }
+        
+        // ── END VALIDATION ─────────────────────────────────────────────────────
+        
         if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Saving...'; }
 
         // ── Enum maps matching Prisma schema exactly ──────────────────────────
@@ -736,6 +817,7 @@
         fd.append('firstName',     document.getElementById('firstName').value.trim());
         fd.append('lastName',      document.getElementById('lastName').value.trim());
         fd.append('rollNo',        document.getElementById('rollNo').value.trim());
+        fd.append('cnic',          document.getElementById('cnic').value.trim());
         fd.append('gender',        genderVal);
         fd.append('admissionType', admTypeVal);
         fd.append('feeCategory',   feeCatVal);
@@ -744,7 +826,7 @@
 
         // Optional string fields — only append if non-empty
         // NOTE: only fields that exist in the Prisma Student model
-        var optStr = ['middleName','cnic','religion','address','fatherName','fatherPhone',
+        var optStr = ['middleName','religion','address','fatherName','fatherPhone',
                       'prevSchool','prevGrade','fatherCnic','fatherOccupation',
                       'motherName','motherPhone','guardianName','guardianPhone','emergencyContact'];
         optStr.forEach(function(id) {
@@ -761,11 +843,18 @@
         var secEl = document.getElementById('studentSection');
         if (secEl && secEl.value) fd.append('sectionId', secEl.value);
 
-        // Date fields
+        // Date fields - only send if valid and non-empty
         var dobEl = document.getElementById('dob');
-        if (dobEl && dobEl.value) fd.append('dob', dobEl.value);
+        if (dobEl && dobEl.value && dobEl.value.trim()) {
+          fd.append('dob', dobEl.value);
+        }
+        
+        // admissionDate is REQUIRED - must always be sent
         var admDateEl = document.getElementById('admissionDate');
-        if (admDateEl && admDateEl.value) fd.append('admissionDate', admDateEl.value);
+        if (admDateEl && admDateEl.value && admDateEl.value.trim()) {
+          fd.append('admissionDate', admDateEl.value);
+        }
+        // Note: if empty, backend will default to current date
 
         // Blood group
         var bgEl = document.getElementById('bloodGroup');
@@ -805,9 +894,14 @@
             loadStats();
             setTimeout(function() { document.getElementById('successAlert').classList.add('d-none'); }, 4000);
           } else {
+            console.error('[ADD STUDENT] Error response:', res);
             API.toast((res && res.message) || 'Failed to save student', 'danger');
+            if (res && res.debug) {
+              console.error('[ADD STUDENT] Debug info:', res.debug);
+            }
           }
         } catch(e) {
+          console.error('[ADD STUDENT] Exception:', e);
           API.toast('Error: ' + e.message, 'danger');
         } finally {
           if (btn) { btn.disabled = false; btn.innerHTML = '<i class="bi bi-check-circle me-1"></i>Submit & Save'; }

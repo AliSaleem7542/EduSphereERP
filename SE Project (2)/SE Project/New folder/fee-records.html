@@ -271,20 +271,38 @@
               </div>
               <div class="card-body p-0">
                 <div class="table-responsive">
-                  <table class="table table-striped table-hover mb-0" style="font-size:0.85rem">
+                  <table class="table table-striped table-hover mb-0" style="font-size:0.75rem">
                     <thead class="table-dark">
                       <tr>
-                        <th>#</th><th>Roll No</th><th>Student</th><th>Section</th>
-                        <th>Package</th>
+                        <th rowspan="2">#</th>
+                        <th rowspan="2">Section</th>
+                        <th rowspan="2">Roll No</th>
+                        <th rowspan="2">Student Name</th>
+                        <th rowspan="2">Father's Name</th>
+                        <th rowspan="2">Contact</th>
+                        <th colspan="3">Package</th>
+                        <th colspan="2">Annual Charges</th>
+                        <th colspan="2">1st Installment</th>
+                        <th colspan="2">2nd Installment</th>
+                        <th colspan="2">3rd Installment</th>
+                        <th colspan="2">4th Installment</th>
+                        <th rowspan="2">Total Paid</th>
+                        <th rowspan="2">Remaining</th>
+                      </tr>
+                      <tr>
                         <th>Annual</th>
-                        <th>Tuition Fee</th>
-                        <th>Transport</th>
-                        <th>1st Install</th>
-                        <th>2nd Install</th>
-                        <th>3rd Install</th>
-                        <th>4th Install</th>
-                        <th>Total Paid</th>
-                        <th>Remaining</th>
+                        <th>Tuition</th>
+                        <th>Package</th>
+                        <th>Paid</th>
+                        <th>Remarks</th>
+                        <th>Paid</th>
+                        <th>Remarks</th>
+                        <th>Paid</th>
+                        <th>Remarks</th>
+                        <th>Paid</th>
+                        <th>Remarks</th>
+                        <th>Paid</th>
+                        <th>Remarks</th>
                       </tr>
                     </thead>
                     <tbody id="recordsBody"></tbody>
@@ -367,12 +385,16 @@
       async function loadData() {
         var res = null;
         for (var attempt = 1; attempt <= 3; attempt++) {
-          res = await API.fees.list({ limit: 500 });
+          res = await API.fees.list({ limit: 5000 });
           if (res && res.success) break;
           if (attempt < 3) await new Promise(function(r){ setTimeout(r, attempt * 2000); });
         }
-        if (!res || !res.success) return;
+        if (!res || !res.success) {
+          console.error('Failed to load fee records');
+          return;
+        }
         var records = res.data.data || res.data || [];
+        console.log('Loaded ' + records.length + ' fee records');
         window._feeRecords = records;
         updateStats(records);
         renderTable();
@@ -408,31 +430,77 @@
           if (!studentMap[sid]) {
             var sName = r.student ? (r.student.firstName + ' ' + r.student.lastName) : '—';
             var rollNo = r.student ? r.student.rollNo : '';
+            var fatherName = r.student ? r.student.fatherName : '';
+            var contact = r.student ? r.student.fatherPhone : '';
             studentMap[sid] = {
-              studentId: sid, studentName: sName, rollNo: rollNo, section: '',
+              studentId: sid, studentName: sName, rollNo: rollNo, 
+              fatherName: fatherName, contact: contact, section: '',
               packageTotal: r.student ? Number(r.student.packageTotal || 0) : 0,
-              annual: null, annualR: null, inst1: null, inst1R: null,
-              inst2: null, inst2R: null, inst3: null, inst3R: null, inst4: null, inst4R: null,
+              annualCharges: r.student ? Number(r.student.annualCharges || 0) : 0,
+              tuitionFee: r.student ? Number(r.student.tuitionFee || 0) : 0,
+              annualAmt: 0, annualRemarks: '',
+              inst1Amt: 0, inst1Remarks: '',
+              inst2Amt: 0, inst2Remarks: '',
+              inst3Amt: 0, inst3Remarks: '',
+              inst4Amt: 0, inst4Remarks: '',
               totalPaid: 0
             };
           }
-          var amt = Number(r.amount) + Number(r.transportAmount || 0);
-          studentMap[sid].totalPaid += amt;
-          // Store student fee info
-          if (r.student) {
-            studentMap[sid].tuitionFee   = r.student.tuitionFee   || null;
-            studentMap[sid].transportFee = r.student.transportFee || null;
-            studentMap[sid].section      = r.student.section ? r.student.section.name : '-';
+          // Only count the main amount, NOT transport (transport is separate)
+          var mainAmt = Number(r.amount);
+          studentMap[sid].totalPaid += mainAmt;
+          
+          // Store student info
+          if (r.student && r.student.section) {
+            studentMap[sid].section = r.student.section.name;
           }
+          
           var inst = (r.installment || '').toLowerCase();
-          if (inst.indexOf('annual') > -1) { studentMap[sid].annual = amt; studentMap[sid].annualR = r.receiptNo; }
-          else if (inst.indexOf('1st') > -1) { studentMap[sid].inst1 = amt; studentMap[sid].inst1R = r.receiptNo; }
-          else if (inst.indexOf('2nd') > -1) { studentMap[sid].inst2 = amt; studentMap[sid].inst2R = r.receiptNo; }
-          else if (inst.indexOf('3rd') > -1) { studentMap[sid].inst3 = amt; studentMap[sid].inst3R = r.receiptNo; }
-          else if (inst.indexOf('4th') > -1) { studentMap[sid].inst4 = amt; studentMap[sid].inst4R = r.receiptNo; }
+          
+          // Debug for NIMRA
+          if (r.student && r.student.firstName && r.student.firstName.toUpperCase().indexOf('NIMRA') > -1) {
+            console.log('NIMRA record: installment=' + inst + ', amount=' + mainAmt + ', transport=' + (r.transportAmount || 0));
+          }
+          
+          if (inst.indexOf('annual') > -1 || inst.indexOf('admission') > -1) { 
+            studentMap[sid].annualAmt += mainAmt; 
+            studentMap[sid].annualRemarks = r.remarks || ''; 
+          }
+          else if (inst.indexOf('1st') > -1) { 
+            studentMap[sid].inst1Amt += mainAmt; 
+            studentMap[sid].inst1Remarks = r.remarks || ''; 
+          }
+          else if (inst.indexOf('2nd') > -1) { 
+            studentMap[sid].inst2Amt += mainAmt; 
+            studentMap[sid].inst2Remarks = r.remarks || ''; 
+          }
+          else if (inst.indexOf('3rd') > -1) { 
+            studentMap[sid].inst3Amt += mainAmt; 
+            studentMap[sid].inst3Remarks = r.remarks || ''; 
+          }
+          else if (inst.indexOf('4th') > -1) { 
+            studentMap[sid].inst4Amt += mainAmt; 
+            studentMap[sid].inst4Remarks = r.remarks || ''; 
+          }
         });
 
         var rows = Object.values(studentMap);
+        
+        // Debug NIMRA's final data
+        var nimraRow = rows.find(function(r) { return r.studentName.toUpperCase().indexOf('NIMRA') > -1; });
+        if (nimraRow) {
+          console.log('NIMRA final data:', {
+            packageTotal: nimraRow.packageTotal,
+            annualAmt: nimraRow.annualAmt,
+            inst1Amt: nimraRow.inst1Amt,
+            inst2Amt: nimraRow.inst2Amt,
+            inst3Amt: nimraRow.inst3Amt,
+            inst4Amt: nimraRow.inst4Amt,
+            totalPaid: nimraRow.totalPaid,
+            remaining: nimraRow.packageTotal - nimraRow.totalPaid
+          });
+        }
+        
         rows = rows.filter(function(r) {
           return !q || r.studentName.toLowerCase().indexOf(q) > -1 || r.rollNo.toLowerCase().indexOf(q) > -1;
         });
@@ -446,42 +514,52 @@
         var page = rows.slice(start, start + PER_PAGE);
         var tbody = document.getElementById('recordsBody');
 
-        function fmt(val, receipt) {
-          if (val === null || val === undefined) return '<span class="text-muted">-</span>';
-          return 'Rs. ' + Number(val).toLocaleString() + (receipt ? '<br><small class="text-muted"><code>' + receipt + '</code></small>' : '');
+        function fmt(val) {
+          if (val === null || val === undefined || val === 0) return '<span class="text-muted">-</span>';
+          return 'Rs. ' + Number(val).toLocaleString();
+        }
+        
+        function fmtRemarks(remarks) {
+          if (!remarks) return '<span class="text-muted">-</span>';
+          return '<small>' + SECURITY.escapeHtml(remarks) + '</small>';
         }
 
         if (page.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="14" class="text-center text-muted py-4">No records found.</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="21" class="text-center text-muted py-4">No records found.</td></tr>';
         } else {
           tbody.innerHTML = page.map(function(r, i) {
             // XSS Protection: Escape all user-generated content
             var rollNo = SECURITY.escapeHtml(r.rollNo || '-');
             var studentName = SECURITY.escapeHtml(r.studentName);
+            var fatherName = SECURITY.escapeHtml(r.fatherName || '-');
+            var contact = SECURITY.escapeHtml(r.contact || '-');
             var section = SECURITY.escapeHtml(r.section || '-');
-            var annualR = SECURITY.escapeHtml(r.annualR || '');
-            var inst1R = SECURITY.escapeHtml(r.inst1R || '');
-            var inst2R = SECURITY.escapeHtml(r.inst2R || '');
-            var inst3R = SECURITY.escapeHtml(r.inst3R || '');
-            var inst4R = SECURITY.escapeHtml(r.inst4R || '');
             
             var remaining = r.packageTotal - r.totalPaid;
             var remClass = remaining > 0 ? 'text-danger fw-bold' : 'text-success fw-bold';
+            
             return '<tr>' +
               '<td>' + (start + i + 1) + '</td>' +
+              '<td>' + section + '</td>' +
               '<td>' + rollNo + '</td>' +
               '<td>' + studentName + '</td>' +
-              '<td><span class="badge bg-secondary">' + section + '</span></td>' +
-              '<td>' + (r.packageTotal ? 'Rs. ' + Number(r.packageTotal).toLocaleString() : '-') + '</td>' +
-              '<td>' + fmt(r.annual, annualR) + '</td>' +
-              '<td>' + (r.tuitionFee ? 'Rs. ' + Number(r.tuitionFee).toLocaleString() : '-') + '</td>' +
-              '<td>' + (r.transportFee ? 'Rs. ' + Number(r.transportFee).toLocaleString() : '-') + '</td>' +
-              '<td>' + fmt(r.inst1, inst1R) + '</td>' +
-              '<td>' + fmt(r.inst2, inst2R) + '</td>' +
-              '<td>' + fmt(r.inst3, inst3R) + '</td>' +
-              '<td>' + fmt(r.inst4, inst4R) + '</td>' +
-              '<td><strong>Rs. ' + r.totalPaid.toLocaleString() + '</strong></td>' +
-              '<td class="' + remClass + '">Rs. ' + Math.abs(remaining).toLocaleString() + '</td>' +
+              '<td>' + fatherName + '</td>' +
+              '<td>' + contact + '</td>' +
+              '<td>' + fmt(r.annualCharges) + '</td>' +
+              '<td>' + fmt(r.tuitionFee) + '</td>' +
+              '<td>' + fmt(r.packageTotal) + '</td>' +
+              '<td>' + fmt(r.annualAmt) + '</td>' +
+              '<td>' + fmtRemarks(r.annualRemarks) + '</td>' +
+              '<td>' + fmt(r.inst1Amt) + '</td>' +
+              '<td>' + fmtRemarks(r.inst1Remarks) + '</td>' +
+              '<td>' + fmt(r.inst2Amt) + '</td>' +
+              '<td>' + fmtRemarks(r.inst2Remarks) + '</td>' +
+              '<td>' + fmt(r.inst3Amt) + '</td>' +
+              '<td>' + fmtRemarks(r.inst3Remarks) + '</td>' +
+              '<td>' + fmt(r.inst4Amt) + '</td>' +
+              '<td>' + fmtRemarks(r.inst4Remarks) + '</td>' +
+              '<td class="fw-bold">' + fmt(r.totalPaid) + '</td>' +
+              '<td class="' + remClass + '">' + fmt(Math.abs(remaining)) + '</td>' +
               '</tr>';
           }).join('');
         }
@@ -509,9 +587,18 @@
 
       function printRecords() { window.print(); }
       function exportCSV() {
-        var rows = [['#', 'Roll No', 'Student', 'Package', 'Annual', '1st', '2nd', '3rd', '4th', 'Total Paid', 'Remaining']];
+        var rows = [['#', 'Section', 'Roll No', 'Student', 'Father Name', 'Contact', 'Annual Charges', 'Tuition Fee', 'Package', 'Annual Paid', 'Annual Remarks', '1st Paid', '1st Remarks', '2nd Paid', '2nd Remarks', '3rd Paid', '3rd Remarks', '4th Paid', '4th Remarks', 'Total Paid', 'Remaining']];
         filtered.forEach(function(r, i) {
-          rows.push([i + 1, r.rollNo, r.studentName, r.packageTotal, r.annual || '', r.inst1 || '', r.inst2 || '', r.inst3 || '', r.inst4 || '', r.totalPaid, r.packageTotal - r.totalPaid]);
+          rows.push([
+            i + 1, r.section, r.rollNo, r.studentName, r.fatherName || '', r.contact || '',
+            r.annualCharges || '', r.tuitionFee || '', r.packageTotal || '',
+            r.annualAmt || '', r.annualRemarks || '',
+            r.inst1Amt || '', r.inst1Remarks || '',
+            r.inst2Amt || '', r.inst2Remarks || '',
+            r.inst3Amt || '', r.inst3Remarks || '',
+            r.inst4Amt || '', r.inst4Remarks || '',
+            r.totalPaid, r.packageTotal - r.totalPaid
+          ]);
         });
         var csv = rows.map(function(r) { return r.join(','); }).join('\n');
         var a = document.createElement('a'); a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv); a.download = 'fee-records.csv'; a.click();

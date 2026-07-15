@@ -1,0 +1,34 @@
+# Ignore backend and non-frontend files from Vercel deployment
+backend/
+*.py
+*.pyc
+__pycache__/
+*.docx
+*.xlsx
+*.xls
+*.jpeg
+*.jpg
+System Architecture.jpeg
+ER Diagram.png
+INSTALLMENT_FEE_SYSTEM.md
+TEST-CONSOLE-COMMANDS.txt
+TEST-WHY-889-RECEIPTS.txt
+add_accounts_sidebar.py
+add_refund_link.py
+add_refund_link2.py
+apply_theme.py
+embed_data.py
+fix_accounts_final.py
+fix_accounts_position.py
+fix_accounts_sidebar.py
+fix_accounts_v3.py
+fix_accounts_v4.py
+fix_navbar_links.py
+fix_return_book.py
+fix_return_book2.py
+fix_tt_links.py
+gen_fees.py
+generate_data.py
+remove_seed_data.py
+package-lock.json
+3
