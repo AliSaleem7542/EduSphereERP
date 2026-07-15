@@ -615,10 +615,16 @@
    */
   async function loadFilterDropdowns() {
     try {
+      console.log('Loading filter dropdowns...');
       const res = await API.classes.list();
-      if (!res || !res.success) { return; }
+      console.log('Classes response:', res);
+      if (!res || !res.success) { 
+        console.error('Failed to get classes:', res);
+        return; 
+      }
       
       const classes = res.data || [];
+      console.log('Classes loaded:', classes);
       
       // Populate filter dropdown
       const filterClass = document.getElementById('filterClass');
@@ -627,10 +633,12 @@
         classes.forEach(cls => {
           filterClass.innerHTML += `<option value="${cls.id}">${SECURITY.escapeHtml(cls.name)}</option>`;
         });
+        console.log('Class dropdown populated with', classes.length, 'classes');
       }
       
       Logger.debug('Filter dropdowns loaded');
     } catch (error) {
+      console.error('Failed to load filter dropdowns:', error);
       Logger.error('Failed to load filter dropdowns:', error);
     }
   }
@@ -715,6 +723,7 @@
     changePage: changePage,
     updateSectionFilter: updateSectionFilter,
     updateEditSectionOptions: updateEditSectionOptions,
+    renderTable: renderTable,
   };
   
   // Auto-initialize when DOM is ready

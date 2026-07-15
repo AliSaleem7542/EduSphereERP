@@ -309,7 +309,7 @@ model Student {
   bookIssues   BookIssue[]
   promotions   StudentPromotion[]
 
-  @@unique([rollNo, deletedAt]) // Composite unique: rollNo must be unique only among non-deleted
+  @@unique([rollNo, sectionId, deletedAt]) // Composite unique: rollNo unique per section
   @@map("students")
 }
 
