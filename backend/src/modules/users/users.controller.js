@@ -7,7 +7,7 @@ const VALID_ROLES = ['ADMIN', 'TEACHER', 'STUDENT', 'LIBRARIAN', 'CASHIER'];
 async function getAll(req, res, next) {
   try {
     const users = await prisma.user.findMany({
-      select: { id: true, username: true, role: true, isActive: true, createdAt: true },
+      select: { id: true, username: true, email: true, role: true, isActive: true, createdAt: true, updatedAt: true },
       orderBy: { createdAt: 'desc' },
     });
     return sendSuccess(res, users);
@@ -49,7 +49,7 @@ async function update(req, res, next) {
     const user = await prisma.user.update({
       where: { id: parseInt(req.params.id) },
       data,
-      select: { id: true, username: true, role: true, isActive: true },
+      select: { id: true, username: true, email: true, role: true, isActive: true, createdAt: true, updatedAt: true },
     });
     return sendSuccess(res, user, 'User updated');
   } catch (err) { next(err); }

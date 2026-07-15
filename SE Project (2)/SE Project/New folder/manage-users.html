@@ -233,22 +233,54 @@
     <script>
       AUTH.requireAuth('ADMIN');
 
-      var PAGE_SIZE = 10, currentPage = 1;
+      var PAGE_SIZE = 10;
+      var currentPage = 1;
       var _allUsers = [];
+      var _backupUsers = []; // Backup to restore on errors
+      var resetAttempt = 0;
 
       async function loadUsers() {
         try {
+          console.log('📡 Loading users (attempt ' + (++resetAttempt) + ')...');
           var res = await API.users.list();
-          _allUsers = (res && res.success) ? (res.data || []) : [];
+          console.log('📥 API Response:', res);
+          
+          if (res && res.success && Array.isArray(res.data)) {
+            _allUsers = res.data;
+            _backupUsers = JSON.parse(JSON.stringify(res.data)); // Safe backup
+            resetAttempt = 0; // Reset counter on success
+            console.log('✅ Loaded ' + _allUsers.length + ' users');
+          } else {
+            console.error('❌ Invalid API response:', res);
+            // Restore from backup if API fails
+            if (_backupUsers.length > 0) {
+              _allUsers = JSON.parse(JSON.stringify(_backupUsers));
+              console.log('🔄 Restored from backup: ' + _allUsers.length + ' users');
+              API.toast('Using cached data (connection issue)', 'warning');
+            } else {
+              API.toast('Failed to load users', 'danger');
+            }
+          }
+        } catch(e) {
+          console.error('❌ Load error:', e);
+          // Preserve existing data on error
+          if (_backupUsers.length > 0 && _allUsers.length === 0) {
+            _allUsers = JSON.parse(JSON.stringify(_backupUsers));
+            console.log('🔄 Restored from backup after error: ' + _allUsers.length + ' users');
+          }
+          if (_allUsers.length === 0) {
+            API.toast('Connection error - no cached data available', 'danger');
+          }
+        } finally {
+          currentPage = 1; // Always reset to page 1
           updateStats();
           renderUsers();
-        } catch(e) {
-          API.toast('Failed to load users', 'danger');
         }
       }
 
       function updateStats() {
         var u = _allUsers;
+        if (!Array.isArray(u)) u = [];
         document.getElementById('statTotal').textContent    = u.length;
         document.getElementById('statActive').textContent   = u.filter(function(x){ return x.isActive !== false; }).length;
         document.getElementById('statInactive').textContent = u.filter(function(x){ return x.isActive === false; }).length;
@@ -257,14 +289,13 @@
 
       function filtered() {
         var q = document.getElementById('searchInput').value.toLowerCase();
-        var r = document.getElementById('filterRole').value;   // already uppercase e.g. 'ADMIN'
+        var r = document.getElementById('filterRole').value;
         var s = document.getElementById('filterStatus').value.toLowerCase();
         return _allUsers.filter(function(u){
-          var name = (u.name || u.username || '').toLowerCase();
+          var name = (u.username || '').toLowerCase();
           var email= (u.email||'').toLowerCase();
-          var uname= (u.username||'').toLowerCase();
           var statusStr = u.isActive !== false ? 'active' : 'inactive';
-          return (!q || name.indexOf(q)>-1 || email.indexOf(q)>-1 || uname.indexOf(q)>-1)
+          return (!q || name.indexOf(q)>-1 || email.indexOf(q)>-1)
               && (!r || (u.role||'').toUpperCase()===r)
               && (!s || statusStr===s);
         });
@@ -273,16 +304,39 @@
       var ROLE_COLORS = { ADMIN:'bg-danger', TEACHER:'bg-primary', STUDENT:'bg-info text-dark' };
 
       function renderUsers() {
+        if (!Array.isArray(_allUsers)) {
+          console.error('❌ _allUsers is not an array:', _allUsers);
+          return;
+        }
+
         var data  = filtered();
         var total = data.length;
         var pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
         if (currentPage > pages) currentPage = 1;
         var slice = data.slice((currentPage-1)*PAGE_SIZE, currentPage*PAGE_SIZE);
         var tbody = document.getElementById('usersBody');
+        
+        console.log('🎨 Rendering:', { total: total, pages: pages, pageSize: PAGE_SIZE, sliceLength: slice.length });
+        
+        if (!tbody) {
+          console.error('❌ tbody element not found');
+          return;
+        }
+
         if (!slice.length) {
-          tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4">No users found.</td></tr>';
+          if (total === 0 && _allUsers.length > 0) {
+            tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4">No results match your filters.</td></tr>';
+          } else if (_allUsers.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="8" class="text-center text-warning py-4">⚠️ No users loaded. <a href="javascript:location.reload()">Refresh</a></td></tr>';
+          } else {
+            tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4">No users on this page.</td></tr>';
+          }
         } else {
           tbody.innerHTML = slice.map(function(u, i) {
+            if (!u || typeof u.id === 'undefined') {
+              console.warn('⚠️ Invalid user object:', u);
+              return '';
+            }
             var role = (u.role||'').toUpperCase();
             var rc   = ROLE_COLORS[role] || 'bg-secondary';
             var isActive = u.isActive !== false;
@@ -290,42 +344,52 @@
             var statusLabel = isActive ? 'Active' : 'Inactive';
             var toggleIcon  = isActive ? 'bi-pause-circle-fill' : 'bi-play-circle-fill';
             var toggleColor = isActive ? 'secondary' : 'success';
-            var displayName = u.name || u.username || '-';
-            var lastLogin   = u.lastLogin ? (API.fmtDate ? API.fmtDate(u.lastLogin) : u.lastLogin) : '-';
+            var displayName = u.username || 'Unknown';
+            var lastLogin   = u.updatedAt ? (API.fmtDate ? API.fmtDate(u.updatedAt) : u.updatedAt) : '-';
             return '<tr>' +
               '<td>' + ((currentPage-1)*PAGE_SIZE + i + 1) + '</td>' +
               '<td><strong>' + displayName + '</strong></td>' +
               '<td><code>' + (u.username||'-') + '</code></td>' +
               '<td>' + (u.email||'-') + '</td>' +
-              '<td><span class="badge ' + rc + '">' + (u.role||'-') + '</span></td>' +
+              '<td><span class="badge ' + rc + '">' + (u.role||'?') + '</span></td>' +
               '<td><span class="badge ' + sc + '">' + statusLabel + '</span></td>' +
               '<td><small>' + lastLogin + '</small></td>' +
               '<td class="text-nowrap">' +
-                '<button class="btn btn-sm btn-outline-primary me-1" onclick="openEdit(\'' + u.id + '\')"><i class="bi bi-pencil-fill"></i></button>' +
-                '<button class="btn btn-sm btn-outline-warning me-1" onclick="openPwd(\'' + u.id + '\',\'' + displayName.replace(/'/g,"\\'") + '\')"><i class="bi bi-key-fill"></i></button>' +
-                '<button class="btn btn-sm btn-outline-' + toggleColor + ' me-1" onclick="toggleStatus(\'' + u.id + '\')"><i class="bi ' + toggleIcon + '"></i></button>' +
-                '<button class="btn btn-sm btn-outline-danger" onclick="deleteUser(\'' + u.id + '\')"><i class="bi bi-trash-fill"></i></button>' +
+                '<button class="btn btn-sm btn-outline-primary me-1" onclick="openEdit(\'' + u.id + '\')" title="Edit"><i class="bi bi-pencil-fill"></i></button>' +
+                '<button class="btn btn-sm btn-outline-warning me-1" onclick="openPwd(\'' + u.id + '\',\'' + displayName.replace(/'/g,"\\'") + '\')" title="Password"><i class="bi bi-key-fill"></i></button>' +
+                '<button class="btn btn-sm btn-outline-' + toggleColor + ' me-1" onclick="toggleStatus(\'' + u.id + '\')" title="Toggle Status"><i class="bi ' + toggleIcon + '"></i></button>' +
+                '<button class="btn btn-sm btn-outline-danger" onclick="deleteUser(\'' + u.id + '\')" title="Deactivate"><i class="bi bi-trash-fill"></i></button>' +
               '</td></tr>';
           }).join('');
         }
-        document.getElementById('pageInfo').textContent =
-          'Showing ' + (total ? (currentPage-1)*PAGE_SIZE+1 : 0) + ' – ' + Math.min(currentPage*PAGE_SIZE, total) + ' of ' + total;
+        
+        var pageInfo = document.getElementById('pageInfo');
+        if (pageInfo) {
+          pageInfo.textContent = total + ' users' + (total > 0 ? ' (page ' + currentPage + ' of ' + pages + ')' : '');
+        }
+        
         var pg = document.getElementById('pagination');
-        pg.innerHTML = '';
-        for (var p = 1; p <= pages; p++) {
-          var btn = document.createElement('button');
-          btn.className = 'btn btn-sm ' + (p===currentPage ? 'btn-primary' : 'btn-outline-secondary');
-          btn.textContent = p;
-          btn.onclick = (function(pp){ return function(){ currentPage=pp; renderUsers(); }; })(p);
-          pg.appendChild(btn);
+        if (pg) {
+          pg.innerHTML = '';
+          for (var p = 1; p <= pages; p++) {
+            var btn = document.createElement('button');
+            btn.className = 'btn btn-sm ' + (p===currentPage ? 'btn-primary' : 'btn-outline-secondary');
+            btn.textContent = p;
+            btn.type = 'button';
+            btn.onclick = (function(pp){ return function(){ currentPage=pp; renderUsers(); }; })(p);
+            pg.appendChild(btn);
+          }
         }
       }
 
       function openEdit(id) {
         var u = _allUsers.find(function(x){ return String(x.id)===String(id); });
-        if (!u) return;
+        if (!u) {
+          API.toast('User not found', 'danger');
+          return;
+        }
         document.getElementById('editId').value       = u.id;
-        document.getElementById('editName').value     = u.name || '';
+        document.getElementById('editName').value     = u.username || '';
         document.getElementById('editUsername').value = u.username || '';
         document.getElementById('editEmail').value    = u.email || '';
         document.getElementById('editRole').value     = u.role || 'TEACHER';
@@ -339,14 +403,37 @@
         var role     = document.getElementById('editRole').value;
         var statusVal = document.getElementById('editStatus').value;
         var isActive = statusVal === 'Active';
+        
         if (!username) { API.toast('Username is required.', 'warning'); return; }
-        var res = await API.users.update(id, { username: username, role: role, isActive: isActive });
-        if (res && res.success) {
-          API.toast('User updated successfully.', 'success');
-          bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
-          loadUsers();
-        } else {
-          API.toast((res && res.message) || 'Failed to update user.', 'danger');
+        if (!id) { API.toast('Invalid user ID.', 'danger'); return; }
+        
+        console.log('💾 Saving edit:', { id, username, role, isActive });
+        try {
+          var res = await API.users.update(id, { username: username, role: role, isActive: isActive });
+          console.log('📥 Update response:', res);
+          
+          if (res && res.success) {
+            API.toast('User updated successfully.', 'success');
+            var modal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
+            if (modal) modal.hide();
+            // Update local copy immediately to keep UI responsive
+            var user = _allUsers.find(function(x){ return String(x.id)===String(id); });
+            if (user) {
+              user.username = username;
+              user.role = role;
+              user.isActive = isActive;
+            }
+            renderUsers();
+            setTimeout(loadUsers, 1000); // Reload to sync with server
+          } else {
+            console.error('❌ Update failed:', res);
+            API.toast((res && res.message) || 'Failed to update user.', 'danger');
+            renderUsers(); // Keep existing data visible
+          }
+        } catch(e) {
+          console.error('❌ Save edit error:', e);
+          API.toast('Error updating user: ' + e.message, 'danger');
+          renderUsers(); // Keep existing data visible
         }
       }
 
@@ -360,46 +447,104 @@
       async function savePassword() {
         var id  = document.getElementById('pwdUserId').value;
         var pwd = document.getElementById('newPassword').value;
-        if (!pwd || pwd.length < 6) { API.toast('Password must be at least 6 characters.', 'warning'); return; }
-        var res = await API.users.update(id, { password: pwd });
-        if (res && res.success) {
-          API.toast('Password reset successfully.', 'success');
-          bootstrap.Modal.getInstance(document.getElementById('pwdModal')).hide();
-        } else {
-          API.toast((res && res.message) || 'Failed to reset password.', 'danger');
+        
+        if (!id) { API.toast('Invalid user ID.', 'danger'); return; }
+        if (!pwd || pwd.length < 6) { 
+          API.toast('Password must be at least 6 characters.', 'warning'); 
+          return; 
+        }
+        
+        console.log('🔐 Resetting password for user:', id);
+        try {
+          var res = await API.users.update(id, { password: pwd });
+          console.log('📥 Password update response:', res);
+          
+          if (res && res.success) {
+            API.toast('Password reset successfully.', 'success');
+            var modal = bootstrap.Modal.getInstance(document.getElementById('pwdModal'));
+            if (modal) modal.hide();
+            renderUsers(); // Keep table visible
+          } else {
+            console.error('❌ Password update failed:', res);
+            API.toast((res && res.message) || 'Failed to reset password.', 'danger');
+            renderUsers(); // Keep existing data visible
+          }
+        } catch(e) {
+          console.error('❌ Save password error:', e);
+          API.toast('Error resetting password: ' + e.message, 'danger');
+          renderUsers(); // Keep existing data visible
         }
       }
 
       async function toggleStatus(id) {
         var u = _allUsers.find(function(x){ return String(x.id)===String(id); });
-        if (!u) return;
+        if (!u) {
+          API.toast('User not found', 'danger');
+          return;
+        }
         var newIsActive = u.isActive === false ? true : false;
-        var res = await API.users.update(id, { isActive: newIsActive });
-        if (res && res.success) {
-          API.toast('Status updated.', 'success');
-          loadUsers();
-        } else {
-          API.toast((res && res.message) || 'Failed to update status.', 'danger');
+        
+        console.log('🔄 Toggling status for user:', id, 'to', newIsActive);
+        try {
+          var res = await API.users.update(id, { isActive: newIsActive });
+          console.log('📥 Status update response:', res);
+          
+          if (res && res.success) {
+            API.toast('Status updated.', 'success');
+            u.isActive = newIsActive; // Update immediately
+            renderUsers();
+            setTimeout(loadUsers, 1000); // Sync with server
+          } else {
+            console.error('❌ Status update failed:', res);
+            API.toast((res && res.message) || 'Failed to update status.', 'danger');
+            renderUsers(); // Keep existing data visible
+          }
+        } catch(e) {
+          console.error('❌ Toggle status error:', e);
+          API.toast('Error updating status: ' + e.message, 'danger');
+          renderUsers(); // Keep existing data visible
         }
       }
 
       async function deleteUser(id) {
         if (!confirm('Deactivate this user?')) return;
-        var res = await API.users.deactivate(id);
-        if (res && res.success) {
-          API.toast('User deactivated.', 'success');
-          loadUsers();
-        } else {
-          API.toast((res && res.message) || 'Failed to deactivate user.', 'danger');
+        
+        console.log('🗑️ Deactivating user:', id);
+        try {
+          var res = await API.users.deactivate(id);
+          console.log('📥 Deactivate response:', res);
+          
+          if (res && res.success) {
+            API.toast('User deactivated.', 'success');
+            // Remove from local array to show immediate feedback
+            _allUsers = _allUsers.filter(function(x){ return String(x.id) !== String(id); });
+            renderUsers();
+            setTimeout(loadUsers, 1000); // Sync with server
+          } else {
+            console.error('❌ Deactivate failed:', res);
+            API.toast((res && res.message) || 'Failed to deactivate user.', 'danger');
+            renderUsers(); // Keep existing data visible
+          }
+        } catch(e) {
+          console.error('❌ Delete user error:', e);
+          API.toast('Error deactivating user: ' + e.message, 'danger');
+          renderUsers(); // Keep existing data visible
         }
       }
 
       document.addEventListener('DOMContentLoaded', async function(){
-        // Retry for Render cold start
+        console.log('🚀 Initializing Manage Users page...');
+        // Retry for Render cold start (max 3 attempts)
         for (var attempt = 1; attempt <= 3; attempt++) {
+          console.log('⏳ Connection attempt ' + attempt + '...');
           var test = await API.users.list();
-          if (test && test.success) break;
-          if (attempt < 3) await new Promise(function(r){ setTimeout(r, attempt * 2000); });
+          if (test && test.success) {
+            console.log('✅ Connected on attempt ' + attempt);
+            break;
+          }
+          if (attempt < 3) {
+            await new Promise(function(r){ setTimeout(r, attempt * 2000); });
+          }
         }
         loadUsers();
       });
