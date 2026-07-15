@@ -9,7 +9,7 @@
 // ── DETECT LOCALHOST: Auto-switch between local and production backend ──────
 if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
   // LOCALHOST: Use local backend if running
-  window.EDUSPHERE_API_URL = 'http://localhost:5000';
+  window.EDUSPHERE_API_URL = 'http://localhost:5002';
   console.log('[EDU-SPHERE] Running on LOCALHOST - Using local backend');
 } else {
   // PRODUCTION: Use Render backend
