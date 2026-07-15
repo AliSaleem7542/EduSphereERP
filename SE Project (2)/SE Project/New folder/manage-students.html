@@ -261,23 +261,23 @@
                 <div class="row g-3 align-items-end">
                   <div class="col-md-4">
                     <label class="form-label"><i class="bi bi-search"></i> Search</label>
-                    <input type="text" class="form-control" id="searchInput" placeholder="Name, roll no, father..." oninput="window.ManageStudents.renderTable();">
+                    <input type="text" class="form-control" id="searchInput" placeholder="Name, roll no, father...">
                   </div>
                   <div class="col-md-2">
                     <label class="form-label">Class</label>
-                    <select class="form-select" id="filterClass" onchange="window.ManageStudents.updateSectionFilter(); window.ManageStudents.renderTable();">
+                    <select class="form-select" id="filterClass" onchange="updateSectionFilter(); renderTable();">
                       <option value="">All Classes</option>
                     </select>
                   </div>
                   <div class="col-md-2">
                     <label class="form-label">Section</label>
-                    <select class="form-select" id="filterSection" onchange="window.ManageStudents.renderTable();">
+                    <select class="form-select" id="filterSection" onchange="renderTable();">
                       <option value="">All Sections</option>
                     </select>
                   </div>
                   <div class="col-md-2">
                     <label class="form-label">Gender</label>
-                    <select class="form-select" id="filterGender" onchange="window.ManageStudents.renderTable();">
+                    <select class="form-select" id="filterGender" onchange="renderTable();">
                       <option value="">All</option>
                       <option value="MALE">Male</option>
                       <option value="FEMALE">Female</option>
@@ -286,7 +286,7 @@
                   </div>
                   <div class="col-md-2 d-flex gap-2">
                     <a href="add-student.html" class="btn btn-primary w-100"><i class="bi bi-plus-circle"></i> Add New</a>
-                    <button class="btn btn-outline-secondary" onclick="window.ManageStudents.clearFilters();" title="Clear filters"><i class="bi bi-x-circle"></i></button>
+                    <button class="btn btn-outline-secondary" onclick="clearFilters()" title="Clear filters"><i class="bi bi-x-circle"></i></button>
                   </div>
                 </div>
               </div>
