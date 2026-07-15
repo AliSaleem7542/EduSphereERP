@@ -650,23 +650,42 @@
     const classId = document.getElementById('filterClass').value;
     const sectionSelect = document.getElementById('filterSection');
     
-    if (!sectionSelect) { return; }
+    console.log('updateSectionFilter called, classId:', classId);
+    
+    if (!sectionSelect) { 
+      console.error('Section select element not found');
+      return; 
+    }
     
     sectionSelect.innerHTML = '<option value="">All Sections</option>';
     
     if (!classId) {
+      console.log('No class selected');
       renderTable();
       return;
     }
     
     try {
+      console.log('Calling API.classes.sections(' + classId + ')');
       const res = await API.classes.sections(classId);
-      if (res && res.success) {
-        (res.data || []).forEach(section => {
+      console.log('API response:', res);
+      
+      if (!res) {
+        console.error('No response from API');
+        return;
+      }
+      
+      if (res.success) {
+        const sections = res.data || [];
+        console.log('Sections received:', sections.length);
+        sections.forEach(section => {
           sectionSelect.innerHTML += `<option value="${section.id}">${SECURITY.escapeHtml(section.name)}</option>`;
         });
+      } else {
+        console.error('API returned success:false', res);
       }
     } catch (error) {
+      console.error('Exception in updateSectionFilter:', error);
       Logger.error('Failed to load sections:', error);
     }
   }
