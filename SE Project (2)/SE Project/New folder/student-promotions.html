@@ -381,7 +381,7 @@
         tbody.innerHTML = '<tr><td colspan="8" class="text-center py-3"><span class="spinner-border spinner-border-sm me-2"></span>Loading...</td></tr>';
 
         try {
-          var params = { classId: classId, limit: 200 };
+          var params = { classId: classId, limit: 500 };
           if (sectionId) params.sectionId = sectionId;
           var res = await API.students.list(params);
           if (!res || !res.success) {
