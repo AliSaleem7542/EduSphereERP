@@ -447,8 +447,8 @@
 
         for (var i = 0; i < ids.length; i++) {
           try {
-            var body = { classId: toClassId === 'GRADUATED' ? null : toClassId };
-            if (toSecId && toClassId !== 'GRADUATED') body.sectionId = toSecId;
+            var body = { toClassId: toClassId === 'GRADUATED' ? null : toClassId };
+            if (toSecId && toClassId !== 'GRADUATED') body.toSectionId = toSecId;
             if (toClassId === 'GRADUATED') body.status = 'GRADUATED';
             var res = await API.students.promote(ids[i], body);
             if (res && res.success) successCount++;

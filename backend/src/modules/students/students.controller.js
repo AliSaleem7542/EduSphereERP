@@ -350,18 +350,54 @@ async function promote(req, res, next) {
     const studentId = parseInt(req.params.id);
     const { toClassId, toSectionId, academicYearId } = req.body;
 
+    console.log('[PROMOTE] Received:', { studentId, toClassId, toSectionId, academicYearId });
+
     const student = await prisma.student.findUnique({ where: { id: studentId } });
-    if (!student) return sendError(res, 'Student not found', 404);
+    if (!student) {
+      console.log('[PROMOTE] Student not found:', studentId);
+      return sendError(res, 'Student not found', 404);
+    }
+
+    console.log('[PROMOTE] Found student:', student.firstName, 'from class', student.classId, 'section', student.sectionId);
 
     // Auto-resolve academicYearId
     let yearId = academicYearId ? parseInt(academicYearId) : null;
     if (!yearId) {
       const currentYear = await prisma.academicYear.findFirst({ where: { isCurrent: true } });
-      if (!currentYear) return sendError(res, 'No current academic year found', 400);
+      if (!currentYear) {
+        console.log('[PROMOTE] No current academic year found');
+        return sendError(res, 'No current academic year found', 400);
+      }
       yearId = currentYear.id;
     }
 
-    if (!toClassId) return sendError(res, 'toClassId is required', 400);
+    console.log('[PROMOTE] Using academic year:', yearId);
+
+    if (!toClassId) {
+      console.log('[PROMOTE] toClassId is required');
+      return sendError(res, 'toClassId is required', 400);
+    }
+
+    // Verify target class and section exist
+    const targetClass = await prisma.class.findUnique({ where: { id: parseInt(toClassId) } });
+    if (!targetClass) {
+      console.log('[PROMOTE] Target class not found:', toClassId);
+      return sendError(res, 'Target class not found', 404);
+    }
+
+    if (toSectionId) {
+      const targetSection = await prisma.section.findUnique({ where: { id: parseInt(toSectionId) } });
+      if (!targetSection) {
+        console.log('[PROMOTE] Target section not found:', toSectionId);
+        return sendError(res, 'Target section not found', 404);
+      }
+      if (targetSection.classId !== parseInt(toClassId)) {
+        console.log('[PROMOTE] Section does not belong to target class');
+        return sendError(res, 'Section does not belong to target class', 400);
+      }
+    }
+
+    console.log('[PROMOTE] Creating promotion record for student', studentId, 'to class', toClassId, 'section', toSectionId);
 
     const promotion = await prisma.$transaction(async (tx) => {
       const promo = await tx.studentPromotion.create({
@@ -376,6 +412,8 @@ async function promote(req, res, next) {
         },
       });
 
+      console.log('[PROMOTE] Created promotion record:', promo.id);
+
       await tx.student.update({
         where: { id: studentId },
         data: {
@@ -385,11 +423,14 @@ async function promote(req, res, next) {
         },
       });
 
+      console.log('[PROMOTE] Updated student record');
       return promo;
     });
 
+    console.log('[PROMOTE] Success!');
     return sendSuccess(res, promotion, 'Student promoted successfully');
   } catch (err) {
+    console.error('[PROMOTE] Error:', err.message);
     next(err);
   }
 }
