@@ -461,11 +461,20 @@
       async function saveSectionEdit() {
         var sectionId = parseInt(document.getElementById('editSectionId').value);
         var name      = document.getElementById('editSectionName').value.trim();
+        
+        console.log('[EDIT SECTION] sectionId:', sectionId, 'name:', name);
+        
         if (!name) { API.toast('Section name is required.', 'warning'); return; }
+        
+        console.log('[EDIT SECTION] Calling API.classes.updateSection');
         var res = await API.classes.updateSection(sectionId, { name: name });
+        
+        console.log('[EDIT SECTION] Response:', res);
+        
         if (res && res.success) {
           API.toast('Section updated.', 'success');
-          bootstrap.Modal.getInstance(document.getElementById('editSectionModal')).hide();
+          var modal = bootstrap.Modal.getInstance(document.getElementById('editSectionModal'));
+          if (modal) modal.hide();
           await loadAllSections();
         } else {
           API.toast((res && res.message) || 'Update failed.', 'danger');

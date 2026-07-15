@@ -86,6 +86,8 @@ async function updateSection(req, res, next) {
   try {
     const id = parseInt(req.params.sectionId);
     
+    console.log('[UPDATE SECTION] Received request - sectionId:', id, 'body:', req.body);
+    
     // Mass Assignment Prevention: Whitelist only allowed fields
     const allowedFields = ['name', 'classId', 'classTeacherId'];
     const data = {};
@@ -105,13 +107,20 @@ async function updateSection(req, res, next) {
     if (data.classId) data.classId = parseInt(data.classId);
     if (data.classTeacherId) data.classTeacherId = parseInt(data.classTeacherId);
     
+    console.log('[UPDATE SECTION] Update data:', data);
+    
     if (Object.keys(data).length === 0) {
+      console.log('[UPDATE SECTION] No valid fields to update');
       return sendError(res, 'No valid fields to update', 400);
     }
     
     const section = await prisma.section.update({ where: { id }, data });
+    console.log('[UPDATE SECTION] Update successful:', section);
     return sendSuccess(res, section, 'Section updated');
-  } catch (err) { next(err); }
+  } catch (err) {
+    console.error('[UPDATE SECTION] Error:', err.message);
+    next(err);
+  }
 }
 
 async function deleteSection(req, res, next) {
